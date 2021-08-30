@@ -17,8 +17,26 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class JsonSchemaTest {
-    private JsonSchema jsonSchemaTest;
+    private static final String jsonSchemaAsJson = "{\n" +
+            "  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n" +
+            "  \"$id\": \"https://example.com/product.schema.json\",\n" +
+            "  \"title\": \"Product\",\n" +
+            "  \"description\": \"A product from Acme's catalog\",\n" +
+            "  \"type\": \"object\",\n" +
+            "  \"properties\": {\n" +
+            "    \"productId\": {\n" +
+            "      \"description\": \"The unique identifier for a product\",\n" +
+            "      \"type\": \"integer\"\n" +
+            "    },\n" +
+            "    \"productName\": {\n" +
+            "      \"description\": \"Name of the product\",\n" +
+            "      \"type\": \"string\"\n" +
+            "    }\n" +
+            "  },\n" +
+            "  \"required\": [ \"productId\", \"productName\" ]\n" +
+            "}";
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private JsonSchema jsonSchemaTest;
 
     @Before
     public void Setup() {
@@ -56,8 +74,8 @@ public class JsonSchemaTest {
 
         assertEquals(2, jsonSchema.getRequired().size());
         assertEquals(true,
-                                    jsonSchema.getRequired().contains("productId") &&
-                                    jsonSchema.getRequired().contains("productName"));
+                jsonSchema.getRequired().contains("productId") &&
+                        jsonSchema.getRequired().contains("productName"));
     }
 
     @Test
@@ -66,23 +84,4 @@ public class JsonSchemaTest {
         final JsonSchema reconstructedSchema = objectMapper.readValue(pojoRepresentation, JsonSchema.class);
         assertEquals(jsonSchemaTest, reconstructedSchema);
     }
-
-    private static final String jsonSchemaAsJson = "{\n" +
-            "  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n" +
-            "  \"$id\": \"https://example.com/product.schema.json\",\n" +
-            "  \"title\": \"Product\",\n" +
-            "  \"description\": \"A product from Acme's catalog\",\n" +
-            "  \"type\": \"object\",\n" +
-            "  \"properties\": {\n" +
-            "    \"productId\": {\n" +
-            "      \"description\": \"The unique identifier for a product\",\n" +
-            "      \"type\": \"integer\"\n" +
-            "    },\n" +
-            "    \"productName\": {\n" +
-            "      \"description\": \"Name of the product\",\n" +
-            "      \"type\": \"string\"\n" +
-            "    }\n" +
-            "  },\n" +
-            "  \"required\": [ \"productId\", \"productName\" ]\n" +
-            "}";
 }
