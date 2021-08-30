@@ -1,0 +1,1 @@
+# Plain Old Data Objects framework generator from JSON Schemas
