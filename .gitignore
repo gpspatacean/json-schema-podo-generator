@@ -1,0 +1,11 @@
+# Generic IDEA
+.idea/
+**/*.iml
+
+# Generic Maven
+target/
+
+
+# Random
+**/*.log
+**/*.bkp
