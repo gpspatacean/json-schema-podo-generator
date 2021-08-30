@@ -16,8 +16,22 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class PropertiesTest {
-    private Properties properties;
+    private static final String propertiesJson = "{\n" +
+            "\t\t\"prop1\":{\n" +
+            "\t\t\t\"description\":\"Description of 1st property\",\n" +
+            "\t\t\t\"type\":\"object\"\n" +
+            "\t\t},\n" +
+            "\t\t\"prop2\":{\n" +
+            "\t\t\t\"description\":\"Description of 2nd property\",\n" +
+            "\t\t\t\"type\":\"integer\"\n" +
+            "\t\t},\n" +
+            "\t\t\"prop3\":{\n" +
+            "\t\t\t\"description\":\"Description of 3nd property\",\n" +
+            "\t\t\t\"type\":\"boolean\"\n" +
+            "\t\t}\n" +
+            "\t}\n";
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private Properties properties;
 
     @Before
     public void Setup() {
@@ -36,7 +50,7 @@ public class PropertiesTest {
     @Test
     public void testFullSerialization() throws JsonProcessingException {
         final String actual = objectMapper.writeValueAsString(properties);
-        final String liniarExpected = propertiesJson.replaceAll("[\\r\\n\\t]","");
+        final String liniarExpected = propertiesJson.replaceAll("[\\r\\n\\t]", "");
         assertEquals(liniarExpected, actual);
     }
 
@@ -44,23 +58,6 @@ public class PropertiesTest {
     public void bidirectionalTransformation() throws JsonProcessingException {
         final String propertiesAsString = objectMapper.writeValueAsString(properties);
         final Properties reconvertedProperties = objectMapper.readValue(propertiesAsString, Properties.class);
-        assertEquals(properties,reconvertedProperties);
+        assertEquals(properties, reconvertedProperties);
     }
-
-    private static final String propertiesJson = "{\n" +
-            //"\t\"properties\":{\n" +
-            "\t\t\"prop1\":{\n" +
-            "\t\t\t\"description\":\"Description of 1st property\",\n" +
-            "\t\t\t\"type\":\"object\"\n" +
-            "\t\t},\n" +
-            "\t\t\"prop2\":{\n" +
-            "\t\t\t\"description\":\"Description of 2nd property\",\n" +
-            "\t\t\t\"type\":\"integer\"\n" +
-            "\t\t},\n" +
-            "\t\t\"prop3\":{\n" +
-            "\t\t\t\"description\":\"Description of 3nd property\",\n" +
-            "\t\t\t\"type\":\"boolean\"\n" +
-            "\t\t}\n" +
-            "\t}\n";// +
-            //"}";
 }

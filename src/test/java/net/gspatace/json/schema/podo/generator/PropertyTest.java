@@ -37,10 +37,10 @@ public class PropertyTest {
     @Test
     public void objectToJsonString() throws JsonProcessingException {
         final Property property = Property.builder()
-                                            .propertyName("productId")
-                                            .description("The unique identifier for a product")
-                                            .type(JsonDataTypes.INTEGER)
-                                            .build();
+                .propertyName("productId")
+                .description("The unique identifier for a product")
+                .type(JsonDataTypes.INTEGER)
+                .build();
         final String result = objectMapper.writeValueAsString(property);
         final String linearizedExpectedJson = propertyJson.replaceAll("[\\n\\t]", "");
         assertEquals(linearizedExpectedJson, result);
@@ -49,8 +49,8 @@ public class PropertyTest {
     @Test
     public void bidirectionalTransformation() throws JsonProcessingException {
         final Property originalProperty = Property.builder()
-                        .propertyName("propertyWithDescription")
-                        .description("The description of a property").type(JsonDataTypes.OBJECT).build();
+                .propertyName("propertyWithDescription")
+                .description("The description of a property").type(JsonDataTypes.OBJECT).build();
         final String jsonRepresentation = objectMapper.writeValueAsString(originalProperty);
         final Property reconstructedProperty = objectMapper.readValue(jsonRepresentation, Property.class);
         assertEquals(originalProperty, reconstructedProperty);
