@@ -20,12 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Main base class for all generators
+ * It keeps common logic and the drives the main code generation workflow
+ *
+ * @author George Spătăcean
+ */
 public abstract class AbstractGenerator {
     private final String schemaInput;
     private final ProcessedTemplatesWriter writer;
     private final List<String> templateList = new ArrayList<>();
     private final SchemaGenerator generatorAnnotation;
 
+    /**
+     * Protected constructor
+     * @param baseCliOptions the command line options as passed to the
+     *                       main generate command in {@link net.gspatace.json.schema.podo.generator.cli.commands.GenerateCommand#run()}
+     */
     protected AbstractGenerator(BaseOptions baseCliOptions) {
         this.schemaInput = baseCliOptions.getInputSpec();
         //TODO <gspatace> don't really know if this is smart
@@ -34,6 +45,12 @@ public abstract class AbstractGenerator {
         writer = new ProcessedTemplatesWriter(baseCliOptions.getOutputDirectory());
     }
 
+    /**
+     * Retrieves a JSON Schema Generator Data POJO for the passed schema
+     * @return POJO representation of the passed schema
+     * @throws JsonProcessingException if error occurred while transforming
+     *                                  input schema.
+     */
     protected JsonSchemaGenData getJsonSchemaGenData() throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
@@ -45,6 +62,10 @@ public abstract class AbstractGenerator {
         return JsonSchemaParser.getGeneratorData(jsonSchema);
     }
 
+    /**
+     * Parses and retrieves the provided Schema passed to the generator
+     * @return Schema contents as string
+     */
     protected String getSchema() {
         final Path schemePath = FileSystems.getDefault().getPath(schemaInput);
         try (InputStream iss = new FileInputStream(schemePath.toFile());
@@ -56,10 +77,23 @@ public abstract class AbstractGenerator {
         }
     }
 
+    /**
+     * Template registration of concrete generator implementations
+     * @param templateName name of template to be executed
+     */
     protected void addTemplateFile(final String templateName) {
         templateList.add(templateName);
     }
 
+    /**
+     * Main generator driver method. It follows this workflow:
+     * <ol>
+     *     <li>Template management preparation</li>
+     *     <li>Templates execution</li>
+     *     <li>Final write of executed templates</li>
+     * </ol>
+     * @throws JsonProcessingException if errors occured while processing the provided JSON Schema
+     */
     public void generate() throws JsonProcessingException {
         final TemplateLoader templateLoader = new EmbeddedTemplateLoader(embeddedResourceLocation());
         final TemplateManager templateManager = new TemplateManager(templateLoader);
@@ -71,10 +105,20 @@ public abstract class AbstractGenerator {
         writer.writeToDisk();
     }
 
+    /**
+     * Accessor of the name
+     * for the current running concrete generator
+     * @return name
+     */
     public String name() {
         return generatorAnnotation.name();
     }
 
+    /**
+     * Accessor of the embedded location of the templates
+     * for the current running concrete generator
+     * @return resource location
+     */
     public String embeddedResourceLocation() {
         return generatorAnnotation.embeddedResourceLocation();
     }

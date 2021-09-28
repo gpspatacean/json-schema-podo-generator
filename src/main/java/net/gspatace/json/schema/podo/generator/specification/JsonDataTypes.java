@@ -1,5 +1,11 @@
 package net.gspatace.json.schema.podo.generator.specification;
 
+/**
+ * Enumeration that holds the basic type of property objects in
+ * a JSON Schema object.
+ *
+ * @author George Spătăcean
+ */
 public enum JsonDataTypes {
     NOT_SET(""),
     ARRAY("array"),

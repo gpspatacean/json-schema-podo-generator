@@ -13,6 +13,12 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Deserializer for a "property", which is a child node of the
+ * "properties" node of an Object, as specified by JSON Schema
+ *
+ * @author George Spătăcean
+ */
 public class PropertyDeserializer extends JsonDeserializer<Property> {
     @Override
     public Property deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {

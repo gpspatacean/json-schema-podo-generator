@@ -11,6 +11,12 @@ import net.gspatace.json.schema.podo.generator.specification.models.Property;
 
 import java.io.IOException;
 
+/**
+ * Serializer for the "properties" object of a JSON Object,
+ * as specified in the JSON Schema.
+ *
+ * @author George Spătăcean
+ */
 public class PropertiesSerializer extends JsonSerializer<Properties> {
     @Override
     public void serialize(Properties properties, JsonGenerator jsonGenerator, SerializerProvider serializers) throws IOException {

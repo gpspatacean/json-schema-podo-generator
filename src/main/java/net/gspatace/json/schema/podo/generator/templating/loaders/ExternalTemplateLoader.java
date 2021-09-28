@@ -8,10 +8,20 @@ import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
+/**
+ * Template Loader that retrieves files from a specified location on disk
+ *
+ * @author George Spătăcean
+ */
 public class ExternalTemplateLoader implements TemplateLoader {
 
     private final Path directory;
 
+    /**
+     * Public constructor
+     * @param directoryPath location on disk from where template files
+     *                      should be retrieved from. Only full paths.
+     */
     public ExternalTemplateLoader(final String directoryPath) {
         directory = FileSystems.getDefault().getPath(directoryPath);
     }
