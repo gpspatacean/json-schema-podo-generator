@@ -4,10 +4,21 @@ import net.gspatace.json.schema.podo.generator.templating.interfaces.TemplateLoa
 
 import java.io.InputStream;
 
+/**
+ * Template Loader that retrieves files from the embedded
+ * "src/main/resource" directory.
+ *
+ * @author George Spătăcean
+ */
 public class EmbeddedTemplateLoader implements TemplateLoader {
 
     private final String resourceSubdirectory;
 
+    /**
+     * Public constructor
+     * @param resourceSubdirectory the subdirectory of the "src/main/resource"
+     *                             where templates for this generator reside
+     */
     public EmbeddedTemplateLoader(final String resourceSubdirectory) {
         this.resourceSubdirectory = resourceSubdirectory;
     }

@@ -6,6 +6,13 @@ import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 
 import java.util.List;
 
+/**
+ * POJO of the JSON Schema representation of an object.
+ * This is the root object that holds information from a
+ * given JSON Schema
+ *
+ * @author George Spătăcean
+ */
 @Data
 public class JsonSchema {
 

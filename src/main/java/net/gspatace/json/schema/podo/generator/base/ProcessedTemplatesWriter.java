@@ -9,10 +9,20 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Holder and writer of already processed templates.
+ * This will write all the templates as final part of the
+ * code generation workflow, as implemented in {@link AbstractGenerator#generate()}
+ */
 public class ProcessedTemplatesWriter {
     private final Map<String, String> processedTemplates = new ConcurrentHashMap<>();
     private final Path outputDirectory;
 
+    /**
+     * Public constructor
+     * @param outputDir either full or relative path where the output
+     *                  of the generator should be written
+     */
     public ProcessedTemplatesWriter(final String outputDir) {
         final Path temporaryPath = Paths.get(outputDir);
         if (temporaryPath.isAbsolute()) {
@@ -23,10 +33,19 @@ public class ProcessedTemplatesWriter {
         }
     }
 
+    /**
+     * Add to the processed templates list a new file to be written
+     * @param name name of the file that must be created
+     * @param content contents to be written, after Mustache execution
+     *                has been completed.
+     */
     public void addProcessedTemplate(final String name, final String content) {
         processedTemplates.put(name, content);
     }
 
+    /**
+     * Write in the already specified directory all the files
+     */
     public void writeToDisk() {
         processedTemplates.forEach((name, contents) -> {
             final File target = outputDirectory.resolve(name).toFile();
