@@ -74,7 +74,7 @@ public abstract class AbstractGenerator {
              BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
             return bufferedReader.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new SchemaRetrievalException("Failed to get input schema", e);
         }
     }
 

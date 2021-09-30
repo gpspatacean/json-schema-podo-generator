@@ -14,8 +14,6 @@ public class ListCommand implements Runnable {
         System.out.println("Name\t\tDescription");
         final String pattern = "%s\t\t%s%n";
         final List<GeneratorDescription> availGenerators = GeneratorsService.getInstance().getAvailableGenerators();
-        availGenerators.forEach(generatorDescription -> {
-            System.out.printf(pattern, generatorDescription.getName(), generatorDescription.getDescription());
-        });
+        availGenerators.forEach(description -> System.out.printf(pattern, description.getName(), description.getDescription()));
     }
 }

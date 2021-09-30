@@ -7,8 +7,7 @@ import net.gspatace.json.schema.podo.generator.specification.models.Property;
 import org.junit.Test;
 
 import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.createDefaultObjectMapper;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PropertyTest {
     private static final String propertyJson = "{\n" +
@@ -23,7 +22,7 @@ public class PropertyTest {
     @Test
     public void nonNullObjectIsReturned() throws JsonProcessingException {
         final Property property = objectMapper.readValue(propertyJson, Property.class);
-        assertTrue(property != null);
+        assertNotNull(property);
     }
 
     @Test
