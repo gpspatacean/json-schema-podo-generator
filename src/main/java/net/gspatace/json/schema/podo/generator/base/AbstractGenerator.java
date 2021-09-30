@@ -1,9 +1,7 @@
 package net.gspatace.json.schema.podo.generator.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import net.gspatace.json.schema.podo.generator.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.generators.JsonSchemaGenData;
 import net.gspatace.json.schema.podo.generator.generators.JsonSchemaParser;
@@ -20,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.createDefaultObjectMapper;
+
 /**
  * Main base class for all generators
  * It keeps common logic and the drives the main code generation workflow
@@ -34,6 +34,7 @@ public abstract class AbstractGenerator {
 
     /**
      * Protected constructor
+     *
      * @param baseCliOptions the command line options as passed to the
      *                       main generate command in {@link net.gspatace.json.schema.podo.generator.cli.commands.GenerateCommand#run()}
      */
@@ -47,16 +48,13 @@ public abstract class AbstractGenerator {
 
     /**
      * Retrieves a JSON Schema Generator Data POJO for the passed schema
+     *
      * @return POJO representation of the passed schema
      * @throws JsonProcessingException if error occurred while transforming
-     *                                  input schema.
+     *                                 input schema.
      */
     protected JsonSchemaGenData getJsonSchemaGenData() throws JsonProcessingException {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-        objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        objectMapper.disable(SerializationFeature.INDENT_OUTPUT);
-
+        final ObjectMapper objectMapper = createDefaultObjectMapper();
         final String schema = getSchema();
         final JsonSchema jsonSchema = objectMapper.readValue(schema, JsonSchema.class);
         return JsonSchemaParser.getGeneratorData(jsonSchema);
@@ -64,6 +62,7 @@ public abstract class AbstractGenerator {
 
     /**
      * Parses and retrieves the provided Schema passed to the generator
+     *
      * @return Schema contents as string
      */
     protected String getSchema() {
@@ -79,6 +78,7 @@ public abstract class AbstractGenerator {
 
     /**
      * Template registration of concrete generator implementations
+     *
      * @param templateName name of template to be executed
      */
     protected void addTemplateFile(final String templateName) {
@@ -92,6 +92,7 @@ public abstract class AbstractGenerator {
      *     <li>Templates execution</li>
      *     <li>Final write of executed templates</li>
      * </ol>
+     *
      * @throws JsonProcessingException if errors occured while processing the provided JSON Schema
      */
     public void generate() throws JsonProcessingException {
@@ -108,6 +109,7 @@ public abstract class AbstractGenerator {
     /**
      * Accessor of the name
      * for the current running concrete generator
+     *
      * @return name
      */
     public String name() {
@@ -117,6 +119,7 @@ public abstract class AbstractGenerator {
     /**
      * Accessor of the embedded location of the templates
      * for the current running concrete generator
+     *
      * @return resource location
      */
     public String embeddedResourceLocation() {

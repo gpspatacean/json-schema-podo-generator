@@ -1,9 +1,7 @@
 package net.gspatace.json.schema.podo.generator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.JsonSchema;
 import net.gspatace.json.schema.podo.generator.specification.models.Properties;
@@ -14,7 +12,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.createDefaultObjectMapper;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JsonSchemaTest {
     private static final String jsonSchemaAsJson = "{\n" +
@@ -35,7 +35,7 @@ public class JsonSchemaTest {
             "  },\n" +
             "  \"required\": [ \"productId\", \"productName\" ]\n" +
             "}";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = createDefaultObjectMapper();
     private JsonSchema jsonSchemaTest;
 
     @Before
@@ -50,10 +50,6 @@ public class JsonSchemaTest {
         final List<String> required = new ArrayList<>();
         required.add("prop1");
         required.add("prop3");
-
-        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-        objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        objectMapper.disable(SerializationFeature.INDENT_OUTPUT);
 
         jsonSchemaTest = new JsonSchema();
         jsonSchemaTest.setSchema("https://some-json-schema.org/schema");
@@ -73,9 +69,8 @@ public class JsonSchemaTest {
         assertEquals(JsonDataTypes.OBJECT, jsonSchema.getType());
 
         assertEquals(2, jsonSchema.getRequired().size());
-        assertEquals(true,
-                jsonSchema.getRequired().contains("productId") &&
-                        jsonSchema.getRequired().contains("productName"));
+        assertTrue(jsonSchema.getRequired().contains("productId") &&
+                jsonSchema.getRequired().contains("productName"));
     }
 
     @Test

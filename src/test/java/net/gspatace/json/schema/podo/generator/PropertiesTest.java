@@ -1,9 +1,7 @@
 package net.gspatace.json.schema.podo.generator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.Properties;
 import net.gspatace.json.schema.podo.generator.specification.models.Property;
@@ -13,6 +11,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.createDefaultObjectMapper;
 import static org.junit.Assert.assertEquals;
 
 public class PropertiesTest {
@@ -30,7 +29,7 @@ public class PropertiesTest {
             "\t\t\t\"type\":\"boolean\"\n" +
             "\t\t}\n" +
             "\t}\n";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = createDefaultObjectMapper();
     private Properties properties;
 
     @Before
@@ -41,10 +40,6 @@ public class PropertiesTest {
         propertyList.add(Property.builder().propertyName("prop2").description("Description of 2nd property").type(JsonDataTypes.INTEGER).build());
         propertyList.add(Property.builder().propertyName("prop3").description("Description of 3nd property").type(JsonDataTypes.BOOLEAN).build());
         properties.setPropertyList(propertyList);
-
-        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-        objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        objectMapper.disable(SerializationFeature.INDENT_OUTPUT);
     }
 
     @Test

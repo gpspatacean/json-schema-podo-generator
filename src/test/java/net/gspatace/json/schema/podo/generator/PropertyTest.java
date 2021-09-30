@@ -1,15 +1,14 @@
 package net.gspatace.json.schema.podo.generator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.Property;
-import org.junit.Before;
 import org.junit.Test;
 
+import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.createDefaultObjectMapper;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PropertyTest {
     private static final String propertyJson = "{\n" +
@@ -19,19 +18,12 @@ public class PropertyTest {
             "\t}\n" +
             "}";
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Before
-    public void Setup() {
-        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-        objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        objectMapper.disable(SerializationFeature.INDENT_OUTPUT);
-    }
+    private static final ObjectMapper objectMapper = createDefaultObjectMapper();
 
     @Test
     public void nonNullObjectIsReturned() throws JsonProcessingException {
         final Property property = objectMapper.readValue(propertyJson, Property.class);
-        assert property != null;
+        assertTrue(property != null);
     }
 
     @Test
