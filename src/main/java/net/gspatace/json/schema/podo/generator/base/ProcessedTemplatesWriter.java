@@ -1,5 +1,7 @@
 package net.gspatace.json.schema.podo.generator.base;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,12 +16,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * This will write all the templates as final part of the
  * code generation workflow, as implemented in {@link AbstractGenerator#generate()}
  */
+@Slf4j
 public class ProcessedTemplatesWriter {
     private final Map<String, String> processedTemplates = new ConcurrentHashMap<>();
     private final Path outputDirectory;
 
     /**
      * Public constructor
+     *
      * @param outputDir either full or relative path where the output
      *                  of the generator should be written
      */
@@ -31,11 +35,13 @@ public class ProcessedTemplatesWriter {
             final Path currentDir = Paths.get("").toAbsolutePath();
             outputDirectory = currentDir.resolve(outputDir);
         }
+        log.trace("Generated code will be written to `{}`", outputDirectory);
     }
 
     /**
      * Add to the processed templates list a new file to be written
-     * @param name name of the file that must be created
+     *
+     * @param name    name of the file that must be created
      * @param content contents to be written, after Mustache execution
      *                has been completed.
      */
@@ -50,13 +56,14 @@ public class ProcessedTemplatesWriter {
         processedTemplates.forEach((name, contents) -> {
             final File target = outputDirectory.resolve(name).toFile();
             try {
+                log.info("Writing file `{}`", target);
                 Files.createDirectories(Paths.get(target.getParent()));
                 final FileWriter fileWriter = new FileWriter(target);
                 fileWriter.write(contents);
                 fileWriter.flush();
                 fileWriter.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Failed to write file `{}`", target, e);
             }
         });
     }

@@ -2,6 +2,7 @@ package net.gspatace.json.schema.podo.generator.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import net.gspatace.json.schema.podo.generator.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.generators.JsonSchemaGenData;
 import net.gspatace.json.schema.podo.generator.generators.JsonSchemaParser;
@@ -26,6 +27,7 @@ import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.
  *
  * @author George Spătăcean
  */
+@Slf4j
 public abstract class AbstractGenerator {
     private final String schemaInput;
     private final ProcessedTemplatesWriter writer;
@@ -102,6 +104,7 @@ public abstract class AbstractGenerator {
         templateList.forEach(template -> {
             final String resolvedTemplate = templateManager.executeTemplate(template, schemaData);
             writer.addProcessedTemplate(template, resolvedTemplate);
+            log.debug("Added resolved template {}", template);
         });
         writer.writeToDisk();
     }
@@ -123,6 +126,8 @@ public abstract class AbstractGenerator {
      * @return resource location
      */
     public String embeddedResourceLocation() {
-        return generatorAnnotation.embeddedResourceLocation();
+        final String location = generatorAnnotation.embeddedResourceLocation();
+        log.trace("Generator `{}` is loading templates from `{}` resources directory.", name(), location);
+        return location;
     }
 }

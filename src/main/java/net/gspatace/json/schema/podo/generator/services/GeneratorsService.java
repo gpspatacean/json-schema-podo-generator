@@ -1,5 +1,6 @@
 package net.gspatace.json.schema.podo.generator.services;
 
+import lombok.extern.slf4j.Slf4j;
 import net.gspatace.json.schema.podo.generator.annotations.CustomProperties;
 import net.gspatace.json.schema.podo.generator.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.base.AbstractGenerator;
@@ -24,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author George Spătăcean
  */
+@Slf4j
 public class GeneratorsService {
     private static final String GENERATOR_PACKAGE = "net.gspatace.json.schema.podo.generator.langs";
     private final Map<String, Class<?>> loadedGenerators = new ConcurrentHashMap<>();
@@ -39,6 +41,7 @@ public class GeneratorsService {
         generatorClasses.forEach(clazz -> {
             final SchemaGenerator annotation = clazz.getAnnotation(SchemaGenerator.class);
             loadedGenerators.put(annotation.name(), clazz);
+            log.trace("Found `{}` as a registered generator.", annotation.name());
         });
     }
 
@@ -62,6 +65,7 @@ public class GeneratorsService {
             final GeneratorDescription.GeneratorDescriptionBuilder builder = GeneratorDescription.builder();
             builder.name(annotation.name()).description(annotation.description());
             generators.add(builder.build());
+            log.trace("Added generator description for `{}` generator", annotation.name());
         });
         return generators;
     }
@@ -74,7 +78,7 @@ public class GeneratorsService {
      */
     public Optional<AbstractGenerator> getGeneratorInstance(final BaseOptions baseOptions) {
         if (!loadedGenerators.containsKey(baseOptions.getGeneratorName())) {
-            System.err.println("Eroare");
+            log.error("Generator `{}` was not found.", baseOptions.getGeneratorName());
             return Optional.empty();
         }
 
@@ -84,7 +88,7 @@ public class GeneratorsService {
             final AbstractGenerator generator = (AbstractGenerator) constructor.newInstance(baseOptions);
             return Optional.of(generator);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            ex.printStackTrace();
+            log.error("Failed to instantiate generator `{}`:", baseOptions.getGeneratorName(), ex);
         }
 
         return Optional.empty();
@@ -100,7 +104,7 @@ public class GeneratorsService {
      */
     public Optional<Object> getCustomOptionsCommand(final String targetGenerator) {
         if (!loadedGenerators.containsKey(targetGenerator)) {
-            System.err.println("eroare");
+            log.error("Generator `{}` was not found.", targetGenerator);
             return Optional.empty();
         }
 
@@ -116,8 +120,10 @@ public class GeneratorsService {
                 final Constructor<?> constructor = optionsClass.get().getConstructor();
                 return Optional.of(constructor.newInstance());
             }
+
+            log.debug("CustomProperties class for generator `{}` not found", targetGenerator);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            ex.printStackTrace();
+            log.error("Failed to instantiate CustomProperties class for generator `{}`", targetGenerator, ex);
         }
         return Optional.empty();
     }

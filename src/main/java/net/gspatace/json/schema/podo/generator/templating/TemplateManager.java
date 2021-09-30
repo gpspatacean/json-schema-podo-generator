@@ -22,6 +22,7 @@ public class TemplateManager {
 
     /**
      * Public Constructor
+     *
      * @param templateLoader handler for loading templates
      */
     public TemplateManager(TemplateLoader templateLoader) {
@@ -30,9 +31,10 @@ public class TemplateManager {
 
     /**
      * Executes a compiled template against the given context
+     *
      * @param templateName the name of the target template
-     * @param context Object that can be used by the
-     *                underlying Mustache Engine.
+     * @param context      Object that can be used by the
+     *                     underlying Mustache Engine.
      * @return the final populated file.
      * @throws TemplateExecutionException if the target template cannot be executed
      */

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
  *
  * @author George Spătăcean
  */
+
 public interface TemplateLoader {
     /**
      * Get a handler to a stream from where contents of the template
@@ -36,7 +37,6 @@ public interface TemplateLoader {
              BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
             return bufferedReader.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
-            System.err.println("Yes, Rico, Ka-boom!");
             throw new TemplateNotLoadedException("Failed to load Template: ", e);
         }
     }
