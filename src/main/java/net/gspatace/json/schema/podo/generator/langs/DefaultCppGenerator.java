@@ -17,6 +17,8 @@ public class DefaultCppGenerator extends AbstractGenerator {
 
         addTemplateFile("header.mustache");
         addTemplateFile("source.mustache");
+
+        parseCustomOptionsProperties(cppSpecificProperties);
     }
 
     @CustomProperties

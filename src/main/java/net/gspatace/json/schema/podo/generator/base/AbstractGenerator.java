@@ -10,12 +10,14 @@ import net.gspatace.json.schema.podo.generator.specification.models.JsonSchema;
 import net.gspatace.json.schema.podo.generator.templating.TemplateManager;
 import net.gspatace.json.schema.podo.generator.templating.interfaces.TemplateLoader;
 import net.gspatace.json.schema.podo.generator.templating.loaders.EmbeddedTemplateLoader;
+import picocli.CommandLine;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,7 @@ public abstract class AbstractGenerator {
     private final String schemaInput;
     private final ProcessedTemplatesWriter writer;
     private final List<String> templateList = new ArrayList<>();
+    private final String[] customPropertiesInput;
     private final SchemaGenerator generatorAnnotation;
 
     /**
@@ -46,6 +49,7 @@ public abstract class AbstractGenerator {
         // ( read/use derived class annotation in base constructor )
         generatorAnnotation = this.getClass().getAnnotation(SchemaGenerator.class);
         writer = new ProcessedTemplatesWriter(baseCliOptions.getOutputDirectory());
+        customPropertiesInput = baseCliOptions.getGeneratorSpecificProperties();
     }
 
     /**
@@ -129,5 +133,20 @@ public abstract class AbstractGenerator {
         final String location = generatorAnnotation.embeddedResourceLocation();
         log.trace("Generator `{}` is loading templates from `{}` resources directory.", name(), location);
         return location;
+    }
+
+    /**
+     * Parse custom properties command string and fill custom
+     * generator properties object
+     *
+     * @param customPropertiesObj generator specific class instantiation
+     */
+    protected void parseCustomOptionsProperties(final Object customPropertiesObj) {
+        try {
+            final CommandLine customPropertiesCmd = new CommandLine(customPropertiesObj);
+            customPropertiesCmd.parseArgs(customPropertiesInput);
+        } catch (CommandLine.ParameterException ex) {
+            log.error("Failed to parse custom generator options, for command {}:", Arrays.toString(customPropertiesInput), ex);
+        }
     }
 }
