@@ -6,10 +6,7 @@ import net.gspatace.json.schema.podo.generator.base.BaseOptions;
 import net.gspatace.json.schema.podo.generator.services.GeneratorsService;
 import picocli.CommandLine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @CommandLine.Command(name = "generate", description = "Run the generator",
         subcommands = {CommandLine.HelpCommand.class})
@@ -25,7 +22,7 @@ public class GenerateCommand implements Runnable {
     protected String outputDirectory;
 
     @CommandLine.Option(names = "-genprops", split = ",")
-    Map<String, String> generatorSpecificProperties;
+    Map<String, String> generatorSpecificProperties = new HashMap<>();
 
     @Override
     public void run() {

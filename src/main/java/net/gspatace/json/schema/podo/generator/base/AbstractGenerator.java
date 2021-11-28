@@ -6,19 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import net.gspatace.json.schema.podo.generator.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.generators.JsonSchemaGenData;
 import net.gspatace.json.schema.podo.generator.generators.JsonSchemaParser;
+import net.gspatace.json.schema.podo.generator.generators.MemberVariableData;
+import net.gspatace.json.schema.podo.generator.generators.ModelData;
+import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.JsonSchema;
+import net.gspatace.json.schema.podo.generator.templating.TemplateFile;
 import net.gspatace.json.schema.podo.generator.templating.TemplateManager;
 import net.gspatace.json.schema.podo.generator.templating.interfaces.TemplateLoader;
 import net.gspatace.json.schema.podo.generator.templating.loaders.EmbeddedTemplateLoader;
+import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.createDefaultObjectMapper;
@@ -31,11 +34,13 @@ import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.
  */
 @Slf4j
 public abstract class AbstractGenerator {
+    protected final Map<JsonDataTypes, String> baseDataTypesMappings = new HashMap<>();
     private final String schemaInput;
     private final ProcessedTemplatesWriter writer;
-    private final List<String> templateList = new ArrayList<>();
+    private final List<TemplateFile> templateList = new ArrayList<>();
     private final String[] customPropertiesInput;
     private final SchemaGenerator generatorAnnotation;
+    private final List<String> languagePrimitives = new ArrayList<>();
 
     /**
      * Protected constructor
@@ -85,10 +90,37 @@ public abstract class AbstractGenerator {
     /**
      * Template registration of concrete generator implementations
      *
-     * @param templateName name of template to be executed
+     * @param templateFile name of template to be executed
      */
-    protected void addTemplateFile(final String templateName) {
-        templateList.add(templateName);
+    protected void addTemplateFile(final TemplateFile templateFile) {
+        templateList.add(templateFile);
+    }
+
+    /**
+     * Adds a mapping from JSON Schema Datatype to Language Datatype
+     * @param type JSON Schema Datatype
+     * @param languageType Language Datatype
+     */
+    protected void addBaseDataTypeMapping(final JsonDataTypes type, final String languageType) {
+        baseDataTypesMappings.put(type, languageType);
+    }
+
+    /**
+     * Checks to see if a given JSON Datatype is registered as a base datatype, as per
+     * Generator Configuration
+     * @param type JSON Type to check
+     * @return true/false
+     */
+    protected boolean isBaseType(final JsonDataTypes type) {
+        return baseDataTypesMappings.containsKey(type);
+    }
+
+    /**
+     * Adds a type as a primitive to the list.
+     * @param primitive will be registered as a primitive
+     */
+    protected void addLanguagePrimitive(final String primitive) {
+        languagePrimitives.add(primitive);
     }
 
     /**
@@ -105,12 +137,132 @@ public abstract class AbstractGenerator {
         final TemplateLoader templateLoader = new EmbeddedTemplateLoader(embeddedResourceLocation());
         final TemplateManager templateManager = new TemplateManager(templateLoader);
         final JsonSchemaGenData schemaData = getJsonSchemaGenData();
-        templateList.forEach(template -> {
-            final String resolvedTemplate = templateManager.executeTemplate(template, schemaData);
-            writer.addProcessedTemplate(template, resolvedTemplate);
-            log.debug("Added resolved template {}", template);
-        });
+        specializeGeneratorData(schemaData);
+        generateModels(templateManager, schemaData.getModels());
         writer.writeToDisk();
+    }
+
+    /**
+     * High Level API that will drive and derive the transformation
+     * from an agnostic schema representation to usable, language specific
+     * information.
+     *
+     * @param generatorData working representation of JSON Schema
+     */
+    protected void specializeGeneratorData(JsonSchemaGenData generatorData) {
+        generatorData.getModels().forEach(modelData -> {
+            modelData.setModelName(deriveModelName(modelData));
+            modelData.getMembers().forEach(
+                    memberVariableData -> fillLanguageDataType(memberVariableData, this::getCollectionDataType)
+            );
+        });
+    }
+
+    /**
+     * @see net.gspatace.json.schema.podo.generator.base.CollectionTypeBuilder
+     */
+    protected String getCollectionDataType(final MemberVariableData member) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(baseDataTypesMappings.get(JsonDataTypes.ARRAY));
+        final String dataType = isBaseType(member.getJsonDataTypes()) ?
+                baseDataTypesMappings.get(JsonDataTypes.valueOf(member.getDataType().toUpperCase(Locale.ROOT))) :
+                member.getDataType();
+        sb.append("<").append(dataType).append(">");
+        return sb.toString();
+    }
+
+    /**
+     * Fill information required by the mustache templates
+     * <ul>
+     *     <ui>model name</ui>
+     *     <ui>getter,setter name</ui>
+     *     <ui>collections</ui>
+     * </ul>
+     *
+     * @param memberVariableData    the property for which information is filled
+     * @param collectionTypeBuilder used for collections, it will build the final
+     *                              language construct
+     */
+    protected void fillLanguageDataType(MemberVariableData memberVariableData, CollectionTypeBuilder collectionTypeBuilder) {
+        if (memberVariableData.getJsonDataTypes() == JsonDataTypes.ARRAY) {
+            memberVariableData.setDataType(collectionTypeBuilder.getCollectionDataType(memberVariableData));
+            memberVariableData.setPrimitive(false);
+        } else if (baseDataTypesMappings.containsKey(memberVariableData.getJsonDataTypes())) {
+            memberVariableData.setDataType(baseDataTypesMappings.get(memberVariableData.getJsonDataTypes()));
+            memberVariableData.setPrimitive(languagePrimitives.contains(memberVariableData.getDataType()));
+        } else {
+            if (memberVariableData.getJsonDataTypes() == JsonDataTypes.OBJECT) {
+                memberVariableData.getInnerModel().ifPresent(modelData -> memberVariableData.setDataType(deriveModelName(modelData)));
+            } else {
+                memberVariableData.setDataType(memberVariableData.getName());
+            }
+            memberVariableData.setPrimitive(false);
+        }
+        memberVariableData.setSetterName(deriveSetterName(memberVariableData));
+        memberVariableData.setGetterName(deriveGetterName(memberVariableData));
+    }
+
+    /**
+     * Returns the name of the model; will be used for file names.
+     * Can be overridden.
+     *
+     * @param model current working model
+     * @return name of the model
+     */
+    protected String deriveModelName(final ModelData model) {
+        return StringUtils.capitalize(model.getModelName());
+    }
+
+    /**
+     * Derive the name of the getter of the property. Can be overridden.
+     *
+     * @param member current property.
+     * @return name of the getter
+     */
+    protected String deriveGetterName(final MemberVariableData member) {
+        final StringBuilder getterNameBuilder = new StringBuilder();
+        final String prefix = member.getDataType().toLowerCase(Locale.ROOT).equals("bool") ? "Is" : "Get";
+        final String capitalizedPropertyName = StringUtils.capitalize(member.getName());
+        getterNameBuilder.append(prefix).append(capitalizedPropertyName);
+        return getterNameBuilder.toString();
+    }
+
+    /**
+     * Derive the name of the setter of the property. Can be overridden.
+     *
+     * @param member current property.
+     * @return name of the setter.
+     */
+    protected String deriveSetterName(final MemberVariableData member) {
+        final StringBuilder setterNameBuilder = new StringBuilder();
+        final String capitalizedPropertyName = StringUtils.capitalize(member.getName());
+        setterNameBuilder.append("Set").append(capitalizedPropertyName);
+        return setterNameBuilder.toString();
+    }
+
+    /**
+     * Generates all the files for the provided models.
+     *
+     * @param templateManager will parse and execute needed templates.
+     * @param models          list of models to be generated.
+     */
+    private void generateModels(TemplateManager templateManager, List<ModelData> models) {
+        models.forEach(modelData -> generateFilesForModel(templateManager, modelData));
+    }
+
+    /**
+     * For each registered template, will execute it against the specified model.
+     *
+     * @param templateManager will parse and execute required templates.
+     * @param modelData       current working model
+     */
+    private void generateFilesForModel(final TemplateManager templateManager, final ModelData modelData) {
+        templateList.forEach(template -> {
+            final String resolvedTemplate = templateManager.executeTemplate(template.getTemplateName(), modelData);
+            final String outputFileName = modelData.getModelName() + "." + template.getFileExtension();
+            writer.addProcessedTemplate(outputFileName, resolvedTemplate);
+            log.debug("Added resolved template {}", outputFileName);
+        });
     }
 
     /**

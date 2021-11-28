@@ -4,6 +4,8 @@ import net.gspatace.json.schema.podo.generator.annotations.CustomProperties;
 import net.gspatace.json.schema.podo.generator.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.base.AbstractGenerator;
 import net.gspatace.json.schema.podo.generator.base.BaseOptions;
+import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
+import net.gspatace.json.schema.podo.generator.templating.TemplateFile;
 import picocli.CommandLine;
 
 @SchemaGenerator(name = "cpp", embeddedResourceLocation = "cpp",
@@ -15,8 +17,18 @@ public class DefaultCppGenerator extends AbstractGenerator {
     public DefaultCppGenerator(BaseOptions baseOptions) {
         super(baseOptions);
 
-        addTemplateFile("header.mustache");
-        addTemplateFile("source.mustache");
+        addTemplateFile(new TemplateFile("header.mustache", "hpp"));
+        addTemplateFile(new TemplateFile("source.mustache", "cpp"));
+
+        addBaseDataTypeMapping(JsonDataTypes.INTEGER, "int");
+        addBaseDataTypeMapping(JsonDataTypes.NUMBER, "double");
+        addBaseDataTypeMapping(JsonDataTypes.BOOLEAN, "bool");
+        addBaseDataTypeMapping(JsonDataTypes.STRING, "std::string");
+        addBaseDataTypeMapping(JsonDataTypes.ARRAY, "std::vector");
+
+        addLanguagePrimitive("int");
+        addLanguagePrimitive("double");
+        addLanguagePrimitive("bool");
 
         parseCustomOptionsProperties(cppSpecificProperties);
     }

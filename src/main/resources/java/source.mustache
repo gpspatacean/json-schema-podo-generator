@@ -1,0 +1,15 @@
+public class {{{modelName}}} {
+{{#members}}
+    /* {{{description}}} */
+    private {{{dataType}}} {{{name}}};
+{{/members}}
+{{#members}}
+    public {{{dataType}}} {{{getterName}}} {
+        return {{{name}}};
+    }
+
+    public void {{{setterName}}} (final {{{dataType}}} value ) {
+        this.{{{name}}} = value;
+    }
+{{/members}}
+}
