@@ -8,6 +8,7 @@ public:
     {{{modelName}}}() = default;
 
     {{#members}}
+    /* {{{name}}} accessors */
     {{#isPrimitive}}
     {{{dataType}}} {{{getterName}}}() const;
     void {{{setterName}}}({{{dataType}}} value);
@@ -20,7 +21,7 @@ public:
     {{/members}}
 private:
     {{#members}}
-        /* {{{description}}} */
-        {{{dataType}}} {{{name}}};
+    /* {{{description}}} */
+    {{{dataType}}} {{{name}}};
     {{/members}}
 };

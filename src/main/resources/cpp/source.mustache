@@ -2,20 +2,21 @@
 
 {{#members}}
 {{#isPrimitive}}
-    {{{dataType}}} {{{modelName}}}::{{{getterName}}}() const {
-        return {{{name}}};
-    }
-    void {{{modelName}}}::{{{setterName}}}({{{dataType}}} value) {
-        this->{{{name}}} = value;
-    }
+{{{dataType}}} {{{modelName}}}::{{{getterName}}}() const {
+    return {{{name}}};
+}
+
+void {{{modelName}}}::{{{setterName}}}({{{dataType}}} value) {
+    this->{{{name}}} = value;
+}
 {{/isPrimitive}}
 {{^isPrimitive}}
-    {{{dataType}}}& {{{modelName}}}::{{{getterName}}}() const {
-        return {{{name}}};
-    }
-    void {{{modelName}}}::{{{setterName}}}(const {{{dataType}}}& value) {
-        this->{{{name}}} = value;
-    }
-{{/isPrimitive}}
+{{{dataType}}}& {{{modelName}}}::{{{getterName}}}() const {
+    return {{{name}}};
+}
 
+void {{{modelName}}}::{{{setterName}}}(const {{{dataType}}}& value) {
+    this->{{{name}}} = value;
+}
+{{/isPrimitive}}
 {{/members}}
