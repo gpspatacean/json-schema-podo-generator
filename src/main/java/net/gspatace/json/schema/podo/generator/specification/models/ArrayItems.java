@@ -16,9 +16,12 @@ import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 @Builder
 public class ArrayItems {
     private JsonDataTypes type;
+    private Properties properties;
 
     @JsonCreator
-    public ArrayItems(@JsonProperty("type") JsonDataTypes type) {
+    public ArrayItems(@JsonProperty("type") JsonDataTypes type,
+                      @JsonProperty("properties") Properties properties) {
         this.type = type;
+        this.properties = properties;
     }
 }
