@@ -1,5 +1,26 @@
 #pragma once
-class {{{name}}} {
+
+#include <string>
+#include <vector>
+
+class {{{modelName}}} {
 public:
-    {{{name}}}() = default;
-}
+    {{{modelName}}}() = default;
+
+    {{#members}}
+    {{#isPrimitive}}
+    {{{dataType}}} {{{getterName}}}() const;
+    void {{{setterName}}}({{{dataType}}} value);
+    {{/isPrimitive}}
+    {{^isPrimitive}}
+    {{{dataType}}}& {{{getterName}}}() const;
+    void {{{setterName}}}(const {{{dataType}}}& value);
+    {{/isPrimitive}}
+
+    {{/members}}
+private:
+    {{#members}}
+        /* {{{description}}} */
+        {{{dataType}}} {{{name}}};
+    {{/members}}
+};
