@@ -1,4 +1,4 @@
-package net.gspatace.json.schema.podo.generator;
+package net.gspatace.json.schema.podo.generator.specification;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +16,7 @@ import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class JsonSchemaTest {
+public class JsonSchemaTests {
     private static final String jsonSchemaAsJson = "{\n" +
             "  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n" +
             "  \"$id\": \"https://example.com/product.schema.json\",\n" +

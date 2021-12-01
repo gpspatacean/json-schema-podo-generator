@@ -1,8 +1,7 @@
-package net.gspatace.json.schema.podo.generator;
+package net.gspatace.json.schema.podo.generator.specification;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.Properties;
 import net.gspatace.json.schema.podo.generator.specification.models.Property;
 import org.junit.Before;
@@ -14,7 +13,7 @@ import java.util.List;
 import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.createDefaultObjectMapper;
 import static org.junit.Assert.assertEquals;
 
-public class PropertiesTest {
+public class PropertiesTests {
     private static final String propertiesJson = "{\n" +
             "\t\t\"prop1\":{\n" +
             "\t\t\t\"description\":\"Description of 1st property\",\n" +

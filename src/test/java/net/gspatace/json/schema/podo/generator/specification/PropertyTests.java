@@ -1,15 +1,14 @@
-package net.gspatace.json.schema.podo.generator;
+package net.gspatace.json.schema.podo.generator.specification;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.Property;
 import org.junit.Test;
 
 import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.createDefaultObjectMapper;
 import static org.junit.Assert.*;
 
-public class PropertyTest {
+public class PropertyTests {
     private static final String propertyJson = "{\n" +
             "\t\"productId\":{\n" +
             "\t\t\"description\":\"The unique identifier for a product\",\n" +
