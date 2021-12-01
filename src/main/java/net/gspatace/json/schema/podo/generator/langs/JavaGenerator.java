@@ -4,16 +4,12 @@ import net.gspatace.json.schema.podo.generator.annotations.CustomProperties;
 import net.gspatace.json.schema.podo.generator.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.base.AbstractGenerator;
 import net.gspatace.json.schema.podo.generator.base.BaseOptions;
-import net.gspatace.json.schema.podo.generator.generators.JsonSchemaGenData;
-import net.gspatace.json.schema.podo.generator.generators.MemberVariableData;
 import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.templating.TemplateFile;
 import picocli.CommandLine;
 
-import java.util.Locale;
-
 @SchemaGenerator(name = "java", embeddedResourceLocation = "java",
-                    description = "Just for tests.")
+        description = "Just for tests.")
 public class JavaGenerator extends AbstractGenerator {
 
     private final JavaOptionsCli javaSpecificProperties = new JavaOptionsCli();
