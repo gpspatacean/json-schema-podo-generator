@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "rate": {
+      "type": "integer",
+      "description": "Rating from 1 to 10"
+    },
+    "user": {
+      "type": "string",
+      "description": "User that gave this review"
+    }
+  }
+}

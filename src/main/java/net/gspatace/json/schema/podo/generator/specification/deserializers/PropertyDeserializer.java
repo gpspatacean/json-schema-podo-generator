@@ -12,6 +12,8 @@ import net.gspatace.json.schema.podo.generator.specification.models.Property;
 import java.io.IOException;
 import java.util.*;
 
+import static net.gspatace.json.schema.podo.generator.specification.deserializers.DeserializeUtils.getOptionalComplexProperty;
+
 /**
  * Deserializer for a "property", which is a child node of the
  * "properties" node of an Object, as specified by JSON Schema
@@ -70,30 +72,6 @@ public class PropertyDeserializer extends JsonDeserializer<Property> {
                 .properties(properties)
                 .required(required)
                 .build();
-    }
-
-    /**
-     * Returns an optional complex Object that is serialized
-     * as a standalone object from its respective JSON Node
-     *
-     * @param jsonNode      node that contains the desired information
-     * @param propertyName  name of the target property
-     * @param propertyClass Class of the object
-     * @param <T>           Class of the object
-     * @return optional Complex object
-     */
-    private <T> Optional<T> getOptionalComplexProperty(final JsonNode jsonNode, final String propertyName, final Class<T> propertyClass) {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-        final Optional<String> propertyAsString = Optional.ofNullable(jsonNode.get(propertyName)).map(JsonNode::toString);
-        if (propertyAsString.isPresent()) {
-            try {
-                return Optional.of(objectMapper.readValue(propertyAsString.get(), propertyClass));
-            } catch (JsonProcessingException ex) {
-                log.error("Failed converting [{}] to object of type `{}`", propertyAsString.get(), propertyClass, ex);
-            }
-        }
-        return Optional.empty();
     }
 
     /**

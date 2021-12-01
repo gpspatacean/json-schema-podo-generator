@@ -164,9 +164,9 @@ public abstract class AbstractGenerator {
     protected String getCollectionDataType(final MemberVariableData member) {
         final StringBuilder sb = new StringBuilder();
         sb.append(baseDataTypesMappings.get(JsonDataTypes.ARRAY));
-        final String dataType = isBaseType(member.getJsonDataTypes()) ?
+        final String dataType = isBaseType(member.getJsonDataTypes()) && !member.getInnerModel().isPresent() ?
                 baseDataTypesMappings.get(JsonDataTypes.valueOf(member.getDataType().toUpperCase(Locale.ROOT))) :
-                member.getDataType();
+                StringUtils.capitalize(member.getDataType());
         sb.append("<").append(dataType).append(">");
         return sb.toString();
     }
