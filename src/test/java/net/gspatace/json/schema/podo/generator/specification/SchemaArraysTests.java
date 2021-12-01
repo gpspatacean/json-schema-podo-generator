@@ -1,11 +1,8 @@
-package net.gspatace.json.schema.podo.generator;
+package net.gspatace.json.schema.podo.generator.specification;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import jdk.nashorn.internal.scripts.JD;
-import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.ArrayItems;
 import net.gspatace.json.schema.podo.generator.specification.models.JsonSchema;
 import net.gspatace.json.schema.podo.generator.specification.models.Properties;
@@ -27,12 +24,12 @@ import static org.junit.Assert.*;
  * @author George Spătăcean
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-public class SchemaArraysTest {
+public class SchemaArraysTests {
     private final ObjectMapper objectMapper = createDefaultObjectMapper();
 
     @Test
     public void DeserializeArrayWithSimpleTypes() throws JsonProcessingException {
-        final Optional<String> jsonSchema = getSchemaFromResource(this.getClass().getClassLoader(), "SchemaArrays.json");
+        final Optional<String> jsonSchema = getSchemaFromResource(this.getClass().getClassLoader(), "schemas/SchemaArrays.json");
         if (!jsonSchema.isPresent()) {
             assertFalse("Test Failure: failed to read input file", false);
         }
@@ -49,7 +46,7 @@ public class SchemaArraysTest {
 
     @Test
     public void DeserializeArrayWithComplexTypes() throws JsonProcessingException {
-        final Optional<String> jsonSchema = getSchemaFromResource(this.getClass().getClassLoader(), "SchemaArrays.json");
+        final Optional<String> jsonSchema = getSchemaFromResource(this.getClass().getClassLoader(), "schemas/SchemaArrays.json");
         if (!jsonSchema.isPresent()) {
             assertFalse("Test Failure: failed to read input file", false);
         }
@@ -75,7 +72,7 @@ public class SchemaArraysTest {
         final ObjectMapper objectMapper = createDefaultObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
         final String actual = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayItems);
-        final Optional<String> expected = getSchemaFromResource(this.getClass().getClassLoader(), "SimpleArrayProperty.json");
+        final Optional<String> expected = getSchemaFromResource(this.getClass().getClassLoader(), "schemas/SimpleArrayProperty.json");
         JSONAssert.assertEquals(expected.get(), actual, JSONCompareMode.STRICT);
     }
 
@@ -103,7 +100,7 @@ public class SchemaArraysTest {
         final ObjectMapper objectMapper = createDefaultObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
         final String actualRepresentation = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayItems);
-        final Optional<String> expectedRepresentation = getSchemaFromResource(this.getClass().getClassLoader(), "ComplexArrayProperty.json");
+        final Optional<String> expectedRepresentation = getSchemaFromResource(this.getClass().getClassLoader(), "schemas/ComplexArrayProperty.json");
         JSONAssert.assertEquals(expectedRepresentation.get(),actualRepresentation,JSONCompareMode.STRICT);
     }
 }
