@@ -82,17 +82,43 @@ public class JsonSchemaParser {
     }
 
     public static ModelData getModelForArrayType(final Property property) {
-        //TODO check this
-        assert ( property.getType() == JsonDataTypes.ARRAY );
-        assert ( property.getItems().isPresent());
-        final ArrayItems arrayItems = property.getItems().get();
-        if ( arrayItems.getType() != JsonDataTypes.OBJECT &&
-            arrayItems.getType() != JsonDataTypes.ARRAY ) {
-
+        if( JsonDataTypes.ARRAY != property.getType()) {
+            log.error("Property {} is not an array!", property.getPropertyName());
             return ModelData.builder().build();
         }
 
-        return ModelData.builder().build();
+        final Optional<ArrayItems> arrayItems = property.getItems();
+        if(!arrayItems.isPresent()) {
+            log.warn("No array items definition found");
+            return ModelData.builder().build();
+        } else {
+            final ArrayItems items = arrayItems.get();
+            if( JsonDataTypes.OBJECT != items.getType()) {
+                log.error("Currently Array can only have Objects or Simple Data types");
+                return ModelData.builder().build();
+            }
+
+            final Optional<Properties> properties = items.getProperties();
+            if (!properties.isPresent()) {
+                log.error("No properties on Object Type parent property");
+                return ModelData.builder().build();
+            } else {
+
+                final List<Property> propertyList = properties.get().getPropertyList();
+                final List<MemberVariableData> members = new ArrayList<>();
+
+                propertyList.stream().forEach(prop -> {
+                    final MemberVariableData memberVariableData = simplePropertyToMember(prop);
+                    members.add(memberVariableData);
+                });
+                final ModelData.ModelDataBuilder modelDataBuilder = ModelData.builder();
+                modelDataBuilder
+                        .modelName(property.getPropertyName())
+                        .members(members);
+
+                return modelDataBuilder.build();
+            }
+        }
     }
 
     public static MemberVariableData getMemberFromArrayType(final Property property) {
@@ -138,7 +164,17 @@ public class JsonSchemaParser {
                 if ( property.getItems().isPresent()) {
                     final ArrayItems arrayItems = property.getItems().get();
                     if (arrayItems.getType() == JsonDataTypes.OBJECT) {
-                        models.add(getModelForArrayType(property));
+                        final ModelData newModel = getModelForArrayType(property);
+                        models.add(newModel);
+                        final MemberVariableData.MemberVariableDataBuilder memberVariableDataBuilder = MemberVariableData.builder();
+                        memberVariableDataBuilder
+                                .name(property.getPropertyName())
+                                .description(property.getDescription())
+                                .jsonDataTypes(property.getType())
+                                .isArray(true)
+                                .innerModel(Optional.of(newModel))
+                                .dataType(newModel.getModelName());
+                        members.add(memberVariableDataBuilder.build());
                     }
                     else
                     {
