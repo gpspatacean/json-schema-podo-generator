@@ -2,6 +2,7 @@ package net.gspatace.json.schema.podo.generator.cli;
 
 import net.gspatace.json.schema.podo.generator.cli.commands.GenerateCommand;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.After;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class GenerateCommandTests {
         //"magically" set the private fields.
         FieldUtils.writeField(generateCommand, "generatorName", "test-generator", true);
         FieldUtils.writeField(generateCommand, "inputFile", "test/inputTestSchema.json", true);
-        FieldUtils.writeField(generateCommand, "outputDirectory", "test/output", true);
+        FieldUtils.writeField(generateCommand, "outputDirectory", "target/gen-output", true);
 
         final Map<String, String> genProps = new HashMap<>();
         genProps.put("-customOptionOne", "custOptOneValue");
@@ -33,5 +34,10 @@ public class GenerateCommandTests {
 
         generateCommand.run();
         assertTrue(true);
+    }
+
+    @After
+    public void cleanupTestOutput() {
+        //TODO
     }
 }
