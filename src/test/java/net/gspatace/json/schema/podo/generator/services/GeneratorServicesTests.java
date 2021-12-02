@@ -34,9 +34,11 @@ public class GeneratorServicesTests {
 
     @Test
     public void testGeneratorInstantiation() {
+        final String[] testCustomProps = {"-customOptionOne", "custOptOneValue", "-customOptionTwo", "custOptTwoValue"};
         final BaseOptions baseOptions = BaseOptions.builder()
                 .generatorName(testGeneratorName)
                 .outputDirectory("testTempDir")
+                .generatorSpecificProperties(testCustomProps)
                 .build();
         final AbstractGenerator testGenerator = generatorService.getGeneratorInstance(baseOptions).get();
         assertNotNull("Generator is not null", testGenerator);
