@@ -68,7 +68,8 @@ public abstract class AbstractGenerator {
         final ObjectMapper objectMapper = createDefaultObjectMapper();
         final String schema = getSchema();
         final JsonSchema jsonSchema = objectMapper.readValue(schema, JsonSchema.class);
-        return JsonSchemaParser.getGeneratorData(jsonSchema);
+        //return JsonSchemaParser.getGeneratorData(jsonSchema);
+        return new JsonSchemaParser(jsonSchema).getGeneratorData();
     }
 
     /**
