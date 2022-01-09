@@ -159,7 +159,16 @@ public abstract class AbstractGenerator {
     }
 
     /**
-     * @see net.gspatace.json.schema.podo.generator.base.CollectionTypeBuilder
+     * For a given member, if it is a collection, return the language specific construct.
+     * This can be C++ templates, Java/C# generics, etc.
+     *
+     * For instance, for C++, the representation of a collection of "Product"s, could translate to
+     * {@code std::vector<Product> products{};}
+     *
+     * @param member the property that is a collection
+     * @return String containing the language specific construct.
+     *
+     * Also, see {@link net.gspatace.json.schema.podo.generator.base.CollectionTypeBuilder#getCollectionDataType(MemberVariableData)}
      */
     protected String getCollectionDataType(final MemberVariableData member) {
         final StringBuilder sb = new StringBuilder();
@@ -174,9 +183,9 @@ public abstract class AbstractGenerator {
     /**
      * Fill information required by the mustache templates
      * <ul>
-     *     <ui>model name</ui>
-     *     <ui>getter,setter name</ui>
-     *     <ui>collections</ui>
+     *     <li>model name</li>
+     *     <li>getter,setter name</li>
+     *     <li>collections</li>
      * </ul>
      *
      * @param memberVariableData    the property for which information is filled
