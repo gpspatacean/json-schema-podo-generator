@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.JsonSchema;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -28,13 +29,13 @@ public class JsonSchemaParserTests {
         final ObjectMapper objectMapper = createDefaultObjectMapper();
         final String jsonSchemaString = getSchemaFromResource(this.getClass().getClassLoader(), "schemas/ComplexSchema.json").get();
         final JsonSchema jsonSchema = objectMapper.readValue(jsonSchemaString, JsonSchema.class);
-        generatorData = JsonSchemaParser.getGeneratorData(jsonSchema);
+        generatorData = new JsonSchemaParser(jsonSchema).getGeneratorData();
     }
 
     @Test
     public void testBasicProperties() {
         assertEquals("Name of the main Schema is \"Product\"", "Product", generatorData.getName());
-        assertEquals("Main Schema should have 3 models", 3, generatorData.getModels().size());
+        assertEquals("Main Schema should have 4 models", 4, generatorData.getModels().size());
         final List<String> models = generatorData.getModels().stream().map(ModelData::getModelName).collect(Collectors.toList());
         assertTrue("Main Schema should have Product, dimensions, reviews models", models.containsAll(Arrays.asList("Product", "dimensions", "reviews")));
     }
@@ -42,7 +43,7 @@ public class JsonSchemaParserTests {
     @Test
     public void testMainObjectProperties() {
         final ModelData productModel = getModelByName("Product");
-        assertEquals("Main product should have 7 properties", 7, productModel.getMembers().size());
+        assertEquals("Main product should have 6 properties", 6, productModel.getMembers().size());
     }
 
     @Test
@@ -70,10 +71,19 @@ public class JsonSchemaParserTests {
     }
 
     @Test
+    public void testSubObjectOfSubObject() {
+        final MemberVariableData subDimProperty = getMemberDataByName(getModelByName("dimensions"), "subDim");
+        assertTrue("This should be an object property", JsonDataTypes.OBJECT == subDimProperty.getJsonDataTypes());
+        final ModelData subDimModel = subDimProperty.getInnerModel().get();
+        assertEquals("Name of the inner model ", "subDim", subDimModel.getModelName());
+        assertEquals("SubDim inner model should have 2 properties", 2, subDimModel.getMembers().size());
+    }
+
+    @Test
     public void testComplexObjectProperty() {
         final MemberVariableData dimensionsProperty = getMemberDataByName(getModelByName("Product"), "dimensions");
         assertSame("This should be an Object Property", JsonDataTypes.OBJECT, dimensionsProperty.getJsonDataTypes() );
-        assertEquals("This property should have itself 3 properties", 3, dimensionsProperty.getInnerModel().get().getMembers().size());
+        assertEquals("This property should have itself 4 properties", 4, dimensionsProperty.getInnerModel().get().getMembers().size());
     }
 
     private MemberVariableData getMemberDataByName(final ModelData modelData, final String memberName) {
