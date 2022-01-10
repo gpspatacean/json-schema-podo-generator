@@ -26,6 +26,10 @@ jobs:
       - run:
           name: Run tests
           command: mvn test
+      # Generate javadoc just to check everything is fine
+      - run:
+          name: Run javadoc
+          command: mvn javadoc:javadoc
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
