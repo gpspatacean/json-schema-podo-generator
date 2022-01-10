@@ -3,6 +3,10 @@
 #include <string>
 #include <vector>
 
+{{#getDependencies}}
+{{{dependency}}}
+{{/getDependencies}}
+
 class {{{modelName}}} {
 public:
     {{{modelName}}}() = default;
@@ -14,7 +18,7 @@ public:
     void {{{setterName}}}({{{dataType}}} value);
     {{/isPrimitive}}
     {{^isPrimitive}}
-    {{{dataType}}}& {{{getterName}}}() const;
+    const {{{dataType}}}& {{{getterName}}}() const;
     void {{{setterName}}}(const {{{dataType}}}& value);
     {{/isPrimitive}}
 

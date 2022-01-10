@@ -33,6 +33,14 @@ public class DefaultCppGenerator extends AbstractGenerator {
         parseCustomOptionsProperties(cppSpecificProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String formatModelDependency(final String dep) {
+        return String.format("#include \"%s.hpp\"", dep);
+    }
+
     @CustomProperties
     public static class CppSpecificProperties {
         @CommandLine.Option(names = "-ns", description = "Namespace of the generated PODOs")
