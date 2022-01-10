@@ -34,7 +34,7 @@ import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.
  */
 @Slf4j
 public abstract class AbstractGenerator {
-    protected final Map<JsonDataTypes, String> baseDataTypesMappings = new HashMap<>();
+    protected final Map<JsonDataTypes, String> baseDataTypesMappings = new EnumMap<>(JsonDataTypes.class);
     private final String schemaInput;
     private final ProcessedTemplatesWriter writer;
     private final List<TemplateFile> templateList = new ArrayList<>();
@@ -68,7 +68,6 @@ public abstract class AbstractGenerator {
         final ObjectMapper objectMapper = createDefaultObjectMapper();
         final String schema = getSchema();
         final JsonSchema jsonSchema = objectMapper.readValue(schema, JsonSchema.class);
-        //return JsonSchemaParser.getGeneratorData(jsonSchema);
         return new JsonSchemaParser(jsonSchema).getGeneratorData();
     }
 
@@ -132,7 +131,7 @@ public abstract class AbstractGenerator {
      *     <li>Final write of executed templates</li>
      * </ol>
      *
-     * @throws JsonProcessingException if errors occured while processing the provided JSON Schema
+     * @throws JsonProcessingException if errors occurred while processing the provided JSON Schema
      */
     public void generate() throws JsonProcessingException {
         final TemplateLoader templateLoader = new EmbeddedTemplateLoader(embeddedResourceLocation());
@@ -153,6 +152,7 @@ public abstract class AbstractGenerator {
     protected void specializeGeneratorData(JsonSchemaGenData generatorData) {
         generatorData.getModels().forEach(modelData -> {
             modelData.setModelName(deriveModelName(modelData));
+            modelData.setDependencyFormatter(this::formatModelDependency);
             modelData.getMembers().forEach(
                     memberVariableData -> fillLanguageDataType(memberVariableData, this::getCollectionDataType)
             );
@@ -210,6 +210,22 @@ public abstract class AbstractGenerator {
         }
         memberVariableData.setSetterName(deriveSetterName(memberVariableData));
         memberVariableData.setGetterName(deriveGetterName(memberVariableData));
+    }
+
+    /**
+     * Format Model Dependencies - for instance
+     * {@code #include "Dependency.hpp"} for C++
+     * or {@code #import some.package.Dependency} for Java.
+     *
+     * Can be overridden at concrete generator level.
+     *
+     * @param dep Name of the model for which include/import statement
+     *            is required.
+     * @return the formatted include/import/etc. statement
+     *
+     */
+    protected String formatModelDependency(final String dep) {
+        return dep;
     }
 
     /**
