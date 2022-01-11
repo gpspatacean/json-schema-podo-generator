@@ -10,6 +10,7 @@ import net.gspatace.json.schema.podo.generator.generators.MemberVariableData;
 import net.gspatace.json.schema.podo.generator.generators.ModelData;
 import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.JsonSchema;
+import net.gspatace.json.schema.podo.generator.templating.SupportFile;
 import net.gspatace.json.schema.podo.generator.templating.TemplateFile;
 import net.gspatace.json.schema.podo.generator.templating.TemplateManager;
 import net.gspatace.json.schema.podo.generator.templating.interfaces.TemplateLoader;
@@ -34,12 +35,46 @@ import static net.gspatace.json.schema.podo.generator.utils.ObjectMapperFactory.
  */
 @Slf4j
 public abstract class AbstractGenerator {
+    /**
+     * Holder for JSON Schema type to Language specific type mappings
+     * For instance, {@code STRING -> std::string; BOOLEAN -> bool; } for C++
+     */
     protected final Map<JsonDataTypes, String> baseDataTypesMappings = new EnumMap<>(JsonDataTypes.class);
+
+    /**
+     * JSON Schema for which we want to generate PODOs
+     */
     private final String schemaInput;
+
+    /**
+     * Writer for compiled ( executed ) templates
+     */
     private final ProcessedTemplatesWriter writer;
+
+    /**
+     * List of templates used for generation of each entity
+     */
     private final List<TemplateFile> templateList = new ArrayList<>();
+
+    /**
+     * Supporting files, for instance CMakeLists.txt, pom.xml, READMEs, etc.
+     */
+    private final List<SupportFile> supportFiles = new ArrayList<>();
+
+    /**
+     * String containing command line properties specific to a certain generator
+     * For instance, namespace for C++, packages for Java, etc.
+     */
     private final String[] customPropertiesInput;
+
+    /**
+     * Handler to the annotation of the concrete generator instantiation
+     */
     private final SchemaGenerator generatorAnnotation;
+
+    /**
+     * List of primitives specific to a concrete generator
+     */
     private final List<String> languagePrimitives = new ArrayList<>();
 
     /**
@@ -88,12 +123,21 @@ public abstract class AbstractGenerator {
     }
 
     /**
-     * Template registration of concrete generator implementations
+     * Model template registration of concrete generator implementations
      *
-     * @param templateFile name of template to be executed
+     * @param templateFile template to be executed
      */
     protected void addTemplateFile(final TemplateFile templateFile) {
         templateList.add(templateFile);
+    }
+
+    /**
+     * Auxiliary file registration of concrete generator implementations
+     *
+     * @param supportFile template to be executed
+     */
+    protected void addSupportFile(final SupportFile supportFile) {
+        supportFiles.add(supportFile);
     }
 
     /**
@@ -138,8 +182,23 @@ public abstract class AbstractGenerator {
         final TemplateManager templateManager = new TemplateManager(templateLoader);
         final JsonSchemaGenData schemaData = getJsonSchemaGenData();
         specializeGeneratorData(schemaData);
+        fillAdditionalProperties(schemaData);
         generateModels(templateManager, schemaData.getModels());
+        generateSupportFiles(templateManager, schemaData);
         writer.writeToDisk();
+    }
+
+    /**
+     * Execute auxiliary templates against the current context
+     *
+     * @param templateManager will be used for actual file writing
+     */
+    private void generateSupportFiles(final TemplateManager templateManager, final JsonSchemaGenData generatorData) {
+        supportFiles.forEach(supportFile -> {
+            final String content = templateManager.executeTemplate(supportFile.getTemplateName(), generatorData);
+            writer.addProcessedTemplate(supportFile.getFinalFileName(), content);
+            log.debug("Added resolved template {}", supportFile.getFinalFileName());
+        });
     }
 
     /**
@@ -157,6 +216,16 @@ public abstract class AbstractGenerator {
                     memberVariableData -> fillLanguageDataType(memberVariableData, this::getCollectionDataType)
             );
         });
+    }
+
+    /**
+     * Fill additional generic properties pertaining to a certain
+     * generator implementation, e.g. library/namespace or artifact/package
+     *
+     * @param generatorData data to be enriched with additional properties
+     */
+    protected void fillAdditionalProperties(final JsonSchemaGenData generatorData){
+        log.debug("Not filling additional properties");
     }
 
     /**

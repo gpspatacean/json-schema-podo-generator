@@ -1,4 +1,5 @@
 #pragma once
+#include "ModelBase.hpp"
 
 #include <string>
 #include <vector>
@@ -7,12 +8,16 @@
 {{{dependency}}}
 {{/getDependencies}}
 
-class {{{modelName}}} {
+{{#additionalProperties}}
+{{#namespace}}namespace {{namespace}} { {{/namespace}}
+{{/additionalProperties}}
+
+class {{{modelName}}} : public ModelBase {
 public:
     {{{modelName}}}() = default;
 
     {{#members}}
-    /* {{{name}}} accessors */
+    /* m_{{{name}}} accessors */
     {{#isPrimitive}}
     {{{dataType}}} {{{getterName}}}() const;
     void {{{setterName}}}({{{dataType}}} value);
@@ -23,9 +28,16 @@ public:
     {{/isPrimitive}}
 
     {{/members}}
+    bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>& writer) const override;
+    bool Deserialize(const rapidjson::Value& obj) override;
 private:
     {{#members}}
+
     /* {{{description}}} */
-    {{{dataType}}} {{{name}}};
+    {{{dataType}}} m_{{{name}}}{};
     {{/members}}
 };
+
+{{#additionalProperties}}
+{{#namespace}}} //namespace {{namespace}} {{/namespace}}
+{{/additionalProperties}}
