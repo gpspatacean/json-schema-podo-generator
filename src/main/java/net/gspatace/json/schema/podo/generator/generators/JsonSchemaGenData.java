@@ -2,7 +2,9 @@ package net.gspatace.json.schema.podo.generator.generators;
 
 import lombok.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Holder of information pertaining to the JSON Schema provided as input.
@@ -16,5 +18,17 @@ import java.util.List;
 @Builder
 public class JsonSchemaGenData {
     private final String name;
+
+    /**
+     * List of all the models inferred from JSON Schema.
+     * Each of the model will be used as context in template execution
+     */
     private final List<ModelData> models;
+
+    /**
+     * List of additional generic properties that can be
+     * used by each concrete generator implementation
+     */
+    @Builder.Default
+    private Map<String,Object> additionalProperties = new HashMap<>();
 }

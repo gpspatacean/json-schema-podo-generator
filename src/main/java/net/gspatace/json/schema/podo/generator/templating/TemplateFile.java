@@ -11,7 +11,6 @@ import lombok.Setter;
  * @author George Spătăcean
  */
 @Getter
-@Setter
 @AllArgsConstructor
 public class TemplateFile {
     private String templateName;

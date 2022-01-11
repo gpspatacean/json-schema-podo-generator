@@ -1,24 +1,110 @@
 #include "{{{modelName}}}.hpp"
 
+{{#additionalProperties}}
+{{#namespace}}namespace {{namespace}} { {{/namespace}}
+{{/additionalProperties}}
+
 {{#members}}
 {{#isPrimitive}}
 {{{dataType}}} {{{modelName}}}::{{{getterName}}}() const {
-    return {{{name}}};
+    return m_{{{name}}};
 }
 
 void {{{modelName}}}::{{{setterName}}}({{{dataType}}} value) {
-    this->{{{name}}} = value;
+    m_{{{name}}} = value;
 }
 
 {{/isPrimitive}}
 {{^isPrimitive}}
 const {{{dataType}}}& {{{modelName}}}::{{{getterName}}}() const {
-    return {{{name}}};
+    return m_{{{name}}};
 }
 
 void {{{modelName}}}::{{{setterName}}}(const {{{dataType}}}& value) {
-    this->{{{name}}} = value;
+    m_{{{name}}} = value;
 }
 
 {{/isPrimitive}}
 {{/members}}
+
+bool {{{modelName}}}::Serialize(rapidjson::Writer<rapidjson::StringBuffer>& writer) const {
+    writer.StartObject();
+
+    {{#members}}
+    /**************** <m_{{{name}}}> ****************/
+    writer.String("{{{name}}}");
+    {{^isArray}}
+    {{#isString}}
+    writer.String(m_{{{name}}}.c_str());
+    {{/isString}}
+    {{#isInteger}}
+    writer.Int(m_{{{name}}});
+    {{/isInteger}}
+    {{#isNumber}}
+    writer.Double(m_{{{name}}});
+    {{/isNumber}}
+    {{#isBoolean}}
+    writer.Bool(m_{{{name}}});
+    {{/isBoolean}}
+    {{#isObject}}
+    m_{{{name}}}.Serialize(writer);
+    {{/isObject}}
+    {{/isArray}}
+    {{#isArray}}
+    writer.StartArray();
+    for( const auto& element : m_{{{name}}} ) {
+        {{#isSimpleArray}}
+        Write(writer, element);
+        {{/isSimpleArray}}
+        {{#isComplexArray}}
+        element.Serialize(writer);
+        {{/isComplexArray}}
+    }
+    writer.EndArray();
+    {{/isArray}}
+    /**************** </m_{{{name}}}> ****************/
+
+    {{/members}}
+    writer.EndObject();
+    return true;
+}
+
+bool {{{modelName}}}::Deserialize(const rapidjson::Value& obj){
+    {{#members}}
+    {{^isArray}}
+    {{#isString}}
+    m_{{{name}}} = obj["{{{name}}}"].GetString();
+    {{/isString}}
+    {{#isInteger}}
+    m_{{{name}}} = obj["{{{name}}}"].GetInt();
+    {{/isInteger}}
+    {{#isNumber}}
+    m_{{{name}}} = obj["{{{name}}}"].GetDouble();
+    {{/isNumber}}
+    {{#isBoolean}}
+    m_{{{name}}} = obj["{{{name}}}"].GetBool();
+    {{/isBoolean}}
+    {{#isObject}}
+    m_{{{name}}}.Deserialize(obj["{{{name}}}"]);
+    {{/isObject}}
+    {{/isArray}}
+    {{#isArray}}
+    for( const auto& v : obj["{{{name}}}"].GetArray() ) {
+        decltype (m_{{{name}}})::value_type innerElement{};
+        {{#isSimpleArray}}
+        Read(v, innerElement);
+        {{/isSimpleArray}}
+        {{#isComplexArray}}
+        innerElement.Deserialize(v);
+        {{/isComplexArray}}
+        m_{{{name}}}.push_back(innerElement);
+    }
+    {{/isArray}}
+
+    {{/members}}
+    return true;
+}
+
+{{#additionalProperties}}
+{{#namespace}}} //namespace {{namespace}} {{/namespace}}
+{{/additionalProperties}}

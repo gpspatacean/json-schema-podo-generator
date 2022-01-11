@@ -26,9 +26,47 @@ public class MemberVariableData {
     private String dataType;
     private String getterName;
     private String setterName;
-    @Builder.Default private Optional<ModelData> innerModel = Optional.empty();
+    @Builder.Default
+    private Optional<ModelData> innerModel = Optional.empty();
 
     public String getTypeAsString() {
         return jsonDataTypes.toString();
+    }
+
+    @SuppressWarnings("unused") //May be used directly in templates
+    public boolean isString() {
+        return JsonDataTypes.STRING == jsonDataTypes;
+    }
+
+    @SuppressWarnings("unused") //May be used directly in templates
+    public boolean isInteger() {
+        return JsonDataTypes.INTEGER == jsonDataTypes;
+    }
+
+    @SuppressWarnings("unused") //May be used directly in templates
+    public boolean isNumber() {
+        return JsonDataTypes.NUMBER == jsonDataTypes;
+    }
+
+    @SuppressWarnings("unused") //May be used directly in templates
+    public boolean isBoolean() {
+        return JsonDataTypes.BOOLEAN == jsonDataTypes;
+    }
+
+    @SuppressWarnings("unused") //May be used directly in templates
+    public boolean isObject() {
+        return JsonDataTypes.OBJECT == jsonDataTypes;
+    }
+
+    @SuppressWarnings("unused") //May be used directly in templates
+    public boolean isSimpleArray() {
+        return JsonDataTypes.ARRAY == jsonDataTypes &&
+                !innerModel.isPresent();
+    }
+
+    @SuppressWarnings("unused") //May be used directly in templates
+    public boolean isComplexArray() {
+        return JsonDataTypes.ARRAY == jsonDataTypes &&
+                innerModel.isPresent();
     }
 }

@@ -38,10 +38,19 @@ public class ModelData {
     private UnaryOperator<String> dependencyFormatter = value -> value;
 
     /**
+     * Additional generic properties that can be set by
+     * concrete generator implementations and then be used
+     * in Model templates.
+     */
+    @Builder.Default
+    private Map<String, Object> additionalProperties = new HashMap<>();
+
+    /**
      * Retrieve the dependencies of this module.
      * Used directly in the mustache templates
+     *
      * @return List of maps containing a single identical key (used in
-     *          mustache templates )
+     * mustache templates )
      */
     public List<Map<String, String>> getDependencies() {
         final List<Map<String, String>> dependencies = new ArrayList<>();
