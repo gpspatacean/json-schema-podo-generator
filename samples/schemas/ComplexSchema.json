@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/product.schema.json",
+  "title": "Product",
+  "description": "A product from Acme's catalog",
+  "type": "object",
+  "properties": {
+    "productId": {
+      "description": "The unique identifier for a product",
+      "type": "integer"
+    },
+    "productName": {
+      "description": "Name of the product",
+      "type": "string"
+    },
+    "price": {
+      "description": "The price of the product",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "tags": {
+      "description": "Tags for the product",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "reviews": {
+      "description": "Reviews of the product",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rate": {
+            "type": "integer",
+            "description": "Rating from 1 to 10"
+          },
+          "user": {
+            "type": "string",
+            "description": "User that gave this review"
+          }
+        }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "subDim": {
+          "type": "object",
+          "properties": {
+            "weight": {
+              "type": "number",
+              "description": "The weight of the product"
+            },
+            "density": {
+              "type": "number",
+              "description": "The density of the product"
+            }
+          }
+        }
+      },
+      "required": [ "length", "width", "height" ]
+    }
+  },
+  "required": [ "productId", "productName", "price" ]
+}
