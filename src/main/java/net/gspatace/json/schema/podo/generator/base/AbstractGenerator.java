@@ -354,7 +354,7 @@ public abstract class AbstractGenerator {
     private void generateFilesForModel(final TemplateManager templateManager, final ModelData modelData) {
         templateList.forEach(template -> {
             final String resolvedTemplate = templateManager.executeTemplate(template.getTemplateName(), modelData);
-            final String outputFileName = modelData.getModelName() + "." + template.getFileExtension();
+            final String outputFileName = template.getOutputFilePath(modelData.getModelName());
             writer.addProcessedTemplate(outputFileName, resolvedTemplate);
             log.debug("Added resolved template {}", outputFileName);
         });

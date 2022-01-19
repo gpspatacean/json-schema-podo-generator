@@ -22,8 +22,8 @@ public class DefaultCppGenerator extends AbstractGenerator {
     public DefaultCppGenerator(BaseOptions baseOptions) {
         super(baseOptions);
 
-        addTemplateFile(new TemplateFile("header.mustache", "hpp"));
-        addTemplateFile(new TemplateFile("source.mustache", "cpp"));
+        addTemplateFile(TemplateFile.builder().templateName("header.mustache").fileExtension("hpp").build());
+        addTemplateFile(TemplateFile.builder().templateName("source.mustache").fileExtension("cpp").build());
 
         addSupportFile(new SupportFile("modelbase-header.mustache", "ModelBase.hpp"));
         addSupportFile(new SupportFile("modelbase-source.mustache", "ModelBase.cpp"));

@@ -8,6 +8,8 @@ import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.templating.TemplateFile;
 import picocli.CommandLine;
 
+import java.util.Optional;
+
 @SchemaGenerator(name = "java", embeddedResourceLocation = "java",
         description = "Just for tests.")
 public class JavaGenerator extends AbstractGenerator {
@@ -16,7 +18,12 @@ public class JavaGenerator extends AbstractGenerator {
 
     public JavaGenerator(BaseOptions baseCliOptions) {
         super(baseCliOptions);
-        addTemplateFile(new TemplateFile("source.mustache", "java"));
+        //addTemplateFile(new TemplateFile("source.mustache", "java"));
+        final String subDir = "src/main/java";
+        addTemplateFile(TemplateFile.builder()
+                .templateName("source.mustache")
+                .fileExtension("java")
+                .subDirectory(Optional.of(subDir)).build());
 
         addBaseDataTypeMapping(JsonDataTypes.INTEGER, "int");
         addBaseDataTypeMapping(JsonDataTypes.NUMBER, "double");
