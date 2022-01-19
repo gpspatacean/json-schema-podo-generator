@@ -65,4 +65,12 @@ public class ModelData {
 
         return dependencies;
     }
+
+    /**
+     * @return true if this model has any arrays, false otherwise
+     */
+    @SuppressWarnings("unused") // may be used directly from templates
+    public boolean hasArrays() {
+        return members.stream().anyMatch(MemberVariableData::isArray);
+    }
 }
