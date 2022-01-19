@@ -1,6 +1,5 @@
 package net.gspatace.json.schema.podo.generator.templating;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -39,7 +38,7 @@ public class TemplateFile {
      *
      * @param fileName the file name
      * @return the final file name and location, relative to the
-     *          destination directory
+     * destination directory
      */
     public String getOutputFilePath(final String fileName) {
         if (subDirectory.isPresent()) {

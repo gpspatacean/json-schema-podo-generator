@@ -1,15 +1,26 @@
+{{#additionalProperties}}
+{{#apiPackage}}package {{apiPackage}};{{/apiPackage}}
+{{/additionalProperties}}
+
+{{#hasArrays}}
+import java.util.ArrayList;
+{{/hasArrays}}
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class {{{modelName}}} {
 {{#members}}
-    /* {{{description}}} */
-    private {{{dataType}}} {{{name}}};
-{{/members}}
-{{#members}}
-    public {{{dataType}}} {{{getterName}}} {
-        return {{{name}}};
-    }
 
-    public void {{{setterName}}} (final {{{dataType}}} value ) {
-        this.{{{name}}} = value;
-    }
+    /**
+     * {{{description}}}
+     */
+    private {{{dataType}}} {{{name}}};
 {{/members}}
 }
