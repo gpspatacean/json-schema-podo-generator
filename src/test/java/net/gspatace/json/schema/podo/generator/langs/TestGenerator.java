@@ -19,7 +19,7 @@ public class TestGenerator extends AbstractGenerator {
 
     public TestGenerator(final BaseOptions baseOptions) {
         super(baseOptions);
-        addTemplateFile(new TemplateFile("testGenerator.mustache", "test"));
+        addTemplateFile(TemplateFile.builder().templateName("testGenerator.mustache").fileExtension("test").build());
         parseCustomOptionsProperties(customProperties);
     }
 
