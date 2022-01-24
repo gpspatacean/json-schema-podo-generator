@@ -8,6 +8,10 @@ further used for interacting with a JSON that matches the specified schema. Heav
 
 It is build as a framework, and new languages can be added. This will be detailed separately.
 
+## Supported generators
+- [C++](samples/cpp) - PODOs with RapidJSON serialization/deserialization
+- [Java](samples/java) - just PODOs with lombok, no JSON library included by default
+
 ## Getting started
 ### Basic usage
 Run `java -jar target/json-schema-podo-generator-0.0.1-SNAPSHOT.jar generate -g cpp -i <schema/input/file.json> -o <output/directory>`.
