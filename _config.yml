@@ -1,0 +1,3 @@
+theme: jekyll-theme-minimal
+title: JSON Schema PODO Generator 
+description: Extendable framework for Plain Old Data Objects code generation based on JSON Schema representation. 
