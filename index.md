@@ -1,37 +1,33 @@
-## Welcome to GitHub Pages
+# Plain Old Data Objects generator from JSON Schemas
 
-You can use the [editor on GitHub](https://github.com/gspatace/json-schema-podo-generator/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## Overview
+Code generation tool that generates Plain Old Data Objects with Serialization/Deserialization capabilities.
+This is a framework that uses [mustache](https://mustache.github.io/) templating, using [this](https://github.com/samskivert/jmustache) 
+java library. Starting from a [JSON Schema](https://json-schema.org/) input file, it will generate models that can be
+further used for interacting with a JSON that matches the specified schema. Heavily inspired from [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator).
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+It is build as a framework, and new languages can be added. This will be detailed separately.
 
-### Markdown
+## Supported generators
+- [C++](samples/cpp) - PODOs with RapidJSON serialization/deserialization
+- [Java](samples/java) - just PODOs with lombok, no JSON library included by default
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Getting started
+### Basic usage
+Run `java -jar target/json-schema-podo-generator-0.0.1-SNAPSHOT.jar generate -g cpp -i <schema/input/file.json> -o <output/directory>`.
+This will generate the models using `cpp` generator.
 
-```markdown
-Syntax highlighted code block
+Also see `java -jar target/json-schema-podo-generator-0.0.1-SNAPSHOT.jar help`
 
-# Header 1
-## Header 2
-### Header 3
+### Advanced features
+Generator specific properties are supported. The available custom properties of a generator can be seen by running
+`java -jar .\target\json-schema-podo-generator-0.0.1-SNAPSHOT.jar config-help -g cpp`
 
-- Bulleted
-- List
+For instance, `java -jar target/json-schema-podo-generator-0.0.1-SNAPSHOT.jar generate -g cpp -i <schema/input/file.json> -o <output/directory> -genprops -ns=my_namespace,-l=mylib`
+will generate the models in the `my_namespace` namespace, and build `mylib` module.
 
-1. Numbered
-2. List
+### Samples
+Samples can be found in [samples](samples) directory.
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/gspatace/json-schema-podo-generator/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Authors
+* George Spătăcean <george.spatacean@gmail.com>
