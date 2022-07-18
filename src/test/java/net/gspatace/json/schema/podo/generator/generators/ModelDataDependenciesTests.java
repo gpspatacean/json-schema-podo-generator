@@ -47,7 +47,7 @@ public class ModelDataDependenciesTests {
                     acc.add(singleElementList.get(0));
                     return acc;
                 })
-                .containsAll(Arrays.asList("Dimensions", "Reviews"));
+                .containsAll(Arrays.asList("Dimensions", "Review"));
         assertTrue("Product must have correct dependencies", hasCorrectDependencies);
     }
 }

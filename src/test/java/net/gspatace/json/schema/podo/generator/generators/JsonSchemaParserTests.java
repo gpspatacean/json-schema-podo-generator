@@ -38,7 +38,7 @@ public class JsonSchemaParserTests {
         assertEquals("Name of the main Schema is \"Product\"", "Product", generatorData.getName());
         assertEquals("Main Schema should have 4 models", 4, generatorData.getModels().size());
         final List<String> models = generatorData.getModels().stream().map(ModelData::getModelName).collect(Collectors.toList());
-        assertTrue("Main Schema should have Product, dimensions, reviews models", models.containsAll(Arrays.asList("Product", "dimensions", "reviews")));
+        assertTrue("Main Schema should have \"Product\", \"dimensions\", \"review\" models", models.containsAll(Arrays.asList("Product", "dimensions", "review")));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class JsonSchemaParserTests {
         final MemberVariableData reviewsProperty = getMemberDataByName(getModelByName(generatorData, "Product"), "reviews");
         assertTrue("This should be an array property", reviewsProperty.isArray() && JsonDataTypes.ARRAY == reviewsProperty.getJsonDataTypes());
         final ModelData innerModelData = reviewsProperty.getInnerModel().get();
-        assertEquals("Name of the inner model ", "reviews", innerModelData.getModelName());
+        assertEquals("Name of the inner model ", "review", innerModelData.getModelName());
         assertEquals("Inner model should have 2 properties ", 2, innerModelData.getMembers().size());
     }
 

@@ -8,6 +8,8 @@ import net.gspatace.json.schema.podo.generator.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.specification.models.ArrayItems;
 import net.gspatace.json.schema.podo.generator.specification.models.Properties;
 import net.gspatace.json.schema.podo.generator.specification.models.Property;
+import org.jibx.schema.codegen.extend.DefaultNameConverter;
+import org.jibx.schema.codegen.extend.NameConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,8 +88,10 @@ public class ArrayPropertyHandler implements JsonTypePropertyHandler {
                 });
 
                 final ModelData.ModelDataBuilder modelDataBuilder = ModelData.builder();
+                final NameConverter nameConverter = new DefaultNameConverter();
+                final String modelName = nameConverter.depluralize(property.getPropertyName());
                 modelDataBuilder
-                        .modelName(property.getPropertyName())
+                        .modelName(modelName)
                         .members(members);
 
                 return modelDataBuilder.build();
