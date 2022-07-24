@@ -7,7 +7,7 @@ Multi-module Maven project with:
 
 Command used to generate contents of [generated](generated) directory:
 
-```java -jar .\target\json-schema-podo-generator-0.0.1-SNAPSHOT.jar generate -g java -i samples\schemas\ComplexSchema.json -o samples\java\generated```
+```java -jar .\modules\cli-wrapper\target\podo-generator-cli-0.0.1-SNAPSHOT.jar generate -g java -i samples\schemas\ComplexSchema.json -o samples\java\generated```
 
 ### Build
 Run `mvn clean package` - it will build everything and run the simple test.
