@@ -5,7 +5,7 @@ Write-Host "This will genererate samples. Please make sure this is rerun after e
 
 $scriptFullPath = $MyInvocation.MyCommand.Path;
 $generatorRootPath = Split-Path (Split-Path $scriptFullPath -Parent) -Parent
-$jarLocation = Join-Path -Path $generatorRootPath -ChildPath "target\json-schema-podo-generator-0.0.1-SNAPSHOT.jar"
+$jarLocation = Join-Path -Path $generatorRootPath -ChildPath "modules\cli-wrapper\target\podo-generator-cli-0.0.1-SNAPSHOT.jar"
 $schemaLocation = Join-Path -Path $generatorRootPath -ChildPath "samples\schemas\ComplexSchema.json"
 
 ##CPP area

@@ -14,16 +14,16 @@ It is build as a framework, and new languages can be added. This will be detaile
 
 ## Getting started
 ### Basic usage
-Run `java -jar target/json-schema-podo-generator-0.0.1-SNAPSHOT.jar generate -g cpp -i <schema/input/file.json> -o <output/directory>`.
+Run `java -jar ./modules/cli-wrapper/target/podo-generator-cli-0.0.1-SNAPSHOT.jar generate -g cpp -i <schema/input/file.json> -o <output/directory>`.
 This will generate the models using `cpp` generator.
 
-Also see `java -jar target/json-schema-podo-generator-0.0.1-SNAPSHOT.jar help`
+Also see `java -jar ./modules/cli-wrapper/target/podo-generator-cli-0.0.1-SNAPSHOT.jar help`
 
 ### Advanced features
 Generator specific properties are supported. The available custom properties of a generator can be seen by running
-`java -jar .\target\json-schema-podo-generator-0.0.1-SNAPSHOT.jar config-help -g cpp`
+`java -jar ./modules/cli-wrapper/target/podo-generator-cli-0.0.1-SNAPSHOT.jar config-help -g cpp`
 
-For instance, `java -jar target/json-schema-podo-generator-0.0.1-SNAPSHOT.jar generate -g cpp -i <schema/input/file.json> -o <output/directory> -genprops -ns=my_namespace,-l=mylib`
+For instance, `java -jar ./modules/cli-wrapper/target/podo-generator-cli-0.0.1-SNAPSHOT.jar generate -g cpp -i <schema/input/file.json> -o <output/directory> -genprops -ns=my_namespace,-l=mylib`
 will generate the models in the `my_namespace` namespace, and build `mylib` module.
 
 ### Samples
