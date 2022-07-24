@@ -10,7 +10,7 @@ $schemaLocation = Join-Path -Path $generatorRootPath -ChildPath "samples\schemas
 
 ##CPP area
 Write-Host "Cleaning up samples/cpp"
-Get-ChildItem .\samples\cpp -Include *.* -Recurse -Exclude main.cpp,README.md | ForEach {
+Get-ChildItem (Join-Path -Path $generatorRootPath -ChildPath "samples/cpp") -Include *.* -Recurse -Exclude main.cpp,README.md | ForEach {
     $_.Delete()
 }
 
