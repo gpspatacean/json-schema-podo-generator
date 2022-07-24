@@ -36,7 +36,7 @@ public class Product {
     /**
      * Reviews of the product
      */
-    private ArrayList<Reviews> reviews;
+    private ArrayList<Review> reviews;
 
     /**
      * 

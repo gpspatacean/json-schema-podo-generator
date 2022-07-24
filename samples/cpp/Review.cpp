@@ -1,25 +1,25 @@
-#include "Reviews.hpp"
+#include "Review.hpp"
 
 namespace podo_generator { 
 
-int Reviews::GetRate() const {
+int Review::GetRate() const {
     return m_rate;
 }
 
-void Reviews::SetRate(int value) {
+void Review::SetRate(int value) {
     m_rate = value;
 }
 
-const std::string& Reviews::GetUser() const {
+const std::string& Review::GetUser() const {
     return m_user;
 }
 
-void Reviews::SetUser(const std::string& value) {
+void Review::SetUser(const std::string& value) {
     m_user = value;
 }
 
 
-bool Reviews::Serialize(rapidjson::Writer<rapidjson::StringBuffer>& writer) const {
+bool Review::Serialize(rapidjson::Writer<rapidjson::StringBuffer>& writer) const {
     writer.StartObject();
 
     /**************** <m_rate> ****************/
@@ -36,7 +36,7 @@ bool Reviews::Serialize(rapidjson::Writer<rapidjson::StringBuffer>& writer) cons
     return true;
 }
 
-bool Reviews::Deserialize(const rapidjson::Value& obj){
+bool Review::Deserialize(const rapidjson::Value& obj){
     m_rate = obj["rate"].GetInt();
 
     m_user = obj["user"].GetString();

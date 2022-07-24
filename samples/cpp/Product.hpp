@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "Reviews.hpp"
+#include "Review.hpp"
 #include "Dimensions.hpp"
 
 namespace podo_generator { 
@@ -30,8 +30,8 @@ public:
     void SetTags(const std::vector<std::string>& value);
 
     /* m_reviews accessors */
-    const std::vector<Reviews>& GetReviews() const;
-    void SetReviews(const std::vector<Reviews>& value);
+    const std::vector<Review>& GetReviews() const;
+    void SetReviews(const std::vector<Review>& value);
 
     /* m_dimensions accessors */
     const Dimensions& GetDimensions() const;
@@ -54,7 +54,7 @@ private:
     std::vector<std::string> m_tags{};
 
     /* Reviews of the product */
-    std::vector<Reviews> m_reviews{};
+    std::vector<Review> m_reviews{};
 
     /*  */
     Dimensions m_dimensions{};

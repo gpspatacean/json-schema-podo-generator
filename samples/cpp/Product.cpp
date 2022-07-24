@@ -34,11 +34,11 @@ void Product::SetTags(const std::vector<std::string>& value) {
     m_tags = value;
 }
 
-const std::vector<Reviews>& Product::GetReviews() const {
+const std::vector<Review>& Product::GetReviews() const {
     return m_reviews;
 }
 
-void Product::SetReviews(const std::vector<Reviews>& value) {
+void Product::SetReviews(const std::vector<Review>& value) {
     m_reviews = value;
 }
 
