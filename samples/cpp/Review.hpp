@@ -7,9 +7,9 @@
 
 namespace podo_generator { 
 
-class Reviews : public ModelBase {
+class Review : public ModelBase {
 public:
-    Reviews() = default;
+    Review() = default;
 
     /* m_rate accessors */
     int GetRate() const;

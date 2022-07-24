@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reviews {
+public class Review {
 
     /**
      * Rating from 1 to 10
