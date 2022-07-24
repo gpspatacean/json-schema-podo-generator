@@ -26,6 +26,10 @@ jobs:
       - run:
           name: Run tests
           command: mvn test
+      # Install artifacts
+      - run:
+          name: Install
+          command: mvn install
       # Generate javadoc just to check everything is fine
       - run:
           name: Run javadoc
