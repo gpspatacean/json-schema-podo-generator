@@ -37,7 +37,6 @@ public class GeneratorServicesTests {
         final String[] testCustomProps = {"-customOptionOne", "custOptOneValue", "-customOptionTwo", "custOptTwoValue"};
         final BaseOptions baseOptions = BaseOptions.builder()
                 .generatorName(testGeneratorName)
-                .outputDirectory("testTempDir")
                 .generatorSpecificProperties(testCustomProps)
                 .build();
         final AbstractGenerator testGenerator = generatorService.getGeneratorInstance(baseOptions).get();

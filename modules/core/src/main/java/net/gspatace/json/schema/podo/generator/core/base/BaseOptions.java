@@ -19,6 +19,5 @@ import lombok.Data;
 public class BaseOptions {
     private final String generatorName;
     private final String inputSpec;
-    private final String outputDirectory;
     private final String[] generatorSpecificProperties;
 }

@@ -46,9 +46,9 @@ public abstract class AbstractGenerator {
     private final String schemaInput;
 
     /**
-     * Writer for compiled ( executed ) templates
+     * Holder for processed source files
      */
-    private final ProcessedTemplatesWriter writer;
+    private final List<ProcessedSourceFile> processedFiles = new ArrayList<>();
 
     /**
      * List of templates used for generation of each entity
@@ -87,7 +87,6 @@ public abstract class AbstractGenerator {
         //TODO <gspatace> don't really know if this is smart
         // ( read/use derived class annotation in base constructor )
         generatorAnnotation = this.getClass().getAnnotation(SchemaGenerator.class);
-        writer = new ProcessedTemplatesWriter(baseCliOptions.getOutputDirectory());
         customPropertiesInput = baseCliOptions.getGeneratorSpecificProperties();
     }
 
@@ -175,8 +174,9 @@ public abstract class AbstractGenerator {
      * </ol>
      *
      * @throws JsonProcessingException if errors occurred while processing the provided JSON Schema
+     * @return List of processed source files to be handled
      */
-    public void generate() throws JsonProcessingException {
+    public List<ProcessedSourceFile> generate() throws JsonProcessingException {
         final TemplateLoader templateLoader = new EmbeddedTemplateLoader(embeddedResourceLocation());
         final TemplateManager templateManager = new TemplateManager(templateLoader);
         final JsonSchemaGenData schemaData = getJsonSchemaGenData();
@@ -184,7 +184,7 @@ public abstract class AbstractGenerator {
         fillAdditionalProperties(schemaData);
         generateModels(templateManager, schemaData.getModels());
         generateSupportFiles(templateManager, schemaData);
-        writer.writeToDisk();
+        return processedFiles;
     }
 
     /**
@@ -195,7 +195,7 @@ public abstract class AbstractGenerator {
     private void generateSupportFiles(final TemplateManager templateManager, final JsonSchemaGenData generatorData) {
         supportFiles.forEach(supportFile -> {
             final String content = templateManager.executeTemplate(supportFile.getTemplateName(), generatorData);
-            writer.addProcessedTemplate(supportFile.getFinalFileName(), content);
+            processedFiles.add(new ProcessedSourceFile(supportFile.getFinalFileName(), content));
             log.debug("Added resolved template {}", supportFile.getFinalFileName());
         });
     }
@@ -354,7 +354,7 @@ public abstract class AbstractGenerator {
         templateList.forEach(template -> {
             final String resolvedTemplate = templateManager.executeTemplate(template.getTemplateName(), modelData);
             final String outputFileName = template.getOutputFilePath(modelData.getModelName());
-            writer.addProcessedTemplate(outputFileName, resolvedTemplate);
+            processedFiles.add(new ProcessedSourceFile(outputFileName, resolvedTemplate));
             log.debug("Added resolved template {}", outputFileName);
         });
     }

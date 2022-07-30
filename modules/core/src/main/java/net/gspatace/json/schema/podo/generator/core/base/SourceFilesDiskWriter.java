@@ -8,26 +8,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 /**
- * Holder and writer of already processed templates.
- * This will write all the templates as final part of the
- * code generation workflow, as implemented in {@link AbstractGenerator#generate()}
+ * Writer of processed source files.
  */
 @Slf4j
-public class ProcessedTemplatesWriter {
-    private final Map<String, String> processedTemplates = new ConcurrentHashMap<>();
+public class SourceFilesDiskWriter {
+    private final List<ProcessedSourceFile> fileList;
     private final Path outputDirectory;
 
     /**
      * Public constructor
      *
+     * @param processedSources list of final processed files
      * @param outputDir either full or relative path where the output
-     *                  of the generator should be written
      */
-    public ProcessedTemplatesWriter(final String outputDir) {
+    public SourceFilesDiskWriter(final List<ProcessedSourceFile> processedSources, final String outputDir) {
+        fileList = processedSources;
         final Path temporaryPath = Paths.get(outputDir);
         if (temporaryPath.isAbsolute()) {
             outputDirectory = temporaryPath;
@@ -39,27 +37,16 @@ public class ProcessedTemplatesWriter {
     }
 
     /**
-     * Add to the processed templates list a new file to be written
-     *
-     * @param name    name of the file that must be created
-     * @param content contents to be written, after Mustache execution
-     *                has been completed.
-     */
-    public void addProcessedTemplate(final String name, final String content) {
-        processedTemplates.put(name, content);
-    }
-
-    /**
      * Write in the already specified directory all the files
      */
     public void writeToDisk() {
-        processedTemplates.forEach((name, contents) -> {
-            final File target = outputDirectory.resolve(name).toFile();
+        fileList.forEach(processedSourceFile -> {
+            final File target = outputDirectory.resolve(processedSourceFile.getFilePath()).toFile();
             try {
                 log.info("Writing file `{}`", target);
                 Files.createDirectories(Paths.get(target.getParent()));
                 final FileWriter fileWriter = new FileWriter(target);
-                fileWriter.write(contents);
+                fileWriter.write(processedSourceFile.getFileContent());
                 fileWriter.flush();
                 fileWriter.close();
             } catch (IOException e) {
