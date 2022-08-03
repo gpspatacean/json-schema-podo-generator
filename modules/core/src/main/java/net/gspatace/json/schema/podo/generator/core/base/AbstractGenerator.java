@@ -9,22 +9,17 @@ import net.gspatace.json.schema.podo.generator.core.generators.JsonSchemaParser;
 import net.gspatace.json.schema.podo.generator.core.generators.MemberVariableData;
 import net.gspatace.json.schema.podo.generator.core.generators.ModelData;
 import net.gspatace.json.schema.podo.generator.core.specification.JsonDataTypes;
+import net.gspatace.json.schema.podo.generator.core.specification.models.JsonSchema;
 import net.gspatace.json.schema.podo.generator.core.templating.SupportFile;
 import net.gspatace.json.schema.podo.generator.core.templating.TemplateFile;
 import net.gspatace.json.schema.podo.generator.core.templating.TemplateManager;
+import net.gspatace.json.schema.podo.generator.core.templating.interfaces.TemplateLoader;
 import net.gspatace.json.schema.podo.generator.core.templating.loaders.EmbeddedTemplateLoader;
 import net.gspatace.json.schema.podo.generator.core.utils.ObjectMapperFactory;
-import net.gspatace.json.schema.podo.generator.core.specification.models.JsonSchema;
-import net.gspatace.json.schema.podo.generator.core.templating.interfaces.TemplateLoader;
 import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Main base class for all generators
@@ -43,7 +38,7 @@ public abstract class AbstractGenerator {
     /**
      * JSON Schema for which we want to generate PODOs
      */
-    private final String schemaInput;
+    private final String inputSchema;
 
     /**
      * Holder for processed source files
@@ -81,8 +76,8 @@ public abstract class AbstractGenerator {
      *
      * @param generatorInput holder of input needed by a generator
      */
-    protected AbstractGenerator(GeneratorInput generatorInput) {
-        this.schemaInput = generatorInput.getInputSpec();
+    protected AbstractGenerator(final GeneratorInput generatorInput) {
+        inputSchema = generatorInput.getInputSpec();
         //TODO <gspatace> don't really know if this is smart
         // ( read/use derived class annotation in base constructor )
         generatorAnnotation = this.getClass().getAnnotation(SchemaGenerator.class);
@@ -98,25 +93,8 @@ public abstract class AbstractGenerator {
      */
     protected JsonSchemaGenData getJsonSchemaGenData() throws JsonProcessingException {
         final ObjectMapper objectMapper = ObjectMapperFactory.createDefaultObjectMapper();
-        final String schema = getSchema();
-        final JsonSchema jsonSchema = objectMapper.readValue(schema, JsonSchema.class);
+        final JsonSchema jsonSchema = objectMapper.readValue(inputSchema, JsonSchema.class);
         return new JsonSchemaParser(jsonSchema).getGeneratorData();
-    }
-
-    /**
-     * Parses and retrieves the provided Schema passed to the generator
-     *
-     * @return Schema contents as string
-     */
-    protected String getSchema() {
-        final Path schemePath = FileSystems.getDefault().getPath(schemaInput);
-        try (InputStream iss = new FileInputStream(schemePath.toFile());
-             InputStreamReader inputStreamReader = new InputStreamReader(iss, StandardCharsets.UTF_8);
-             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-            return bufferedReader.lines().collect(Collectors.joining("\n"));
-        } catch (IOException e) {
-            throw new SchemaRetrievalException("Failed to get input schema", e);
-        }
     }
 
     /**
@@ -139,7 +117,8 @@ public abstract class AbstractGenerator {
 
     /**
      * Adds a mapping from JSON Schema Datatype to Language Datatype
-     * @param type JSON Schema Datatype
+     *
+     * @param type         JSON Schema Datatype
      * @param languageType Language Datatype
      */
     protected void addBaseDataTypeMapping(final JsonDataTypes type, final String languageType) {
@@ -149,6 +128,7 @@ public abstract class AbstractGenerator {
     /**
      * Checks to see if a given JSON Datatype is registered as a base datatype, as per
      * Generator Configuration
+     *
      * @param type JSON Type to check
      * @return true/false
      */
@@ -158,6 +138,7 @@ public abstract class AbstractGenerator {
 
     /**
      * Adds a type as a primitive to the list.
+     *
      * @param primitive will be registered as a primitive
      */
     protected void addLanguagePrimitive(final String primitive) {
@@ -172,8 +153,8 @@ public abstract class AbstractGenerator {
      *     <li>Final write of executed templates</li>
      * </ol>
      *
-     * @throws JsonProcessingException if errors occurred while processing the provided JSON Schema
      * @return List of processed source files to be handled
+     * @throws JsonProcessingException if errors occurred while processing the provided JSON Schema
      */
     public List<ProcessedSourceFile> generate() throws JsonProcessingException {
         final TemplateLoader templateLoader = new EmbeddedTemplateLoader(embeddedResourceLocation());
@@ -222,20 +203,20 @@ public abstract class AbstractGenerator {
      *
      * @param generatorData data to be enriched with additional properties
      */
-    protected void fillAdditionalProperties(final JsonSchemaGenData generatorData){
+    protected void fillAdditionalProperties(final JsonSchemaGenData generatorData) {
         log.debug("Not filling additional properties");
     }
 
     /**
      * For a given member, if it is a collection, return the language specific construct.
      * This can be C++ templates, Java/C# generics, etc.
-     *
+     * <p>
      * For instance, for C++, the representation of a collection of "Product"s, could translate to
      * {@code std::vector<Product> products{};}
      *
      * @param member the property that is a collection
      * @return String containing the language specific construct.
-     *
+     * <p>
      * Also, see {@link CollectionTypeBuilder#getCollectionDataType(MemberVariableData)}
      */
     protected String getCollectionDataType(final MemberVariableData member) {
@@ -283,13 +264,12 @@ public abstract class AbstractGenerator {
      * Format Model Dependencies - for instance
      * {@code #include "Dependency.hpp"} for C++
      * or {@code #import some.package.Dependency} for Java.
-     *
+     * <p>
      * Can be overridden at concrete generator level.
      *
      * @param dep Name of the model for which include/import statement
      *            is required.
      * @return the formatted include/import/etc. statement
-     *
      */
     protected String formatModelDependency(final String dep) {
         return dep;

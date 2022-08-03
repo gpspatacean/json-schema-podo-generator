@@ -1,10 +1,7 @@
 package net.gspatace.json.schema.podo.generator.cli.commands.subcommands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
-import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
-import net.gspatace.json.schema.podo.generator.core.base.ProcessedSourceFile;
-import net.gspatace.json.schema.podo.generator.core.base.SourceFilesDiskWriter;
+import net.gspatace.json.schema.podo.generator.core.base.*;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorsService;
 import picocli.CommandLine;
 
@@ -40,17 +37,18 @@ public class GenerateCommand implements Runnable {
     }
 
     private GeneratorInput buildGeneratorInput() {
+        final String schemaInput = SchemaReader.getSchema(inputFile);
         final GeneratorInput.GeneratorInputBuilder builder = GeneratorInput.builder();
         return builder
                 .generatorName(generatorName)
-                .inputSpec(inputFile)
+                .inputSpec(schemaInput)
                 .generatorSpecificProperties(getUnifiedGeneratorSpecificProperties())
                 .build();
     }
 
     private String[] getUnifiedGeneratorSpecificProperties() {
         final List<String> propList = new ArrayList<>();
-        generatorSpecificProperties.forEach((k,v)->{
+        generatorSpecificProperties.forEach((k, v) -> {
             propList.add(k);
             propList.add(v);
         });
