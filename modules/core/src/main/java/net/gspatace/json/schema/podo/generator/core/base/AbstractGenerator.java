@@ -79,15 +79,14 @@ public abstract class AbstractGenerator {
     /**
      * Protected constructor
      *
-     * @param baseCliOptions the command line options as passed to the
-     *                       main generate command in cli commands.GenerateCommand#run()
+     * @param generatorInput holder of input needed by a generator
      */
-    protected AbstractGenerator(BaseOptions baseCliOptions) {
-        this.schemaInput = baseCliOptions.getInputSpec();
+    protected AbstractGenerator(GeneratorInput generatorInput) {
+        this.schemaInput = generatorInput.getInputSpec();
         //TODO <gspatace> don't really know if this is smart
         // ( read/use derived class annotation in base constructor )
         generatorAnnotation = this.getClass().getAnnotation(SchemaGenerator.class);
-        customPropertiesInput = baseCliOptions.getGeneratorSpecificProperties();
+        customPropertiesInput = generatorInput.getGeneratorSpecificProperties();
     }
 
     /**

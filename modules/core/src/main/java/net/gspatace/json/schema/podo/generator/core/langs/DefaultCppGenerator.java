@@ -3,7 +3,7 @@ package net.gspatace.json.schema.podo.generator.core.langs;
 import net.gspatace.json.schema.podo.generator.core.annotations.CustomProperties;
 import net.gspatace.json.schema.podo.generator.core.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
-import net.gspatace.json.schema.podo.generator.core.base.BaseOptions;
+import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
 import net.gspatace.json.schema.podo.generator.core.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.core.templating.SupportFile;
 import net.gspatace.json.schema.podo.generator.core.templating.TemplateFile;
@@ -19,8 +19,8 @@ public class DefaultCppGenerator extends AbstractGenerator {
 
     private final CppSpecificProperties cppSpecificProperties = new CppSpecificProperties();
 
-    public DefaultCppGenerator(BaseOptions baseOptions) {
-        super(baseOptions);
+    public DefaultCppGenerator(GeneratorInput generatorInput) {
+        super(generatorInput);
 
         addTemplateFile(TemplateFile.builder().templateName("header.mustache").fileExtension("hpp").build());
         addTemplateFile(TemplateFile.builder().templateName("source.mustache").fileExtension("cpp").build());

@@ -4,11 +4,11 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * Holder of properties that are to be passed to generators,
- * when generate command cli commands.GenerateCommand is invoked
+ * Holder of input needed by a generator
  * Holds:
  * <ul>
- *  <li>generic options used by the generation framework</li>
+ *  <li>name of the generator</li>
+ *  <li>input JSON specification file</li>
  *  <li>array of specific generator properties that are passed to their specific generators</li>
  * </ul>
  *
@@ -16,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class BaseOptions {
+public class GeneratorInput {
     private final String generatorName;
     private final String inputSpec;
     private final String[] generatorSpecificProperties;

@@ -2,7 +2,7 @@ package net.gspatace.json.schema.podo.generator.cli.commands.subcommands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
-import net.gspatace.json.schema.podo.generator.core.base.BaseOptions;
+import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
 import net.gspatace.json.schema.podo.generator.core.base.ProcessedSourceFile;
 import net.gspatace.json.schema.podo.generator.core.base.SourceFilesDiskWriter;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorsService;
@@ -28,7 +28,7 @@ public class GenerateCommand implements Runnable {
 
     @Override
     public void run() {
-        final Optional<AbstractGenerator> generatorInstance = GeneratorsService.getInstance().getGeneratorInstance(getOptions());
+        final Optional<AbstractGenerator> generatorInstance = GeneratorsService.getInstance().getGeneratorInstance(buildGeneratorInput());
         generatorInstance.ifPresent(instance -> {
             try {
                 List<ProcessedSourceFile> files = instance.generate();
@@ -39,8 +39,8 @@ public class GenerateCommand implements Runnable {
         });
     }
 
-    private BaseOptions getOptions() {
-        final BaseOptions.BaseOptionsBuilder builder = BaseOptions.builder();
+    private GeneratorInput buildGeneratorInput() {
+        final GeneratorInput.GeneratorInputBuilder builder = GeneratorInput.builder();
         return builder
                 .generatorName(generatorName)
                 .inputSpec(inputFile)
