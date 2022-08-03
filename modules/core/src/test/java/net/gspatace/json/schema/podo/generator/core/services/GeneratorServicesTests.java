@@ -1,7 +1,7 @@
 package net.gspatace.json.schema.podo.generator.core.services;
 
 import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
-import net.gspatace.json.schema.podo.generator.core.base.BaseOptions;
+import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -37,11 +37,11 @@ public class GeneratorServicesTests {
     @Test
     public void testGeneratorInstantiation() {
         final String[] testCustomProps = {"-customOptionOne", "custOptOneValue", "-customOptionTwo", "custOptTwoValue"};
-        final BaseOptions baseOptions = BaseOptions.builder()
+        final GeneratorInput generatorInput = GeneratorInput.builder()
                 .generatorName(testGeneratorName)
                 .generatorSpecificProperties(testCustomProps)
                 .build();
-        final AbstractGenerator testGenerator = generatorService.getGeneratorInstance(baseOptions).get();
+        final AbstractGenerator testGenerator = generatorService.getGeneratorInstance(generatorInput).get();
         assertNotNull("Generator is not null", testGenerator);
         assertEquals("Generator name", "TestGenerator", testGenerator.getClass().getSimpleName());
     }

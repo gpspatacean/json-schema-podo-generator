@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.gspatace.json.schema.podo.generator.core.annotations.CustomProperties;
 import net.gspatace.json.schema.podo.generator.core.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
-import net.gspatace.json.schema.podo.generator.core.base.BaseOptions;
+import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
 import org.reflections.Reflections;
 import picocli.CommandLine;
 
@@ -102,22 +102,22 @@ public class GeneratorsService {
      * Instantiates a concrete generator that can be used
      * See cli commands.GenerateCommand#run()
      *
-     * @param baseOptions generator options holder
+     * @param generatorInput input required by a generator
      * @return the concrete generator
      */
-    public Optional<AbstractGenerator> getGeneratorInstance(final BaseOptions baseOptions) {
-        if (!loadedGenerators.containsKey(baseOptions.getGeneratorName())) {
-            log.error("Generator `{}` was not found.", baseOptions.getGeneratorName());
+    public Optional<AbstractGenerator> getGeneratorInstance(final GeneratorInput generatorInput) {
+        if (!loadedGenerators.containsKey(generatorInput.getGeneratorName())) {
+            log.error("Generator `{}` was not found.", generatorInput.getGeneratorName());
             return Optional.empty();
         }
 
-        final Class<?> clazz = loadedGenerators.get(baseOptions.getGeneratorName());
+        final Class<?> clazz = loadedGenerators.get(generatorInput.getGeneratorName());
         try {
-            final Constructor<?> constructor = clazz.getConstructor(BaseOptions.class);
-            final AbstractGenerator generator = (AbstractGenerator) constructor.newInstance(baseOptions);
+            final Constructor<?> constructor = clazz.getConstructor(GeneratorInput.class);
+            final AbstractGenerator generator = (AbstractGenerator) constructor.newInstance(generatorInput);
             return Optional.of(generator);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error("Failed to instantiate generator `{}`:", baseOptions.getGeneratorName(), ex);
+            log.error("Failed to instantiate generator `{}`:", generatorInput.getGeneratorName(), ex);
         }
 
         return Optional.empty();

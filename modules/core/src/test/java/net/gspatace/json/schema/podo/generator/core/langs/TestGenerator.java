@@ -3,7 +3,7 @@ package net.gspatace.json.schema.podo.generator.core.langs;
 import net.gspatace.json.schema.podo.generator.core.annotations.CustomProperties;
 import net.gspatace.json.schema.podo.generator.core.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
-import net.gspatace.json.schema.podo.generator.core.base.BaseOptions;
+import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
 import net.gspatace.json.schema.podo.generator.core.templating.TemplateFile;
 import picocli.CommandLine;
 
@@ -17,8 +17,8 @@ public class TestGenerator extends AbstractGenerator {
 
     private final TestGeneratorCustomProperties customProperties = new TestGeneratorCustomProperties();
 
-    public TestGenerator(final BaseOptions baseOptions) {
-        super(baseOptions);
+    public TestGenerator(final GeneratorInput generatorInput) {
+        super(generatorInput);
         addTemplateFile(TemplateFile.builder().templateName("testGenerator.mustache").fileExtension("test").build());
         parseCustomOptionsProperties(customProperties);
     }

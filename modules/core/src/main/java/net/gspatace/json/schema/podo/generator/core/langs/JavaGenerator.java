@@ -3,7 +3,7 @@ package net.gspatace.json.schema.podo.generator.core.langs;
 import net.gspatace.json.schema.podo.generator.core.annotations.CustomProperties;
 import net.gspatace.json.schema.podo.generator.core.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
-import net.gspatace.json.schema.podo.generator.core.base.BaseOptions;
+import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
 import net.gspatace.json.schema.podo.generator.core.specification.JsonDataTypes;
 import net.gspatace.json.schema.podo.generator.core.templating.SupportFile;
 import net.gspatace.json.schema.podo.generator.core.templating.TemplateFile;
@@ -20,8 +20,8 @@ public class JavaGenerator extends AbstractGenerator {
 
     private final JavaOptionsCli javaSpecificProperties = new JavaOptionsCli();
 
-    public JavaGenerator(BaseOptions baseCliOptions) {
-        super(baseCliOptions);
+    public JavaGenerator(GeneratorInput generatorInput) {
+        super(generatorInput);
 
         parseCustomOptionsProperties(javaSpecificProperties);
         final String subDir = finalDirectoryDestination();
