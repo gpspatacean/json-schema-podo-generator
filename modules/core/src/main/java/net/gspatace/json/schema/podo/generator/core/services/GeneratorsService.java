@@ -6,6 +6,7 @@ import net.gspatace.json.schema.podo.generator.core.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.BaseOptions;
 import org.reflections.Reflections;
+import picocli.CommandLine;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,9 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * <ul>
  *     <li> retrieval of registered generators</li>
  *     <li> instantiation of specific generator</li>
- *     <li> retrieval of generator specific custom options</li>
+ *     <li> retrieval of generator specific custom options objects</li>
+ *     <li> retrieval of details for all the specific options</li>
  * </ul>
- *
+ * <p>
  * Uses reflection
  *
  * @author George Spătăcean
@@ -47,6 +49,7 @@ public class GeneratorsService {
 
     /**
      * Singleton accessor.
+     *
      * @return a handler to the sole {@link GeneratorsService} instance.
      */
     public static GeneratorsService getInstance() {
@@ -56,6 +59,7 @@ public class GeneratorsService {
     /**
      * Returns a list of description for each registered generator
      * by retrieving everything annotated with {@link SchemaGenerator}
+     *
      * @return the list
      */
     public List<GeneratorDescription> getAvailableGenerators() {
@@ -71,8 +75,33 @@ public class GeneratorsService {
     }
 
     /**
+     * Returns a Set of all the specific options of the given generator
+     *
+     * @param generatorName target generator for which options to be returned
+     * @return Set containing all the options
+     */
+    public Set<OptionDescription> getSpecificGeneratorOptions(final String generatorName) {
+        final Set<OptionDescription> options = new HashSet<>();
+        final Optional<Object> generatorInstance = GeneratorsService.getInstance().getCustomOptionsCommand(generatorName);
+        generatorInstance.ifPresent(theInstance -> {
+            final CommandLine cmd = new CommandLine(theInstance);
+            for (final CommandLine.Model.OptionSpec option : cmd.getCommandSpec().options()) {
+                final OptionDescription optionDescription = OptionDescription.builder()
+                        .name(String.join(";", option.names()))
+                        .defaultValue(option.defaultValue())
+                        .description(String.join(";", option.description()))
+                        .build();
+                options.add(optionDescription);
+            }
+        });
+
+        return options;
+    }
+
+    /**
      * Instantiates a concrete generator that can be used
      * See cli commands.GenerateCommand#run()
+     *
      * @param baseOptions generator options holder
      * @return the concrete generator
      */
@@ -130,6 +159,7 @@ public class GeneratorsService {
 
     /**
      * Simple Singleton Holder of the parent class
+     *
      * @author George Spătăcean
      */
     private static class SingletonHolder {

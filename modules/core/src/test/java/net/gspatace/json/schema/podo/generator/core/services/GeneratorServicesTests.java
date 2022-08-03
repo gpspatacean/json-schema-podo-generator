@@ -4,7 +4,9 @@ import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.BaseOptions;
 import org.junit.Test;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -49,5 +51,14 @@ public class GeneratorServicesTests {
         final Object testGeneratorCustomOptions = generatorService.getCustomOptionsCommand(testGeneratorName).get();
         assertNotNull("Generator Custom options is not null", testGeneratorCustomOptions);
         assertEquals("Generator Custom Options class", "TestGeneratorCustomProperties", testGeneratorCustomOptions.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testCustomOptionsSerialization() {
+        final Set<OptionDescription> expectedOptions = new HashSet<>();
+        expectedOptions.add(OptionDescription.builder().name("-customOptionOne").description("Custom Option One").build());
+        expectedOptions.add(OptionDescription.builder().name("-customOptionTwo").description("Custom Option Two").build());
+        final Set<OptionDescription> actualOptions = generatorService.getSpecificGeneratorOptions(testGeneratorName);
+        assertEquals("Generator Custom Options match:", expectedOptions, actualOptions);
     }
 }
