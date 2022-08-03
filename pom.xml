@@ -37,6 +37,7 @@
   <modules>
     <module>modules/core</module>
     <module>modules/cli-wrapper</module>
+    <module>modules/rest-api</module>
   </modules>
 
   <build>
