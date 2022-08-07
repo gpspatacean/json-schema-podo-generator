@@ -2,6 +2,7 @@ package net.gspatace.json.schema.podo.generator.cli.commands.subcommands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.gspatace.json.schema.podo.generator.core.base.*;
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorsService;
 import picocli.CommandLine;
 
@@ -25,15 +26,15 @@ public class GenerateCommand implements Runnable {
 
     @Override
     public void run() {
-        final Optional<AbstractGenerator> generatorInstance = GeneratorsService.getInstance().getGeneratorInstance(buildGeneratorInput());
-        generatorInstance.ifPresent(instance -> {
-            try {
-                List<ProcessedSourceFile> files = instance.generate();
-                new SourceFilesDiskWriter(files, outputDirectory).writeToDisk();
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            final AbstractGenerator generatorInstance = GeneratorsService.getInstance().getGeneratorInstance(buildGeneratorInput());
+            final List<ProcessedSourceFile> files = generatorInstance.generate();
+            new SourceFilesDiskWriter(files, outputDirectory).writeToDisk();
+        } catch ( GeneratorNotFoundException generatorNotFoundException ){
+            System.err.printf("Generator [%s] not found.%n", generatorName);
+        } catch ( JsonProcessingException jsonProcessingException) {
+            System.err.println("Failed to process provided JSON schema");
+        }
     }
 
     private GeneratorInput buildGeneratorInput() {
