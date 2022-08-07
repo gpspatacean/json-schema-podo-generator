@@ -104,23 +104,24 @@ public class GeneratorsService {
      *
      * @param generatorInput input required by a generator
      * @return the concrete generator
+     * @throws GeneratorNotFoundException in case no such generator has been found
      */
-    public Optional<AbstractGenerator> getGeneratorInstance(final GeneratorInput generatorInput) {
+    public AbstractGenerator getGeneratorInstance(final GeneratorInput generatorInput) throws GeneratorNotFoundException {
         if (!loadedGenerators.containsKey(generatorInput.getGeneratorName())) {
-            log.error("Generator `{}` was not found.", generatorInput.getGeneratorName());
-            return Optional.empty();
+            final String errMsg = String.format("Generator `%s` was not found.", generatorInput.getGeneratorName());
+            log.error(errMsg);
+            throw new GeneratorNotFoundException(errMsg);
         }
 
         final Class<?> clazz = loadedGenerators.get(generatorInput.getGeneratorName());
         try {
             final Constructor<?> constructor = clazz.getConstructor(GeneratorInput.class);
-            final AbstractGenerator generator = (AbstractGenerator) constructor.newInstance(generatorInput);
-            return Optional.of(generator);
+            return (AbstractGenerator) constructor.newInstance(generatorInput);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-            log.error("Failed to instantiate generator `{}`:", generatorInput.getGeneratorName(), ex);
+            final String errMsg = String.format("Failed to instantiate generator '%s'.", generatorInput.getGeneratorName());
+            log.error(errMsg, ex);
+            throw new GeneratorNotFoundException(errMsg, ex);
         }
-
-        return Optional.empty();
     }
 
     /**

@@ -35,13 +35,13 @@ public class GeneratorServicesTests {
     }
 
     @Test
-    public void testGeneratorInstantiation() {
+    public void testGeneratorInstantiation() throws GeneratorNotFoundException {
         final String[] testCustomProps = {"-customOptionOne", "custOptOneValue", "-customOptionTwo", "custOptTwoValue"};
         final GeneratorInput generatorInput = GeneratorInput.builder()
                 .generatorName(testGeneratorName)
                 .generatorSpecificProperties(testCustomProps)
                 .build();
-        final AbstractGenerator testGenerator = generatorService.getGeneratorInstance(generatorInput).get();
+        final AbstractGenerator testGenerator = generatorService.getGeneratorInstance(generatorInput);
         assertNotNull("Generator is not null", testGenerator);
         assertEquals("Generator name", "TestGenerator", testGenerator.getClass().getSimpleName());
     }
