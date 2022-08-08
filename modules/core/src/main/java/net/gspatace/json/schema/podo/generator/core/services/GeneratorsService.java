@@ -1,11 +1,13 @@
 package net.gspatace.json.schema.podo.generator.core.services;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 import lombok.extern.slf4j.Slf4j;
 import net.gspatace.json.schema.podo.generator.core.annotations.CustomProperties;
 import net.gspatace.json.schema.podo.generator.core.annotations.SchemaGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
 import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
-import org.reflections.Reflections;
 import picocli.CommandLine;
 
 import java.lang.reflect.Constructor;
@@ -38,13 +40,16 @@ public class GeneratorsService {
      * and populates internal list of generators to be used further
      */
     private GeneratorsService() {
-        final Reflections reflections = new Reflections(GENERATOR_PACKAGE);
-        final Set<Class<?>> generatorClasses = reflections.getTypesAnnotatedWith(SchemaGenerator.class);
-        generatorClasses.forEach(clazz -> {
-            final SchemaGenerator annotation = clazz.getAnnotation(SchemaGenerator.class);
-            loadedGenerators.put(annotation.name(), clazz);
-            log.trace("Found `{}` as a registered generator.", annotation.name());
-        });
+        final ClassGraph classGraph = new ClassGraph().enableAllInfo().acceptPackages(GENERATOR_PACKAGE);
+        try (ScanResult scanResult = classGraph.scan()) {
+            ClassInfoList classInfoList = scanResult.getClassesWithAnnotation(SchemaGenerator.class);
+            final List<Class<?>> generatorClasses = classInfoList.loadClasses();
+            generatorClasses.forEach(clazz -> {
+                final SchemaGenerator annotation = clazz.getAnnotation(SchemaGenerator.class);
+                loadedGenerators.put(annotation.name(), clazz);
+                log.trace("Found `{}` as a registered generator.", annotation.name());
+            });
+        }
     }
 
     /**
