@@ -40,6 +40,7 @@ import java.util.Set;
  * @author George Spătăcean
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/generators")
 @Slf4j
 public class GeneratorController {
