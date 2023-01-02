@@ -45,29 +45,49 @@ import java.util.Set;
 @Slf4j
 public class GeneratorController {
 
-    @GetMapping("")
+    @GetMapping(value = "",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<GeneratorDescription> listGenerator() {
         return GeneratorsService.getInstance().getAvailableGenerators();
     }
 
-    @GetMapping("/{generatorName}")
+    @GetMapping(value = "/{generatorName}",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<OptionDescription> listGeneratorProperties(@PathVariable final String generatorName) {
         return GeneratorsService.getInstance().getSpecificGeneratorOptions(generatorName);
     }
 
     @PostMapping(value = "/{generatorName}",
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE},
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<Resource> serveGeneratedCodeArchive(@PathVariable final String generatorName,
                                                               @RequestParam final String options,
                                                               @RequestParam final MultipartFile schema,
                                                               @RequestParam(defaultValue = "json-schema-generated-podos") final String archiveName)
             throws IOException, GeneratorNotFoundException {
-
         final String fileContents = new String(schema.getBytes());
+        return buildResponseEntity(generatorName, options, fileContents, archiveName);
+    }
+
+    @PostMapping(value = "/{generatorName}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<Resource> serveGeneratedCodeArchiveFromString(@PathVariable final String generatorName,
+                                                                        @RequestParam final String options,
+                                                                        @RequestBody final String schema,
+                                                                        @RequestParam(defaultValue = "json-schema-generated-podos") final String archiveName)
+            throws IOException, GeneratorNotFoundException {
+        return buildResponseEntity(generatorName, options, schema, archiveName);
+    }
+
+    private ResponseEntity<Resource> buildResponseEntity(final String generatorName,
+                                                         final String options,
+                                                         final String schema,
+                                                         final String archiveName)
+            throws GeneratorNotFoundException, IOException {
         final GeneratorInput generatorInput = GeneratorInput.builder()
                 .generatorName(generatorName)
-                .inputSpec(fileContents)
+                .inputSpec(schema)
                 .generatorSpecificProperties(formatGeneratorOptionsInput(options))
                 .build();
         final AbstractGenerator generatorInstance = GeneratorsService.getInstance().getGeneratorInstance(generatorInput);
