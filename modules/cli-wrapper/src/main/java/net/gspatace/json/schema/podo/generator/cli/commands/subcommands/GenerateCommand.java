@@ -3,7 +3,7 @@ package net.gspatace.json.schema.podo.generator.cli.commands.subcommands;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.gspatace.json.schema.podo.generator.core.base.*;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorsService;
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 import picocli.CommandLine;
 
 import java.util.*;
@@ -27,7 +27,7 @@ public class GenerateCommand implements Runnable {
     @Override
     public void run() {
         try {
-            final AbstractGenerator generatorInstance = GeneratorsService.getInstance().getGeneratorInstance(buildGeneratorInput());
+            final AbstractGenerator generatorInstance = GeneratorsHandler.getInstance().getGeneratorInstance(buildGeneratorInput());
             final List<ProcessedSourceFile> files = generatorInstance.generate();
             new SourceFilesDiskWriter(files, outputDirectory).writeToDisk();
         } catch ( GeneratorNotFoundException generatorNotFoundException ){

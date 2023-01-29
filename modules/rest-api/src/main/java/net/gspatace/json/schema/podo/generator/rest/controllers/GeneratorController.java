@@ -10,7 +10,7 @@ import net.gspatace.json.schema.podo.generator.core.base.ProcessedSourceFile;
 import net.gspatace.json.schema.podo.generator.core.base.SourceFilesArchiveBuilder;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorDescription;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorsService;
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 import net.gspatace.json.schema.podo.generator.core.services.OptionDescription;
 import net.gspatace.json.schema.podo.generator.rest.models.CustomOption;
 import org.springframework.core.io.InputStreamResource;
@@ -48,13 +48,13 @@ public class GeneratorController {
     @GetMapping(value = "",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<GeneratorDescription> listGenerator() {
-        return GeneratorsService.getInstance().getAvailableGenerators();
+        return GeneratorsHandler.getInstance().getAvailableGenerators();
     }
 
     @GetMapping(value = "/{generatorName}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<OptionDescription> listGeneratorProperties(@PathVariable final String generatorName) {
-        return GeneratorsService.getInstance().getSpecificGeneratorOptions(generatorName);
+        return GeneratorsHandler.getInstance().getSpecificGeneratorOptions(generatorName);
     }
 
     @PostMapping(value = "/{generatorName}",
@@ -90,7 +90,7 @@ public class GeneratorController {
                 .inputSpec(schema)
                 .generatorSpecificProperties(formatGeneratorOptionsInput(options))
                 .build();
-        final AbstractGenerator generatorInstance = GeneratorsService.getInstance().getGeneratorInstance(generatorInput);
+        final AbstractGenerator generatorInstance = GeneratorsHandler.getInstance().getGeneratorInstance(generatorInput);
         final List<ProcessedSourceFile> processedSources = generatorInstance.generate();
         final byte[] archive = new SourceFilesArchiveBuilder(processedSources).buildArchive();
         final InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(archive));

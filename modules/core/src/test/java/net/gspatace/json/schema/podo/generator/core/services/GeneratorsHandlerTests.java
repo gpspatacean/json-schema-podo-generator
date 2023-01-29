@@ -21,9 +21,9 @@ import static org.junit.Assert.*;
  * @author George Spătăcean
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-public class GeneratorServicesTests {
+public class GeneratorsHandlerTests {
     private final static String testGeneratorName = "test-generator";
-    private final static GeneratorsService generatorService = GeneratorsService.getInstance();
+    private final static GeneratorsHandler generatorService = GeneratorsHandler.getInstance();
 
     @Test
     public void testBasicGeneratorData() {

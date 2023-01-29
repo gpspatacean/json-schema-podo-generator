@@ -1,7 +1,7 @@
 package net.gspatace.json.schema.podo.generator.cli.commands.subcommands;
 
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorDescription;
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorsService;
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 import picocli.CommandLine;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class ListCommand implements Runnable {
         System.out.println("List of available generators:");
         System.out.println("Name\t\tDescription");
         final String pattern = "%s\t\t%s%n";
-        final List<GeneratorDescription> availGenerators = GeneratorsService.getInstance().getAvailableGenerators();
+        final List<GeneratorDescription> availGenerators = GeneratorsHandler.getInstance().getAvailableGenerators();
         availGenerators.forEach(description -> System.out.printf(pattern, description.getName(), description.getDescription()));
     }
 }

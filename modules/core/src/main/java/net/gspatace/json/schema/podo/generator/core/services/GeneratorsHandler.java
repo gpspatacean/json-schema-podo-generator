@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author George Spătăcean
  */
 @Slf4j
-public class GeneratorsService {
+public class GeneratorsHandler {
     private static final String GENERATOR_PACKAGE = "net.gspatace.json.schema.podo.generator.core.langs";
     private final Map<String, Class<?>> loadedGenerators = new ConcurrentHashMap<>();
 
@@ -39,7 +39,7 @@ public class GeneratorsService {
      * Uses reflection to parse all generators annotated with {@link SchemaGenerator}
      * and populates internal list of generators to be used further
      */
-    private GeneratorsService() {
+    private GeneratorsHandler() {
         final ClassGraph classGraph = new ClassGraph().enableAllInfo().acceptPackages(GENERATOR_PACKAGE);
         try (ScanResult scanResult = classGraph.scan()) {
             ClassInfoList classInfoList = scanResult.getClassesWithAnnotation(SchemaGenerator.class);
@@ -55,9 +55,9 @@ public class GeneratorsService {
     /**
      * Singleton accessor.
      *
-     * @return a handler to the sole {@link GeneratorsService} instance.
+     * @return a handler to the sole {@link GeneratorsHandler} instance.
      */
-    public static GeneratorsService getInstance() {
+    public static GeneratorsHandler getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
@@ -87,7 +87,7 @@ public class GeneratorsService {
      */
     public Set<OptionDescription> getSpecificGeneratorOptions(final String generatorName) {
         final Set<OptionDescription> options = new HashSet<>();
-        final Optional<Object> generatorInstance = GeneratorsService.getInstance().getCustomOptionsCommand(generatorName);
+        final Optional<Object> generatorInstance = GeneratorsHandler.getInstance().getCustomOptionsCommand(generatorName);
         generatorInstance.ifPresent(theInstance -> {
             final CommandLine cmd = new CommandLine(theInstance);
             for (final CommandLine.Model.OptionSpec option : cmd.getCommandSpec().options()) {
@@ -169,6 +169,6 @@ public class GeneratorsService {
      * @author George Spătăcean
      */
     private static class SingletonHolder {
-        private static final GeneratorsService INSTANCE = new GeneratorsService();
+        private static final GeneratorsHandler INSTANCE = new GeneratorsHandler();
     }
 }
