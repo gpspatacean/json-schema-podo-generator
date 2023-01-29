@@ -1,6 +1,6 @@
 package net.gspatace.json.schema.podo.generator.core.annotations;
 
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorsService;
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 *      <li> Providing generic generator information </li>
  * </ul>
  *
- * Please see {@link GeneratorsService}
+ * Please see {@link GeneratorsHandler}
  *
  * @author George Spătăcean
  */

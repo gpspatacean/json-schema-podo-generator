@@ -7,7 +7,7 @@ import lombok.Data;
  * DTO for generator representation.
  * Used for retrieval of information pertaining to a given generator,
  * while listing the available generators.
- * See {@link GeneratorsService#getAvailableGenerators()}
+ * See {@link GeneratorsHandler#getAvailableGenerators()}
  *
  * @author George Spătăcean
  */

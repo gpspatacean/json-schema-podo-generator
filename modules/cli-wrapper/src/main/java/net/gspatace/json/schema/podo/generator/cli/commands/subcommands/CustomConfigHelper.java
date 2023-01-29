@@ -1,6 +1,6 @@
 package net.gspatace.json.schema.podo.generator.cli.commands.subcommands;
 
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorsService;
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 import picocli.CommandLine;
 
 import java.util.Comparator;
@@ -14,7 +14,7 @@ public class CustomConfigHelper implements Runnable {
 
     @Override
     public void run() {
-        final Optional<Object> optionsCommand = GeneratorsService.getInstance().getCustomOptionsCommand(generator);
+        final Optional<Object> optionsCommand = GeneratorsHandler.getInstance().getCustomOptionsCommand(generator);
         if (optionsCommand.isPresent()) {
             CommandLine cmd = new CommandLine(optionsCommand.get());
             cmd.setHelpFactory(new HelpCustomizationFactory());
