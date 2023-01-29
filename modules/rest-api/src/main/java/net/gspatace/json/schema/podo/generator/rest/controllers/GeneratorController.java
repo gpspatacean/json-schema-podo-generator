@@ -1,18 +1,11 @@
 package net.gspatace.json.schema.podo.generator.rest.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.gspatace.json.schema.podo.generator.core.base.AbstractGenerator;
-import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
-import net.gspatace.json.schema.podo.generator.core.base.ProcessedSourceFile;
-import net.gspatace.json.schema.podo.generator.core.base.SourceFilesArchiveBuilder;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorDescription;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 import net.gspatace.json.schema.podo.generator.core.services.OptionDescription;
-import net.gspatace.json.schema.podo.generator.rest.models.CustomOption;
+import net.gspatace.json.schema.podo.generator.rest.services.GeneratorsService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -21,14 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Main Wrapper over json-schema-podo-generator
+ * REST Controller over json-schema-podo-generator
  * core logic.
  * Exposes APIs for
  * <ul>
@@ -43,18 +34,21 @@ import java.util.Set;
 @CrossOrigin
 @RequestMapping("/generators")
 @Slf4j
+@RequiredArgsConstructor
 public class GeneratorController {
+
+    private final GeneratorsService service;
 
     @GetMapping(value = "",
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<GeneratorDescription> listGenerator() {
-        return GeneratorsHandler.getInstance().getAvailableGenerators();
+    public List<GeneratorDescription> listGenerators() {
+        return service.listGenerators();
     }
 
     @GetMapping(value = "/{generatorName}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<OptionDescription> listGeneratorProperties(@PathVariable final String generatorName) {
-        return GeneratorsHandler.getInstance().getSpecificGeneratorOptions(generatorName);
+        return service.listGeneratorProperties(generatorName);
     }
 
     @PostMapping(value = "/{generatorName}",
@@ -85,35 +79,10 @@ public class GeneratorController {
                                                          final String schema,
                                                          final String archiveName)
             throws GeneratorNotFoundException, IOException {
-        final GeneratorInput generatorInput = GeneratorInput.builder()
-                .generatorName(generatorName)
-                .inputSpec(schema)
-                .generatorSpecificProperties(formatGeneratorOptionsInput(options))
-                .build();
-        final AbstractGenerator generatorInstance = GeneratorsHandler.getInstance().getGeneratorInstance(generatorInput);
-        final List<ProcessedSourceFile> processedSources = generatorInstance.generate();
-        final byte[] archive = new SourceFilesArchiveBuilder(processedSources).buildArchive();
-        final InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(archive));
+        final InputStreamResource archive = service.buildCodeArchive(generatorName, options, schema);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + archiveName + ".zip\"")
-                .body(resource);
-    }
-
-    private String[] formatGeneratorOptionsInput(final String options) {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            final List<CustomOption> customOptions = objectMapper.readValue(options, new TypeReference<List<CustomOption>>() {
-            });
-            final List<String> propList = new ArrayList<>();
-            customOptions.forEach(option -> {
-                propList.add(option.getName());
-                propList.add(option.getValue());
-            });
-            return propList.toArray(new String[0]);
-        } catch (JsonProcessingException e) {
-            log.error("Failed to map specific options, these will be defaulted:", e);
-        }
-        return new String[0];
+                .body(archive);
     }
 }
