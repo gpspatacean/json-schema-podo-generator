@@ -39,7 +39,7 @@ public class GeneratorsService {
         return generatorsHandler.getAvailableGenerators();
     }
 
-    public Set<OptionDescription> listGeneratorProperties(@NotNull final String generatorName) {
+    public Set<OptionDescription> listGeneratorProperties(@NotNull final String generatorName) throws GeneratorNotFoundException {
         return generatorsHandler.getSpecificGeneratorOptions(generatorName);
     }
 
