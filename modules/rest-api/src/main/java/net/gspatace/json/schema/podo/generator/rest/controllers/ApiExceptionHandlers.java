@@ -1,6 +1,7 @@
 package net.gspatace.json.schema.podo.generator.rest.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import net.gspatace.json.schema.podo.generator.core.services.CustomOptionsInstantiationException;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorInstantiationException;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
 import net.gspatace.json.schema.podo.generator.rest.models.ProblemDetails;
@@ -34,6 +35,13 @@ public class ApiExceptionHandlers extends ResponseEntityExceptionHandler {
     @ExceptionHandler({GeneratorInstantiationException.class})
     private ResponseEntity<Object> handleGeneratorInstantiationException(final GeneratorInstantiationException exception, final HttpServletRequest request){
         final ProblemDetails problemDetails = new ProblemDetails("Generator Instantiation error.", HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getLocalizedMessage(), request.getRequestURI());
+        log.error("Exception caught:", exception);
+        return buildResponseEntity(problemDetails);
+    }
+
+    @ExceptionHandler({CustomOptionsInstantiationException.class})
+    private ResponseEntity<Object> handleCustomOptionsInstantiationException(final CustomOptionsInstantiationException exception, final HttpServletRequest request){
+        final ProblemDetails problemDetails = new ProblemDetails("Custom Properties Object Instantiation error.", HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getLocalizedMessage(), request.getRequestURI());
         log.error("Exception caught:", exception);
         return buildResponseEntity(problemDetails);
     }
