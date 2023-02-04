@@ -47,7 +47,7 @@ public class GeneratorController {
 
     @GetMapping(value = "/{generatorName}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Set<OptionDescription> listGeneratorProperties(@PathVariable final String generatorName) {
+    public Set<OptionDescription> listGeneratorProperties(@PathVariable final String generatorName) throws GeneratorNotFoundException {
         return service.listGeneratorProperties(generatorName);
     }
 

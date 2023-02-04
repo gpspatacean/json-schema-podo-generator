@@ -47,14 +47,14 @@ public class GeneratorsHandlerTests {
     }
 
     @Test
-    public void testGeneratorCustomOptions() {
+    public void testGeneratorCustomOptions() throws GeneratorNotFoundException {
         final Object testGeneratorCustomOptions = generatorService.getCustomOptionsCommand(testGeneratorName).get();
         assertNotNull("Generator Custom options is not null", testGeneratorCustomOptions);
         assertEquals("Generator Custom Options class", "TestGeneratorCustomProperties", testGeneratorCustomOptions.getClass().getSimpleName());
     }
 
     @Test
-    public void testCustomOptionsSerialization() {
+    public void testCustomOptionsSerialization() throws GeneratorNotFoundException {
         final Set<OptionDescription> expectedOptions = new HashSet<>();
         expectedOptions.add(OptionDescription.builder().name("-customOptionOne").description("Custom Option One").build());
         expectedOptions.add(OptionDescription.builder().name("-customOptionTwo").description("Custom Option Two").build());

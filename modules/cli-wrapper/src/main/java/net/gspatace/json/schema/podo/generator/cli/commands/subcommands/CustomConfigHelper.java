@@ -1,5 +1,6 @@
 package net.gspatace.json.schema.podo.generator.cli.commands.subcommands;
 
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 import picocli.CommandLine;
 
@@ -14,14 +15,18 @@ public class CustomConfigHelper implements Runnable {
 
     @Override
     public void run() {
-        final Optional<Object> optionsCommand = GeneratorsHandler.getInstance().getCustomOptionsCommand(generator);
-        if (optionsCommand.isPresent()) {
-            CommandLine cmd = new CommandLine(optionsCommand.get());
-            cmd.setHelpFactory(new HelpCustomizationFactory());
-            cmd.usage(System.out);
-            return;
+        try {
+            final Optional<Object> optionsCommand = GeneratorsHandler.getInstance().getCustomOptionsCommand(generator);
+            if (optionsCommand.isPresent()) {
+                CommandLine cmd = new CommandLine(optionsCommand.get());
+                cmd.setHelpFactory(new HelpCustomizationFactory());
+                cmd.usage(System.out);
+            } else {
+                System.out.printf(String.format("Generator '%s' does not have custom options", generator));
+            }
+        } catch (final GeneratorNotFoundException generatorNotFoundException) {
+            System.err.printf("Generator '%s' not found, please check available generators.%n", generator);
         }
-        System.err.println("generator not found");
     }
 
     static class HelpCustomizationFactory implements CommandLine.IHelpFactory {
