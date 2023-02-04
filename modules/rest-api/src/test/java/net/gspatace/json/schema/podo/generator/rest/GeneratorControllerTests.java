@@ -1,9 +1,6 @@
 package net.gspatace.json.schema.podo.generator.rest;
 
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorDescription;
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorInstantiationException;
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
-import net.gspatace.json.schema.podo.generator.core.services.OptionDescription;
+import net.gspatace.json.schema.podo.generator.core.services.*;
 import net.gspatace.json.schema.podo.generator.rest.controllers.GeneratorController;
 import net.gspatace.json.schema.podo.generator.rest.services.GeneratorsService;
 import org.junit.jupiter.api.Test;
@@ -146,5 +143,16 @@ class GeneratorControllerTests {
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("title", is("Generator Instantiation error.")));
+    }
+
+    @Test
+    void testCustomOptionsInstantiationException() throws Exception {
+        when(service.listGeneratorProperties(anyString()))
+                .thenThrow(CustomOptionsInstantiationException.class);
+        mockMvc.perform(get("/generators/test-generator/options"))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("title", is("Custom Properties Object Instantiation error.")));
     }
 }
