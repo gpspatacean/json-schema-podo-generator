@@ -86,7 +86,7 @@ public class GeneratorsHandler {
      * @return Set containing all the options
      * @throws GeneratorNotFoundException if the given generator was not found
      */
-    public Set<OptionDescription> getSpecificGeneratorOptions(final String generatorName) throws GeneratorNotFoundException {
+    public Set<OptionDescription> getSpecificGeneratorOptions(final String generatorName) {
         final Set<OptionDescription> options = new HashSet<>();
         final Optional<Object> generatorInstance = GeneratorsHandler.getInstance().getCustomOptionsCommand(generatorName);
         generatorInstance.ifPresent(theInstance -> {
@@ -110,12 +110,12 @@ public class GeneratorsHandler {
      *
      * @param generatorInput input required by a generator
      * @return the concrete generator
-     * @throws GeneratorNotFoundException in case no such generator has been found
+     * @throws GeneratorNotFoundException      in case no such generator has been found
+     * @throws GeneratorInstantiationException in case of instantiation failures.
      */
-    public AbstractGenerator getGeneratorInstance(final GeneratorInput generatorInput) throws GeneratorNotFoundException {
+    public AbstractGenerator getGeneratorInstance(final GeneratorInput generatorInput) {
         if (!loadedGenerators.containsKey(generatorInput.getGeneratorName())) {
             final String errMsg = String.format("Generator `%s` was not found.", generatorInput.getGeneratorName());
-            log.error(errMsg);
             throw new GeneratorNotFoundException(errMsg);
         }
 
@@ -126,8 +126,7 @@ public class GeneratorsHandler {
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
                  InvocationTargetException ex) {
             final String errMsg = String.format("Failed to instantiate generator '%s'.", generatorInput.getGeneratorName());
-            log.error(errMsg, ex);
-            throw new GeneratorNotFoundException(errMsg, ex);
+            throw new GeneratorInstantiationException(errMsg, ex);
         }
     }
 
@@ -139,8 +138,10 @@ public class GeneratorsHandler {
      * @param targetGenerator name of the generator
      * @return Optional instance of the custom properties
      * @throws GeneratorNotFoundException if the given generator was not found
+     * @throws CustomOptionsInstantiationException for instantiation failures of the
+*                              {@link CustomProperties} pertaining object.
      */
-    public Optional<Object> getCustomOptionsCommand(final String targetGenerator) throws GeneratorNotFoundException {
+    public Optional<Object> getCustomOptionsCommand(final String targetGenerator) {
         if (!loadedGenerators.containsKey(targetGenerator)) {
             throw new GeneratorNotFoundException(String.format("Generator '%s' was not found.", targetGenerator));
         }
@@ -161,7 +162,7 @@ public class GeneratorsHandler {
             log.debug("CustomProperties class for generator `{}` not found", targetGenerator);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
                  InvocationTargetException ex) {
-            log.error("Failed to instantiate CustomProperties class for generator `{}`", targetGenerator, ex);
+            throw new CustomOptionsInstantiationException(String.format("Failed to instantiate CustomProperties class for generator `%s`", targetGenerator), ex);
         }
         return Optional.empty();
     }

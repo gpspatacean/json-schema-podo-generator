@@ -5,7 +5,7 @@ package net.gspatace.json.schema.podo.generator.core.services;
  *
  * @author George Spătăcean
  */
-public class GeneratorNotFoundException extends Exception {
+public class GeneratorNotFoundException extends RuntimeException {
 
     public GeneratorNotFoundException(final String message) {
         super(message);

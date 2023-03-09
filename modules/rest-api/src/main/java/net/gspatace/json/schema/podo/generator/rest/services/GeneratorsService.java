@@ -39,13 +39,13 @@ public class GeneratorsService {
         return generatorsHandler.getAvailableGenerators();
     }
 
-    public Set<OptionDescription> listGeneratorProperties(@NotNull final String generatorName) throws GeneratorNotFoundException {
+    public Set<OptionDescription> listGeneratorProperties(@NotNull final String generatorName) {
         return generatorsHandler.getSpecificGeneratorOptions(generatorName);
     }
 
     public InputStreamResource buildCodeArchive(@NotNull final String generatorName,
                                                 @NotNull final String options,
-                                                @NotNull final String schema) throws GeneratorNotFoundException, IOException {
+                                                @NotNull final String schema) throws IOException {
         final GeneratorInput generatorInput = GeneratorInput.builder()
                 .generatorName(generatorName)
                 .inputSpec(schema)
