@@ -1,5 +1,6 @@
 package net.gspatace.json.schema.podo.generator.cli.commands.subcommands;
 
+import net.gspatace.json.schema.podo.generator.core.services.CustomOptionsInstantiationException;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 import picocli.CommandLine;
@@ -22,8 +23,10 @@ public class CustomConfigHelper implements Runnable {
                 cmd.setHelpFactory(new HelpCustomizationFactory());
                 cmd.usage(System.out);
             } else {
-                System.out.printf(String.format("Generator '%s' does not have custom options", generator));
+                System.out.printf("Generator '%s' does not have custom options.%n", generator);
             }
+        } catch (final CustomOptionsInstantiationException optionsInstantiationException) {
+            System.err.printf("Failed to instantiate CustomOptions for generator '%s'.%n", generator);
         } catch (final GeneratorNotFoundException generatorNotFoundException) {
             System.err.printf("Generator '%s' not found, please check available generators.%n", generator);
         }

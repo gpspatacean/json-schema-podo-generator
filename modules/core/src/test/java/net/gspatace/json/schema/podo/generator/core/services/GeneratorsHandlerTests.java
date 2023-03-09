@@ -35,7 +35,7 @@ public class GeneratorsHandlerTests {
     }
 
     @Test
-    public void testGeneratorInstantiation() throws GeneratorNotFoundException {
+    public void testGeneratorInstantiation() {
         final String[] testCustomProps = {"-customOptionOne", "custOptOneValue", "-customOptionTwo", "custOptTwoValue"};
         final GeneratorInput generatorInput = GeneratorInput.builder()
                 .generatorName(testGeneratorName)
@@ -47,7 +47,7 @@ public class GeneratorsHandlerTests {
     }
 
     @Test
-    public void testGeneratorCustomOptions() throws GeneratorNotFoundException {
+    public void testGeneratorCustomOptions() {
         final Object testGeneratorCustomOptions = generatorService.getCustomOptionsCommand(testGeneratorName).get();
         assertNotNull("Generator Custom options is not null", testGeneratorCustomOptions);
         assertEquals("Generator Custom Options class", "TestGeneratorCustomProperties", testGeneratorCustomOptions.getClass().getSimpleName());
