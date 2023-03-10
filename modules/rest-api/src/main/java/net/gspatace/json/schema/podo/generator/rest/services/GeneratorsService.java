@@ -9,7 +9,6 @@ import net.gspatace.json.schema.podo.generator.core.base.GeneratorInput;
 import net.gspatace.json.schema.podo.generator.core.base.ProcessedSourceFile;
 import net.gspatace.json.schema.podo.generator.core.base.SourceFilesArchiveBuilder;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorDescription;
-import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorsHandler;
 import net.gspatace.json.schema.podo.generator.core.services.OptionDescription;
 import net.gspatace.json.schema.podo.generator.rest.models.CustomOption;
@@ -37,6 +36,10 @@ public class GeneratorsService {
 
     public List<GeneratorDescription> listGenerators() {
         return generatorsHandler.getAvailableGenerators();
+    }
+
+    public GeneratorDescription listGeneratorDescription(@NotNull final String generatorName) {
+        return generatorsHandler.getGeneratorDescription(generatorName);
     }
 
     public Set<OptionDescription> listGeneratorProperties(@NotNull final String generatorName) {

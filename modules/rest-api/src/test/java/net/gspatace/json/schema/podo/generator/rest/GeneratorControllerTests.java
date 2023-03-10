@@ -54,6 +54,22 @@ class GeneratorControllerTests {
     }
 
     @Test
+    void getGeneratorDescription() throws Exception {
+        final String dummyGenerator = "dummy-target-generator";
+        final GeneratorDescription mockedGenerator = GeneratorDescription.builder()
+                .name(dummyGenerator)
+                .description("Dummy generator description")
+                .build();
+
+        when(service.listGeneratorDescription(dummyGenerator)).thenReturn(mockedGenerator);
+        mockMvc.perform(get("/generators/" + dummyGenerator))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("name", is(mockedGenerator.getName())));
+    }
+
+    @Test
     void getSpecificGeneratorOptions() throws Exception {
         final OptionDescription optionDescription = OptionDescription
                 .builder()
@@ -64,7 +80,7 @@ class GeneratorControllerTests {
 
         final Set<OptionDescription> mockedResult = Collections.singleton(optionDescription);
         when(service.listGeneratorProperties("test-generator")).thenReturn(mockedResult);
-        mockMvc.perform(get("/generators/test-generator"))
+        mockMvc.perform(get("/generators/test-generator/options"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
