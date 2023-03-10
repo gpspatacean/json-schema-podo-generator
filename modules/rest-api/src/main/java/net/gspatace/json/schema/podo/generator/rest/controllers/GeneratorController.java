@@ -1,5 +1,10 @@
 package net.gspatace.json.schema.podo.generator.rest.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorDescription;
@@ -45,7 +50,31 @@ public class GeneratorController {
         return service.listGenerators();
     }
 
+    @Operation(
+            description = "Retrieve generator",
+            summary = "Retrieve a certain generator",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successful Operation",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(implementation = GeneratorDescription.class),
+                                            examples = {
+                                                    @ExampleObject(
+                                                            value = "{\"name\":\"cpp\",\"description\":\"Generate C++ PODOs\"}"
+                                                    )}
+                                    )}
+                    )}
+    )
     @GetMapping(value = "/{generatorName}",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<GeneratorDescription> getGeneratorDetails(@PathVariable final String generatorName) {
+        return ResponseEntity.ok(service.listGeneratorDescription(generatorName));
+    }
+
+    @GetMapping(value = "/{generatorName}/options",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public Set<OptionDescription> listGeneratorProperties(@PathVariable final String generatorName) {
         return service.listGeneratorProperties(generatorName);
