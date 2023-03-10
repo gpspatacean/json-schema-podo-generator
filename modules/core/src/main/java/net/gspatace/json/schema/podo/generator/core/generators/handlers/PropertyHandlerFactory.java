@@ -25,19 +25,17 @@ public class PropertyHandlerFactory {
      */
     public static JsonTypePropertyHandler getForProperty(final Property property) {
         switch (property.getType()) {
-            case BOOLEAN:
-            case INTEGER:
-            case NUMBER:
-            case STRING:
+            case BOOLEAN, INTEGER, NUMBER, STRING -> {
                 return new SimplePropertyHandler();
-            case ARRAY:
-                return new ArrayPropertyHandler();
-            case OBJECT:
-                return new ObjectPropertyHandler();
-            case NOT_SET:
-            case NULL: {
-                log.error("Property {} has incorrect type {}", property.getPropertyName(), property.getType().toString());
             }
+            case ARRAY -> {
+                return new ArrayPropertyHandler();
+            }
+            case OBJECT -> {
+                return new ObjectPropertyHandler();
+            }
+            case NOT_SET, NULL ->
+                    log.error("Property {} has incorrect type {}", property.getPropertyName(), property.getType());
         }
 
         throw new IllegalStateException("Property with invalid type.");
