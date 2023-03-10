@@ -29,7 +29,7 @@ public class GeneratorsHandlerTests {
     public void testBasicGeneratorData() {
         final List<GeneratorDescription> availableGenerators = generatorService.getAvailableGenerators();
         assertTrue("At least one registered generator", availableGenerators.size() > 0);
-        final GeneratorDescription generatorDescription = availableGenerators.stream().filter(genDesc -> genDesc.getName().equals(testGeneratorName)).findFirst().orElseThrow(IllegalStateException::new);
+        final GeneratorDescription generatorDescription = generatorService.getGeneratorDescription(testGeneratorName);
         assertEquals("Name of the registered generator", testGeneratorName, generatorDescription.getName());
         assertEquals("Description of the generator", "Generator use just for unit testing", generatorDescription.getDescription());
     }
@@ -51,6 +51,11 @@ public class GeneratorsHandlerTests {
         final Object testGeneratorCustomOptions = generatorService.getCustomOptionsCommand(testGeneratorName).get();
         assertNotNull("Generator Custom options is not null", testGeneratorCustomOptions);
         assertEquals("Generator Custom Options class", "TestGeneratorCustomProperties", testGeneratorCustomOptions.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testGeneratorDescriptionRetrieval() {
+        assertThrows(GeneratorNotFoundException.class, () -> generatorService.getGeneratorDescription("non-existent"));
     }
 
     @Test

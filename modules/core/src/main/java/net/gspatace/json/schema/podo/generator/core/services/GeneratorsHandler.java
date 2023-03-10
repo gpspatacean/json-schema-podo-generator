@@ -35,6 +35,11 @@ public class GeneratorsHandler {
     private final Map<String, Class<?>> loadedGenerators = new ConcurrentHashMap<>();
 
     /**
+     * List containing the descriptions of all the loaded generators
+     */
+    private final List<GeneratorDescription> generatorDescriptions = new ArrayList<>();
+
+    /**
      * Private constructor
      * Uses reflection to parse all generators annotated with {@link SchemaGenerator}
      * and populates internal list of generators to be used further
@@ -50,6 +55,14 @@ public class GeneratorsHandler {
                 log.trace("Found `{}` as a registered generator.", annotation.name());
             });
         }
+
+        loadedGenerators.forEach((genName, genClazz) -> {
+            final SchemaGenerator annotation = genClazz.getAnnotation(SchemaGenerator.class);
+            final GeneratorDescription.GeneratorDescriptionBuilder builder = GeneratorDescription.builder();
+            builder.name(annotation.name()).description(annotation.description());
+            generatorDescriptions.add(builder.build());
+            log.trace("Added generator description for `{}` generator", annotation.name());
+        });
     }
 
     /**
@@ -62,21 +75,27 @@ public class GeneratorsHandler {
     }
 
     /**
-     * Returns a list of description for each registered generator
+     * Returns the list of descriptions for each registered generator
      * by retrieving everything annotated with {@link SchemaGenerator}
      *
      * @return the list
      */
     public List<GeneratorDescription> getAvailableGenerators() {
-        final List<GeneratorDescription> generators = new ArrayList<>();
-        loadedGenerators.forEach((genName, genClazz) -> {
-            final SchemaGenerator annotation = genClazz.getAnnotation(SchemaGenerator.class);
-            final GeneratorDescription.GeneratorDescriptionBuilder builder = GeneratorDescription.builder();
-            builder.name(annotation.name()).description(annotation.description());
-            generators.add(builder.build());
-            log.trace("Added generator description for `{}` generator", annotation.name());
-        });
-        return generators;
+        return generatorDescriptions;
+    }
+
+    /**
+     * Returns the description of a certain generator
+     *
+     * @param generator the target generator
+     * @return the description
+     */
+    public GeneratorDescription getGeneratorDescription(final String generator) {
+        return generatorDescriptions
+                .stream()
+                .filter(description -> description.getName().equals(generator))
+                .findFirst()
+                .orElseThrow(() -> new GeneratorNotFoundException(String.format("Generator '%s' not found", generator)));
     }
 
     /**
@@ -137,9 +156,9 @@ public class GeneratorsHandler {
      *
      * @param targetGenerator name of the generator
      * @return Optional instance of the custom properties
-     * @throws GeneratorNotFoundException if the given generator was not found
+     * @throws GeneratorNotFoundException          if the given generator was not found
      * @throws CustomOptionsInstantiationException for instantiation failures of the
-*                              {@link CustomProperties} pertaining object.
+     *                                             {@link CustomProperties} pertaining object.
      */
     public Optional<Object> getCustomOptionsCommand(final String targetGenerator) {
         if (!loadedGenerators.containsKey(targetGenerator)) {
