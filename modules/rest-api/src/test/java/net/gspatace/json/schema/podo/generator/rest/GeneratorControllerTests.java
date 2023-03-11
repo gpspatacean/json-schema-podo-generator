@@ -1,6 +1,8 @@
 package net.gspatace.json.schema.podo.generator.rest;
 
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorDescription;
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorInstantiationException;
+import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
 import net.gspatace.json.schema.podo.generator.core.services.OptionDescription;
 import net.gspatace.json.schema.podo.generator.rest.controllers.GeneratorController;
 import net.gspatace.json.schema.podo.generator.rest.services.GeneratorsService;
@@ -123,5 +125,32 @@ class GeneratorControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
                 .andExpect(content().bytes(resourceContents));
+    }
+
+    @Test
+    void testGeneratorNotFoundException() throws Exception {
+        when(service.listGeneratorDescription("nonExistent"))
+                .thenThrow(GeneratorNotFoundException.class);
+        mockMvc.perform(get("/generators/nonExistent" ))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("title", is("Generator not found.")));
+    }
+
+    @Test
+    void testGeneratorInstantiationException() throws Exception {
+        when(service.buildCodeArchive(anyString(), anyString(), anyString()))
+                .thenThrow(GeneratorInstantiationException.class);
+        mockMvc.perform(
+                        post("/generators/test-generator")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"dummy\":\"schema\"}")
+                                .queryParam("options", "[]")
+                )
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("title", is("Generator Instantiation error.")));
     }
 }
