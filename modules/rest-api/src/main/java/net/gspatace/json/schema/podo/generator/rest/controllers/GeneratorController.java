@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorDescription;
 import net.gspatace.json.schema.podo.generator.core.services.GeneratorNotFoundException;
 import net.gspatace.json.schema.podo.generator.core.services.OptionDescription;
+import net.gspatace.json.schema.podo.generator.rest.models.ProblemDetails;
 import net.gspatace.json.schema.podo.generator.rest.services.GeneratorsService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -51,19 +52,32 @@ public class GeneratorController {
     }
 
     @Operation(
-            description = "Retrieve generator",
-            summary = "Retrieve a certain generator",
+            description = "Retrieve details of a registered generator",
+            summary = "Retrieve generator",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Successful Operation",
                             content = {
                                     @Content(
-                                            mediaType = "application/json",
+                                            mediaType = MediaType.APPLICATION_JSON_VALUE,
                                             schema = @Schema(implementation = GeneratorDescription.class),
                                             examples = {
                                                     @ExampleObject(
                                                             value = "{\"name\":\"cpp\",\"description\":\"Generate C++ PODOs\"}"
+                                                    )}
+                                    )}
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Generator not found",
+                            content = {
+                                    @Content(
+                                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                                            schema = @Schema(implementation = ProblemDetails.class),
+                                            examples = {
+                                                    @ExampleObject(
+                                                            value = "{\"title\":\"Generator not found.\",\"status\":404,\"details\":\"Generator 'javas' not found\",\"instance\":\"/generators/javas\"}"
                                                     )}
                                     )}
                     )}
