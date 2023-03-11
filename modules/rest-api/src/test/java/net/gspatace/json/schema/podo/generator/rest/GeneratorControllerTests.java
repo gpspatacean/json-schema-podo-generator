@@ -40,10 +40,7 @@ class GeneratorControllerTests {
 
     @Test
     void getAvailableGenerators() throws Exception {
-        final GeneratorDescription generator = GeneratorDescription.builder()
-                .name("test-generator")
-                .description("test-generator description")
-                .build();
+        final GeneratorDescription generator = new GeneratorDescription("test-generator", "test-generator description");
 
         final List<GeneratorDescription> mockedResult = Collections.singletonList(generator);
         when(service.listGenerators()).thenReturn(mockedResult);
@@ -52,23 +49,20 @@ class GeneratorControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name", is(generator.getName())));
+                .andExpect(jsonPath("$[0].name", is(generator.name())));
     }
 
     @Test
     void getGeneratorDescription() throws Exception {
         final String dummyGenerator = "dummy-target-generator";
-        final GeneratorDescription mockedGenerator = GeneratorDescription.builder()
-                .name(dummyGenerator)
-                .description("Dummy generator description")
-                .build();
+        final GeneratorDescription mockedGenerator = new GeneratorDescription(dummyGenerator, "Dummy generator description");
 
         when(service.listGeneratorDescription(dummyGenerator)).thenReturn(mockedGenerator);
         mockMvc.perform(get("/generators/" + dummyGenerator))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("name", is(mockedGenerator.getName())));
+                .andExpect(jsonPath("name", is(mockedGenerator.name())));
     }
 
     @Test
@@ -115,7 +109,7 @@ class GeneratorControllerTests {
         when(service.buildCodeArchive(anyString(), anyString(), anyString())).thenReturn(mockResource);
 
         final MockMultipartFile mockFile =
-                new MockMultipartFile("schemaFile", "schemaFile.txt",MediaType.APPLICATION_JSON_VALUE, "{\"dummy\":\"schema\"}".getBytes(StandardCharsets.UTF_8));
+                new MockMultipartFile("schemaFile", "schemaFile.txt", MediaType.APPLICATION_JSON_VALUE, "{\"dummy\":\"schema\"}".getBytes(StandardCharsets.UTF_8));
         mockMvc.perform(
                         multipart("/generators/test-generator")
                                 .file("schema", mockFile.getBytes())
@@ -131,7 +125,7 @@ class GeneratorControllerTests {
     void testGeneratorNotFoundException() throws Exception {
         when(service.listGeneratorDescription("nonExistent"))
                 .thenThrow(GeneratorNotFoundException.class);
-        mockMvc.perform(get("/generators/nonExistent" ))
+        mockMvc.perform(get("/generators/nonExistent"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))

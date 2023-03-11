@@ -30,8 +30,8 @@ public class GeneratorsHandlerTests {
         final List<GeneratorDescription> availableGenerators = generatorService.getAvailableGenerators();
         assertTrue("At least one registered generator", availableGenerators.size() > 0);
         final GeneratorDescription generatorDescription = generatorService.getGeneratorDescription(testGeneratorName);
-        assertEquals("Name of the registered generator", testGeneratorName, generatorDescription.getName());
-        assertEquals("Description of the generator", "Generator use just for unit testing", generatorDescription.getDescription());
+        assertEquals("Name of the registered generator", testGeneratorName, generatorDescription.name());
+        assertEquals("Description of the generator", "Generator use just for unit testing", generatorDescription.description());
     }
 
     @Test

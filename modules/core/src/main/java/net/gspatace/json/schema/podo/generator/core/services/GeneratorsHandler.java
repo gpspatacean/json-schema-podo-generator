@@ -58,9 +58,7 @@ public class GeneratorsHandler {
 
         loadedGenerators.forEach((genName, genClazz) -> {
             final SchemaGenerator annotation = genClazz.getAnnotation(SchemaGenerator.class);
-            final GeneratorDescription.GeneratorDescriptionBuilder builder = GeneratorDescription.builder();
-            builder.name(annotation.name()).description(annotation.description());
-            generatorDescriptions.add(builder.build());
+            generatorDescriptions.add(new GeneratorDescription(annotation.name(), annotation.description()));
             log.trace("Added generator description for `{}` generator", annotation.name());
         });
     }
@@ -93,7 +91,7 @@ public class GeneratorsHandler {
     public GeneratorDescription getGeneratorDescription(final String generator) {
         return generatorDescriptions
                 .stream()
-                .filter(description -> description.getName().equals(generator))
+                .filter(description -> description.name().equals(generator))
                 .findFirst()
                 .orElseThrow(() -> new GeneratorNotFoundException(String.format("Generator '%s' not found", generator)));
     }
