@@ -41,12 +41,12 @@ public class SourceFilesDiskWriter {
      */
     public void writeToDisk() {
         fileList.forEach(processedSourceFile -> {
-            final File target = outputDirectory.resolve(processedSourceFile.getFilePath()).toFile();
+            final File target = outputDirectory.resolve(processedSourceFile.filePath()).toFile();
             try {
                 log.info("Writing file `{}`", target);
                 Files.createDirectories(Paths.get(target.getParent()));
                 final FileWriter fileWriter = new FileWriter(target);
-                fileWriter.write(processedSourceFile.getFileContent());
+                fileWriter.write(processedSourceFile.fileContent());
                 fileWriter.flush();
                 fileWriter.close();
             } catch (IOException e) {
