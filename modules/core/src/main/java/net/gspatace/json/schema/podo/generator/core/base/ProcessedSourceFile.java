@@ -1,29 +1,14 @@
 package net.gspatace.json.schema.podo.generator.core.base;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 /**
  * Container of a processed source file
  *
+ * @param filePath    File path including directories from the
+ *                    initial logic directory.
+ *                    e.g. "src/main/java/some/package/File.java" or
+ *                    "Model.hpp"
+ * @param fileContent Final contents of a source
  * @author George Spătăcean
  */
-
-@AllArgsConstructor
-@Getter
-@EqualsAndHashCode
-public class ProcessedSourceFile {
-    /**
-     * File path including directories from the
-     * initial logic directory.
-     * e.g. "src/main/java/some/package/File.java" or
-     * "Model.hpp"
-     */
-    private final String filePath;
-
-    /**
-     * Final contents of a source
-     */
-    private final String fileContent;
+public record ProcessedSourceFile(String filePath, String fileContent) {
 }

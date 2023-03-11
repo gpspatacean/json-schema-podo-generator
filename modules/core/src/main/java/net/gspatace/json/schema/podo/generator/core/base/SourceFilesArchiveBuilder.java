@@ -35,14 +35,14 @@ public class SourceFilesArchiveBuilder {
 
         for (final ProcessedSourceFile processedSourceFile : fileList) {
             try {
-                final ZipArchiveEntry zipEntry = new ZipArchiveEntry(processedSourceFile.getFilePath());
-                final byte[] bytesToWrite = processedSourceFile.getFileContent().getBytes(StandardCharsets.UTF_8);
+                final ZipArchiveEntry zipEntry = new ZipArchiveEntry(processedSourceFile.filePath());
+                final byte[] bytesToWrite = processedSourceFile.fileContent().getBytes(StandardCharsets.UTF_8);
                 zipEntry.setSize(bytesToWrite.length);
                 zipOutputStream.putArchiveEntry(zipEntry);
                 zipOutputStream.write(bytesToWrite);
                 zipOutputStream.closeArchiveEntry();
             } catch (IOException exception) {
-                log.error("Failed to archive file {}", processedSourceFile.getFilePath(), exception);
+                log.error("Failed to archive file {}", processedSourceFile.filePath(), exception);
             }
         }
 
