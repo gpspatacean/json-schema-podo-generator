@@ -101,7 +101,9 @@ public class GeneratorsHandler {
      *
      * @param generatorName target generator for which options to be returned
      * @return Set containing all the options
-     * @throws GeneratorNotFoundException if the given generator was not found
+     * @throws GeneratorNotFoundException          if the given generator was not found
+     * @throws CustomOptionsInstantiationException if the {@link CustomProperties}
+     *                                             object cannot be instantiated
      */
     public Set<OptionDescription> getSpecificGeneratorOptions(final String generatorName) {
         final Set<OptionDescription> options = new HashSet<>();
@@ -163,25 +165,34 @@ public class GeneratorsHandler {
             throw new GeneratorNotFoundException(String.format("Generator '%s' was not found.", targetGenerator));
         }
 
-        final Class<?> generatorClazz = loadedGenerators.get(targetGenerator);
-        try {
-            final Class<?>[] declaredClasses = generatorClazz.getDeclaredClasses();
-            final Optional<Class<?>> optionsClass = Arrays
-                    .stream(declaredClasses)
-                    .filter(clazz -> clazz.isAnnotationPresent(CustomProperties.class))
-                    .findFirst();
-
-            if (optionsClass.isPresent()) {
+        final Optional<Class<?>> optionsClass = getCustomPropertiesClass(targetGenerator);
+        if (optionsClass.isPresent()) {
+            try {
                 final Constructor<?> constructor = optionsClass.get().getConstructor();
                 return Optional.of(constructor.newInstance());
+            } catch (final InstantiationException | IllegalAccessException | NoSuchMethodException |
+                           InvocationTargetException ex) {
+                final String failureMessage = String.format("Failed to instantiate Custom Properties object of class `%s` for generator `%s`", optionsClass.get().getSimpleName(), targetGenerator);
+                throw new CustomOptionsInstantiationException(failureMessage, ex);
             }
-
-            log.debug("CustomProperties class for generator `{}` not found", targetGenerator);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                 InvocationTargetException ex) {
-            throw new CustomOptionsInstantiationException(String.format("Failed to instantiate CustomProperties class for generator `%s`", targetGenerator), ex);
         }
+        log.debug("CustomProperties class for generator `{}` not found", targetGenerator);
         return Optional.empty();
+    }
+
+    /**
+     * Retrieves the {@link CustomProperties} annotated class of a generator
+     *
+     * @param generatorName the name for which the properties class is searched
+     * @return Optional class of the Custom properties class
+     */
+    private Optional<Class<?>> getCustomPropertiesClass(final String generatorName) {
+        final Class<?> generatorClazz = loadedGenerators.get(generatorName);
+        final Class<?>[] declaredClasses = generatorClazz.getDeclaredClasses();
+        return Arrays
+                .stream(declaredClasses)
+                .filter(clazz -> clazz.isAnnotationPresent(CustomProperties.class))
+                .findFirst();
     }
 
     /**
