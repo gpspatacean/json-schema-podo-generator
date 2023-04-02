@@ -1,8 +1,10 @@
 package net.gspatace.json.schema.podo.generator.rest;
 
 import net.gspatace.json.schema.podo.generator.core.services.*;
+import net.gspatace.json.schema.podo.generator.rest.adapter.CustomOptionsTransformer;
 import net.gspatace.json.schema.podo.generator.rest.controllers.GeneratorController;
 import net.gspatace.json.schema.podo.generator.rest.services.GeneratorsService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,7 +22,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,6 +36,9 @@ class GeneratorControllerTests {
 
     @MockBean
     private GeneratorsService service;
+
+    @MockBean
+    private CustomOptionsTransformer optionsTransformer;
 
     @Test
     void getAvailableGenerators() throws Exception {
@@ -85,13 +90,14 @@ class GeneratorControllerTests {
     void getDummyResourceUsingJsonPayload() throws Exception {
         final byte[] resourceContents = new byte[]{'a', 'b', 'c'};
         final InputStreamResource mockResource = new InputStreamResource(new ByteArrayInputStream(resourceContents));
-        when(service.buildCodeArchive(anyString(), anyString(), anyString())).thenReturn(mockResource);
-
+        when(service.buildCodeArchive(anyString(), any(String[].class), anyString()))
+                .thenReturn(mockResource);
+        when(optionsTransformer.getCommandOptions(anyString(), anyMap()))
+                .thenReturn(new String[0]);
         mockMvc.perform(
                         post("/generators/test-generator")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"dummy\":\"schema\"}")
-                                .queryParam("options", "[]")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -103,14 +109,16 @@ class GeneratorControllerTests {
     void getDummyResourceUsingMultiPartFormPayload() throws Exception {
         final byte[] resourceContents = new byte[]{'a', 'b', 'c'};
         final InputStreamResource mockResource = new InputStreamResource(new ByteArrayInputStream(resourceContents));
-        when(service.buildCodeArchive(anyString(), anyString(), anyString())).thenReturn(mockResource);
+        when(service.buildCodeArchive(anyString(), any(String[].class), anyString()))
+                .thenReturn(mockResource);
+        when(optionsTransformer.getCommandOptions(anyString(), anyMap()))
+                .thenReturn(new String[0]);
 
         final MockMultipartFile mockFile =
                 new MockMultipartFile("schemaFile", "schemaFile.txt", MediaType.APPLICATION_JSON_VALUE, "{\"dummy\":\"schema\"}".getBytes(StandardCharsets.UTF_8));
         mockMvc.perform(
                         multipart("/generators/test-generator")
                                 .file("schema", mockFile.getBytes())
-                                .param("options", "[]")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -131,13 +139,14 @@ class GeneratorControllerTests {
 
     @Test
     void testGeneratorInstantiationException() throws Exception {
-        when(service.buildCodeArchive(anyString(), anyString(), anyString()))
+        when(service.buildCodeArchive(anyString(), any(String[].class), anyString()))
                 .thenThrow(GeneratorInstantiationException.class);
+        when(optionsTransformer.getCommandOptions(anyString(), anyMap()))
+                .thenReturn(new String[0]);
         mockMvc.perform(
                         post("/generators/test-generator")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"dummy\":\"schema\"}")
-                                .queryParam("options", "[]")
                 )
                 .andDo(print())
                 .andExpect(status().isInternalServerError())
