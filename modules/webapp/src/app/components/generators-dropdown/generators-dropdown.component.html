@@ -1,0 +1,15 @@
+<div class="container">
+  <label for="generators">Select a generator:</label>
+  <select #gens name="generators" id="generators" (change)="onSelectionChange(gens.value)" class="dropdown-toggle">
+    <option *ngIf="isFirstTime" value="None" class="dropdown-item">Choose generator:</option>
+    <option *ngFor="let generator of generatorsList" [value]="generator.name">
+      {{generator.name}}
+    </option>
+  </select>
+  <form>
+    <div *ngFor="let prop of properties" class="form-control">
+      <small id="{{prop.name}}" class="form-text text-muted">{{prop.description}}</small>
+      <input type="text" class="form-control" id="{{prop.name}}" placeholder="{{prop.defaultValue}}">
+    </div>
+  </form>
+</div>
