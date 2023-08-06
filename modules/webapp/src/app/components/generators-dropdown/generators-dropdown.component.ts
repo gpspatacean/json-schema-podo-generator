@@ -6,8 +6,7 @@ import {GeneratorProperty} from "../../models/generator-property";
 
 @Component({
   selector: 'app-generators-dropdown',
-  templateUrl: './generators-dropdown.component.html',
-  styleUrls: ['./generators-dropdown.component.css']
+  templateUrl: './generators-dropdown.component.html'
 })
 export class GeneratorsDropdownComponent implements OnInit, OnDestroy{
   constructor(private generatorsService: GeneratorsService) {
