@@ -6,10 +6,5 @@
       {{generator.name}}
     </option>
   </select>
-  <form>
-    <div *ngFor="let prop of properties" class="form-control">
-      <small id="{{prop.name}}" class="form-text text-muted">{{prop.description}}</small>
-      <input type="text" class="form-control" id="{{prop.name}}" placeholder="{{prop.defaultValue}}">
-    </div>
-  </form>
+  <app-generator-properties [targetGenerator]="targetGenerator"></app-generator-properties>
 </div>

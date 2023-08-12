@@ -12,6 +12,7 @@ export class GeneratorsDropdownComponent implements OnInit, OnDestroy{
   constructor(private generatorsService: GeneratorsService) {
   }
 
+  targetGenerator: string = "";
   generatorsList: Generator[] = [];
   sub!: Subscription;
   properties: GeneratorProperty[] = [];
@@ -36,10 +37,6 @@ export class GeneratorsDropdownComponent implements OnInit, OnDestroy{
     if(this.isFirstTime) {
       this.isFirstTime = false;
     }
-    this.generatorsService.getGeneratorProperties(value).subscribe({
-      next: properties => this.properties = properties,
-      error: err => console.log(err),
-      complete: () => console.log("properties done")
-    })
+    this.targetGenerator = value;
   }
 }
