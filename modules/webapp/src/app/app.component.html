@@ -6,7 +6,8 @@
 <div class="container">
   <div class="row">
     <div class="col-sm">
-      <textarea class="form-control" rows="10" placeholder="Paste Your JSON Schema here"></textarea>
+      <app-schema-textarea></app-schema-textarea>
+      <button type="button" class="btn btn-primary btn-lg" (click)="onClick()">Download</button>
     </div>
     <div class="col-sm">
       <app-generators-dropdown></app-generators-dropdown>
