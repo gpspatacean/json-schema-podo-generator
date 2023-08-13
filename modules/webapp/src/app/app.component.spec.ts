@@ -1,17 +1,25 @@
-import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import {TestBed} from '@angular/core/testing';
+import {AppComponent} from './app.component';
 import {GeneratorsDropdownComponent} from "./components/generators-dropdown/generators-dropdown.component";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {GeneratorsService} from "./services/generators.service";
+import {SchemaTextareaComponent} from "./components/schema-textarea/schema-textarea.component";
+import {GeneratorPropertiesComponent} from "./components/generator-properties/generator-properties.component";
+import {FormsModule} from "@angular/forms";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
     declarations: [
-        AppComponent,
-        GeneratorsDropdownComponent
+      AppComponent,
+      GeneratorsDropdownComponent,
+      SchemaTextareaComponent,
+      GeneratorPropertiesComponent
     ],
-    imports:[HttpClientTestingModule],
-    providers:[GeneratorsService]
+    imports: [
+      HttpClientTestingModule,
+      FormsModule
+    ],
+    providers: [GeneratorsService]
   }));
 
   it('should create the app', () => {

@@ -24,7 +24,7 @@ export class GeneratorsService {
     return this.http.get<GeneratorProperty[]>(this.backendLocation + "/generators/" + this.generatorInput.name + "/options");
   }
 
-  createDownloadArchive(): Observable<Object> {
+  createDownloadArchive(): Observable<object> {
     const url: string = this.backendLocation + "/generators/" + this.generatorInput.name;
     let queryParams = new HttpParams();
     this.generatorInput.options
