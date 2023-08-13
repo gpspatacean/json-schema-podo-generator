@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { GeneratorPropertiesComponent } from './generator-properties.component';
+import {GeneratorPropertiesComponent} from './generator-properties.component';
 
 describe('GeneratorPropertiesComponent', () => {
   let component: GeneratorPropertiesComponent;

@@ -10,15 +10,15 @@ export class GeneratorPropertiesComponent implements OnChanges, OnInit, OnDestro
   constructor(private generatorsService: GeneratorsService) {
   }
 
-  @Input() targetGenerator: string = "";
+  @Input() targetGenerator = '';
   properties: GeneratorProperty[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
     if (changes['targetGenerator'].currentValue !== "") {
-      this.generatorsService.getGeneratorProperties(this.targetGenerator).subscribe({
+      this.generatorsService.getGeneratorProperties().subscribe({
         next: properties => {
-          properties.forEach(genProp =>  genProp.name = this.normalizePropertyName(genProp.name));
+          properties.forEach(genProp => genProp.name = this.normalizePropertyName(genProp.name));
           this.properties = properties;
         },
         error: err => console.log(err),
@@ -27,18 +27,18 @@ export class GeneratorPropertiesComponent implements OnChanges, OnInit, OnDestro
     }
   }
 
-  private normalizePropertyName(originalPropName: string) : string {
+  private normalizePropertyName(originalPropName: string): string {
     const segments = originalPropName.split(';');
-    return segments[segments.length-1].replace(/^-+/,'');
+    return segments[segments.length - 1].replace(/^-+/, '');
   }
 
-    ngOnDestroy(): void {
-        console.log("gen props ondestroy()")
-    }
+  ngOnDestroy(): void {
+    console.log("gen props ondestroy()")
+  }
 
-    ngOnInit(): void {
-      console.log("gen props oninit()")
-    }
+  ngOnInit(): void {
+    console.log("gen props oninit()")
+  }
 
   onPropertyChanged(event: Event) {
     console.log(event);
