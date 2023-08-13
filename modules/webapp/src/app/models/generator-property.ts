@@ -1,8 +1,5 @@
-export class GeneratorProperty {
-  constructor(
-    public name: string,
-    public description: string,
-    public defaultValue: string
-  ) {
-  }
+export interface GeneratorProperty {
+  name: string;
+  description: string;
+  defaultValue: string;
 }
