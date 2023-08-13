@@ -1,6 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SchemaTextareaComponent } from './schema-textarea.component';
+import {SchemaTextareaComponent} from './schema-textarea.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {FormsModule} from "@angular/forms";
 
 describe('SchemaTextareaComponent', () => {
   let component: SchemaTextareaComponent;
@@ -8,7 +10,8 @@ describe('SchemaTextareaComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SchemaTextareaComponent]
+      declarations: [SchemaTextareaComponent],
+      imports: [HttpClientTestingModule, FormsModule]
     });
     fixture = TestBed.createComponent(SchemaTextareaComponent);
     component = fixture.componentInstance;
