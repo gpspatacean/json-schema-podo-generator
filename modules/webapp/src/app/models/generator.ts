@@ -1,7 +1,4 @@
-export class Generator {
-  constructor(
-    public name: string,
-    public description: string
-  ) {
-  }
+export interface Generator {
+  name: string;
+  description: string;
 }
