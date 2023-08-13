@@ -10,6 +10,7 @@ import {GeneratorInput} from "../models/generator-input";
 })
 export class GeneratorsService {
   private backendLocation: string = "http://localhost:8080";
+  public generatorInput: GeneratorInput = { name:'', payload: {}, options: new Map<string, string>()};
 
   constructor(private http: HttpClient) {
     console.log("service ctor");
@@ -20,21 +21,21 @@ export class GeneratorsService {
   }
 
   getGeneratorProperties(targetGenerator: string): Observable<GeneratorProperty[]> {
-    return this.http.get<GeneratorProperty[]>(this.backendLocation + "/generators/" + targetGenerator + "/options");
+    return this.http.get<GeneratorProperty[]>(this.backendLocation + "/generators/" + this.generatorInput.name + "/options");
   }
 
-  createDownloadArchive(generatorInput: GeneratorInput) : Observable<Object> {
-      const url: string = this.backendLocation + "/generators/" + generatorInput.name;
+  createDownloadArchive(/*generatorInput: GeneratorInput*/) : Observable<Object> {
+      const url: string = this.backendLocation + "/generators/" + this.generatorInput.name;
       let queryParams = new HttpParams();
-      generatorInput.options
-          ?.forEach((k,v) => queryParams = queryParams.append(k,v));
+      this.generatorInput.options
+          ?.forEach((value,key) => queryParams = queryParams.append(key,value));
 
       return this.http.post(url,
-        generatorInput.payload,
+        this.generatorInput.payload,
         {
           observe: 'response',
           responseType: 'arraybuffer',
           params: queryParams
-        })
+        });
   }
 }

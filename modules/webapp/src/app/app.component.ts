@@ -18,8 +18,8 @@ export class AppComponent {
         const options = new Map<string, string>();
         options.set("package", "generated.apis");
         options.set("version", "1.0.0");
-        const generatorInput = new GeneratorInput("java", payload, options);
-        this.generatorsService.createDownloadArchive(generatorInput).subscribe(
+        const generatorInput:GeneratorInput = { name: 'java', payload: payload, options: options };
+        this.generatorsService.createDownloadArchive(/*generatorInput*/).subscribe(
             (response: any) => {
                 let fileName = response.headers.get('Content-Disposition')
                     ?.split(';')[1].split('=')[1];

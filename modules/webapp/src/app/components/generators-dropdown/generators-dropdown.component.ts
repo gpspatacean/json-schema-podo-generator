@@ -38,5 +38,6 @@ export class GeneratorsDropdownComponent implements OnInit, OnDestroy{
       this.isFirstTime = false;
     }
     this.targetGenerator = value;
+    this.generatorsService.generatorInput.name = value;
   }
 }
