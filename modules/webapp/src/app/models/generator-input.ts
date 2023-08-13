@@ -1,8 +1,5 @@
-export class GeneratorInput {
-    constructor(
-        public name: string,
-        public payload: object,
-        public options?: Map<string, string>
-    ) {
-    }
+export interface GeneratorInput {
+  name: string;
+  payload: object;
+  options?: Map<string, string>;
 }

@@ -17,11 +17,19 @@ export class GeneratorPropertiesComponent implements OnChanges, OnInit, OnDestro
     console.log(changes);
     if (changes['targetGenerator'].currentValue !== "") {
       this.generatorsService.getGeneratorProperties(this.targetGenerator).subscribe({
-        next: properties => this.properties = properties,
+        next: properties => {
+          properties.forEach(genProp =>  genProp.name = this.normalizePropertyName(genProp.name));
+          this.properties = properties;
+        },
         error: err => console.log(err),
         complete: () => console.log("properties done")
       });
     }
+  }
+
+  private normalizePropertyName(originalPropName: string) : string {
+    const segments = originalPropName.split(';');
+    return segments[segments.length-1].replace(/^-+/,'');
   }
 
     ngOnDestroy(): void {
@@ -31,4 +39,10 @@ export class GeneratorPropertiesComponent implements OnChanges, OnInit, OnDestro
     ngOnInit(): void {
       console.log("gen props oninit()")
     }
+
+  onPropertyChanged(event: Event) {
+    console.log(event);
+    const target = event.target as HTMLInputElement;
+    this.generatorsService.generatorInput.options?.set(target.id, target.value);
+  }
 }
