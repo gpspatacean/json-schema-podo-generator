@@ -9,14 +9,14 @@ import {GeneratorProperty} from "../../models/generator-property";
   templateUrl: './generators-dropdown.component.html'
 })
 export class GeneratorsDropdownComponent implements OnInit, OnDestroy {
-  constructor(private generatorsService: GeneratorsService) {
-  }
 
-  targetGenerator = '';
   generatorsList: Generator[] = [];
   sub!: Subscription;
   properties: GeneratorProperty[] = [];
   isFirstTime = true;
+
+  constructor(private generatorsService: GeneratorsService) {
+  }
 
   ngOnInit(): void {
     this.sub = this.generatorsService.listGenerators().subscribe({
@@ -37,7 +37,7 @@ export class GeneratorsDropdownComponent implements OnInit, OnDestroy {
     if (this.isFirstTime) {
       this.isFirstTime = false;
     }
-    this.targetGenerator = value;
+    this.generatorsService.updateTargetGenerator(value);
     this.generatorsService.generatorInput.name = value;
   }
 }

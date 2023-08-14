@@ -7,10 +7,11 @@
   <div class="row">
     <div class="col-sm">
       <app-schema-textarea></app-schema-textarea>
-      <button type="button" class="btn btn-primary btn-lg" (click)="onClick()">Download</button>
+      <button (click)="onClick()" class="btn btn-primary btn-lg" type="button">Download</button>
     </div>
     <div class="col-sm">
       <app-generators-dropdown></app-generators-dropdown>
+      <app-generator-properties></app-generator-properties>
     </div>
   </div>
 </div>

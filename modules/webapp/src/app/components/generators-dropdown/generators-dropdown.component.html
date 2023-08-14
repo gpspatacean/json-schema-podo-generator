@@ -1,10 +1,9 @@
 <div class="container">
   <label for="generators">Select a generator:</label>
-  <select #gens name="generators" id="generators" (change)="onSelectionChange(gens.value)" class="dropdown-toggle">
-    <option *ngIf="isFirstTime" value="None" class="dropdown-item">Choose generator:</option>
+  <select #gens (change)="onSelectionChange(gens.value)" class="dropdown-toggle" id="generators" name="generators">
+    <option *ngIf="isFirstTime" class="dropdown-item" value="None">Choose generator:</option>
     <option *ngFor="let generator of generatorsList" [value]="generator.name">
       {{generator.name}}
     </option>
   </select>
-  <app-generator-properties [targetGenerator]="targetGenerator"></app-generator-properties>
 </div>
