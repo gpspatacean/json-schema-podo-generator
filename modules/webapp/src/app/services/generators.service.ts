@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Generator} from "../models/generator";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {GeneratorProperty} from "../models/generator-property";
 import {GeneratorInput} from "../models/generator-input";
 
@@ -9,11 +9,16 @@ import {GeneratorInput} from "../models/generator-input";
   providedIn: 'root'
 })
 export class GeneratorsService {
-  private backendLocation = "http://localhost:8080";
   public generatorInput: GeneratorInput = {name: '', payload: {}, options: new Map<string, string>()};
+  private backendLocation = "http://localhost:8080";
+  private targetGeneratorSubject = new BehaviorSubject('');
+  public targetGenerator = this.targetGeneratorSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    console.log("service ctor");
+  }
+
+  updateTargetGenerator(value: string) {
+    this.targetGeneratorSubject.next(value);
   }
 
   listGenerators(): Observable<Generator[]> {
