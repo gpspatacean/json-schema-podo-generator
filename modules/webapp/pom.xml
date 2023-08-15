@@ -17,6 +17,17 @@
         <frontend.maven.plugin.version>1.12.1</frontend.maven.plugin.version>
         <node.version>v16.17.0</node.version>
         <npm.version>9.8.1</npm.version>
+
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.sources>src/main/angular/src</sonar.sources>
+        <sonar.tests>src/main/angular/src</sonar.tests>
+        <sonar.test.inclusions>src/main/angular/src/**/*.spec.ts</sonar.test.inclusions>
+        <sonar.exculsions>
+            src/main/angular/.angular/,
+            src/main/angular/node_modules/,
+            src/main/angular/node/,
+            src/main/angular/src/main.ts
+        </sonar.exculsions>
     </properties>
 
     <build>
