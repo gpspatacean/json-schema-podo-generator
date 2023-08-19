@@ -28,6 +28,9 @@
             src/main/angular/node/,
             src/main/angular/src/main.ts
         </sonar.exculsions>
+        <sonar.javascript.lcov.reportPaths>
+            src/main/angular/coverage/webapp/lcov.info
+        </sonar.javascript.lcov.reportPaths>
     </properties>
 
     <build>
