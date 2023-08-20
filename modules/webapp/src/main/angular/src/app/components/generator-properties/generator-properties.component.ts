@@ -10,7 +10,11 @@ export class GeneratorPropertiesComponent {
   properties: GeneratorProperty[] = [];
 
   constructor(private generatorsService: GeneratorsService) {
-    this.generatorsService.targetGenerator.subscribe(value => this.onGeneratorChanged(value));
+    this.generatorsService.targetGenerator.subscribe(value => {
+      if (value !== "") {
+        this.onGeneratorChanged(value);
+      }
+    });
   }
 
   onGeneratorChanged(newGenerator: string): void {
