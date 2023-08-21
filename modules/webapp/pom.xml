@@ -12,6 +12,9 @@
     <modelVersion>4.0.0</modelVersion>
     <name>podo-generator-webapp</name>
     <artifactId>podo-generator-webapp</artifactId>
+    <packaging>jar</packaging>
+
+    <description>Webapp over REST API for JSON Schema PODO Generator</description>
 
     <properties>
         <frontend.maven.plugin.version>1.12.1</frontend.maven.plugin.version>
@@ -32,6 +35,19 @@
             src/main/angular/coverage/webapp/lcov.info
         </sonar.javascript.lcov.reportPaths>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>2.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.7.6</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -79,10 +95,72 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-angular-dist</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/angular/dist/webapp</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/src/main/resources/static</directory>
+                            <excludes>
+                                <exclude>.gitkeep</exclude>
+                            </excludes>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/src/main/angular/dist</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
-                <directory>src/main/angular/dist/webapp</directory>
+                <directory>${basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>static/.gitkeep</exclude>
+                </excludes>
             </resource>
         </resources>
     </build>
