@@ -1,0 +1,5 @@
+# Ignore everything in resource/static directory
+# because only the distribution of the Angular app resides there, and is
+# updated during build, and then just packaged in the final .jar
+src/main/resources/static/*
+!src/main/resources/static/.gitkeep
