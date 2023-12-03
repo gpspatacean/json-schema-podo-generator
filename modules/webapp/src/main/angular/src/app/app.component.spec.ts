@@ -6,6 +6,7 @@ import {GeneratorsService} from "./services/generators.service";
 import {SchemaTextareaComponent} from "./components/schema-textarea/schema-textarea.component";
 import {GeneratorPropertiesComponent} from "./components/generator-properties/generator-properties.component";
 import {FormsModule} from "@angular/forms";
+import {AppConfigService} from "./services/app-config.service";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -19,7 +20,10 @@ describe('AppComponent', () => {
       HttpClientTestingModule,
       FormsModule
     ],
-    providers: [GeneratorsService]
+    providers: [
+      GeneratorsService,
+      AppConfigService
+    ]
   }));
 
   it('should create the app', () => {
