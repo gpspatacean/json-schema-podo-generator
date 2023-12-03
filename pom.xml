@@ -53,6 +53,7 @@
     <spring.boot.autoconfigure.version>2.7.12</spring.boot.autoconfigure.version>
     <spring.boot.starter.test.version>2.7.6</spring.boot.starter.test.version>
     <spring.boot.starter.web.version>2.7.6</spring.boot.starter.web.version>
+    <spring.framework.spring.test>5.3.24</spring.framework.spring.test>
     <springdoc.openapi.ui.version>1.6.14</springdoc.openapi.ui.version>
     <mockito.junit.jupiter.version>4.8.1</mockito.junit.jupiter.version>
 
@@ -171,6 +172,12 @@
         <artifactId>spring-boot-starter-web</artifactId>
         <version>${spring.boot.starter.web.version}</version>
         <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${spring.framework.spring.test}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.springdoc</groupId>

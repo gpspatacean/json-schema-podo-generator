@@ -18,8 +18,8 @@
 
   <properties>
     <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
-    <sonar.sources>src/main/angular/src</sonar.sources>
-    <sonar.tests>src/main/angular/src</sonar.tests>
+    <sonar.sources>src/main/angular/src,src/main/java</sonar.sources>
+    <sonar.tests>src/main/angular/src,src/test/java</sonar.tests>
     <sonar.test.inclusions>src/main/angular/src/**/*.spec.ts</sonar.test.inclusions>
     <sonar.exculsions>
       src/main/angular/.angular/,
@@ -34,12 +34,24 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-autoconfigure</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
     </dependency>
   </dependencies>
 

@@ -3,6 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {GeneratorsDropdownComponent} from './generators-dropdown.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {GeneratorPropertiesComponent} from "../generator-properties/generator-properties.component";
+import {AppConfigService} from "../../services/app-config.service";
 
 describe('GeneratorsDropdownComponent', () => {
   let component: GeneratorsDropdownComponent;
@@ -14,7 +15,8 @@ describe('GeneratorsDropdownComponent', () => {
         GeneratorsDropdownComponent,
         GeneratorPropertiesComponent
       ],
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
+      providers: [AppConfigService]
     });
     fixture = TestBed.createComponent(GeneratorsDropdownComponent);
     component = fixture.componentInstance;
