@@ -6,10 +6,16 @@ import {GeneratorsService} from "./services/generators.service";
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  constructor(private generatorsService: GeneratorsService) {
-  }
-
   title = 'Plain Old Data Objects from JSON Schemas Generator';
+  generatorSelected: boolean = false;
+
+  constructor(private generatorsService: GeneratorsService) {
+    this.generatorsService.targetGenerator.subscribe(value => {
+      if (value !== "") {
+        this.generatorSelected = true;
+      }
+    })
+  }
 
   onClick() {
     console.log("Button Clicked");
