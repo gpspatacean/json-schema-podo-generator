@@ -18,19 +18,24 @@ export class AppComponent {
   }
 
   onClick() {
-    console.log("Button Clicked");
     this.generatorsService.createDownloadArchive().subscribe(
       (response: any) => {
         const fileName = response.headers.get('Content-Disposition')
-          ?.split(';')[1].split('=')[1];
+          ?.split(';')[1]?.split('=')[1]?.replaceAll('"', '');
         const rawData = [];
         rawData.push(response.body);
         const a = document.createElement('a');
-        //TODO: Handle name retrieval from http Content-Disposition header
-        a.download = "test.zip";
+        a.download = (fileName !== undefined && fileName != "") ? fileName : "archive.zip";
         a.href = window.URL.createObjectURL(new Blob(rawData, {type: "application/octet-stream"}));
         a.click();
       }
     )
+  }
+
+  onFocusOut(event: FocusEvent) {
+    const target = event.target as HTMLInputElement;
+    if (target.value !== "") {
+      this.generatorsService.generatorInput.options?.set("archiveName", target.value);
+    }
   }
 }

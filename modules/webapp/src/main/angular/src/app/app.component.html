@@ -7,8 +7,12 @@
   <div class="row">
     <div class="col-sm">
       <app-schema-textarea></app-schema-textarea>
-      <button (click)="onClick()" [disabled]="!generatorSelected" class="btn btn-primary btn-lg"
-              type="button">Download
+      <div class="col-sm">
+        <label>Optional archive name:</label>
+        <input (focusout)="onFocusOut($event)" type="text">
+      </div>
+      <button (click)="onClick()" [disabled]="!generatorSelected" class="btn btn-primary btn-lg" type="button">
+        Download
       </button>
     </div>
     <div class="col-sm">
