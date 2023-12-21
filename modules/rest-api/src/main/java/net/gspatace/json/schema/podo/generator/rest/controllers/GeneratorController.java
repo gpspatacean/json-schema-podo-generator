@@ -342,6 +342,7 @@ public class GeneratorController {
         final InputStreamResource archive = service.buildCodeArchive(generatorName, options, schema);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + archiveName + ".zip\"")
                 .body(archive);
     }
