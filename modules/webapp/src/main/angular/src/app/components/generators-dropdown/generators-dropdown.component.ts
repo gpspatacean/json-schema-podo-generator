@@ -22,10 +22,11 @@ export class GeneratorsDropdownComponent implements OnInit, OnDestroy {
     this.sub = this.generatorsService.listGenerators().subscribe({
       next: generators => {
         this.generatorsList = generators;
-        console.log(generators)
       },
-      error: err => console.log(err),
-      complete: () => console.log("done")
+      error: err => {
+      },
+      complete: () => {
+      }
     })
   }
 
