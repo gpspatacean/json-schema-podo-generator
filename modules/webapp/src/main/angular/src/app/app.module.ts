@@ -8,6 +8,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {GeneratorPropertiesComponent} from './components/generator-properties/generator-properties.component';
 import {SchemaTextareaComponent} from './components/schema-textarea/schema-textarea.component';
 import {AppConfigService} from "./services/app-config.service";
+import {APP_BASE_HREF} from "@angular/common";
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -34,6 +35,10 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       useFactory: appInitializerFn,
       multi: true,
       deps: [AppConfigService]
+    },
+    {
+      provide: APP_BASE_HREF,
+      useValue: '/' + (window.location.pathname.split('/')[1] || '')
     }
   ],
   bootstrap: [AppComponent]

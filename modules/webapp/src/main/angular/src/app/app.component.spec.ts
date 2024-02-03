@@ -7,6 +7,7 @@ import {SchemaTextareaComponent} from "./components/schema-textarea/schema-texta
 import {GeneratorPropertiesComponent} from "./components/generator-properties/generator-properties.component";
 import {FormsModule} from "@angular/forms";
 import {AppConfigService} from "./services/app-config.service";
+import {APP_BASE_HREF} from "@angular/common";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -22,7 +23,11 @@ describe('AppComponent', () => {
     ],
     providers: [
       GeneratorsService,
-      AppConfigService
+      AppConfigService,
+      {
+        provide: APP_BASE_HREF,
+        useValue: "/"
+      }
     ]
   }));
 

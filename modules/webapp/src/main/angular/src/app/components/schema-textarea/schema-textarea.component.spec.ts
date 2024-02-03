@@ -4,6 +4,7 @@ import {SchemaTextareaComponent} from './schema-textarea.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {FormsModule} from "@angular/forms";
 import {AppConfigService} from "../../services/app-config.service";
+import {APP_BASE_HREF} from "@angular/common";
 
 describe('SchemaTextareaComponent', () => {
   let component: SchemaTextareaComponent;
@@ -13,7 +14,13 @@ describe('SchemaTextareaComponent', () => {
     TestBed.configureTestingModule({
       declarations: [SchemaTextareaComponent],
       imports: [HttpClientTestingModule, FormsModule],
-      providers: [AppConfigService]
+      providers: [
+        AppConfigService,
+        {
+          provide: APP_BASE_HREF,
+          useValue: "/"
+        }
+      ]
     });
     fixture = TestBed.createComponent(SchemaTextareaComponent);
     component = fixture.componentInstance;

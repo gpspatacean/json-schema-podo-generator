@@ -4,6 +4,7 @@ import {GeneratorsDropdownComponent} from './generators-dropdown.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {GeneratorPropertiesComponent} from "../generator-properties/generator-properties.component";
 import {AppConfigService} from "../../services/app-config.service";
+import {APP_BASE_HREF} from "@angular/common";
 
 describe('GeneratorsDropdownComponent', () => {
   let component: GeneratorsDropdownComponent;
@@ -16,7 +17,13 @@ describe('GeneratorsDropdownComponent', () => {
         GeneratorPropertiesComponent
       ],
       imports: [HttpClientTestingModule],
-      providers: [AppConfigService]
+      providers: [
+        AppConfigService,
+        {
+          provide: APP_BASE_HREF,
+          useValue: "/"
+        }
+      ]
     });
     fixture = TestBed.createComponent(GeneratorsDropdownComponent);
     component = fixture.componentInstance;
