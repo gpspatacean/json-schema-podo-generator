@@ -14,15 +14,12 @@ export class AppConfigService {
   }
 
   loadAppConfiguration() {
-    console.log("Loading App Configuration");
-
     const baseConfigPath: string = "/assets/config.json";
     const configPath: string = this.baseHref === "/" ? baseConfigPath : this.baseHref + baseConfigPath;
     return this.http
       .get<AppConfig>(configPath)
       .pipe(tap(data => {
           this.appConfig = data;
-          console.log("Data read:" + data);
         })
       );
   }
