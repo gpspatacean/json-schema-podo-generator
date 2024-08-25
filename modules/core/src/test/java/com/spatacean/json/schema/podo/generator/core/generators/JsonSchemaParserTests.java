@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -35,7 +34,7 @@ public class JsonSchemaParserTests {
     public void testBasicProperties() {
         assertEquals("Name of the main Schema is \"Product\"", "Product", generatorData.getName());
         assertEquals("Main Schema should have 4 models", 4, generatorData.getModels().size());
-        final List<String> models = generatorData.getModels().stream().map(ModelData::getModelName).collect(Collectors.toList());
+        final List<String> models = generatorData.getModels().stream().map(ModelData::getModelName).toList();
         assertTrue("Main Schema should have \"Product\", \"dimensions\", \"review\" models", models.containsAll(Arrays.asList("Product", "dimensions", "review")));
     }
 

@@ -16,24 +16,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class JsonSchemaTests {
-    private static final String jsonSchemaAsJson = "{\n" +
-            "  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n" +
-            "  \"$id\": \"https://example.com/product.schema.json\",\n" +
-            "  \"title\": \"Product\",\n" +
-            "  \"description\": \"A product from Acme's catalog\",\n" +
-            "  \"type\": \"object\",\n" +
-            "  \"properties\": {\n" +
-            "    \"productId\": {\n" +
-            "      \"description\": \"The unique identifier for a product\",\n" +
-            "      \"type\": \"integer\"\n" +
-            "    },\n" +
-            "    \"productName\": {\n" +
-            "      \"description\": \"Name of the product\",\n" +
-            "      \"type\": \"string\"\n" +
-            "    }\n" +
-            "  },\n" +
-            "  \"required\": [ \"productId\", \"productName\" ]\n" +
-            "}";
+    private static final String JSON_SCHEMA_AS_JSON = """
+            {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "$id": "https://example.com/product.schema.json",
+              "title": "Product",
+              "description": "A product from Acme's catalog",
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "description": "The unique identifier for a product",
+                  "type": "integer"
+                },
+                "productName": {
+                  "description": "Name of the product",
+                  "type": "string"
+                }
+              },
+              "required": [ "productId", "productName" ]
+            }""";
     private final ObjectMapper objectMapper = ObjectMapperFactory.createDefaultObjectMapper();
     private JsonSchema jsonSchemaTest;
 
@@ -61,7 +62,7 @@ public class JsonSchemaTests {
 
     @Test
     public void simpleDeserialization() throws JsonProcessingException {
-        final JsonSchema jsonSchema = objectMapper.readValue(jsonSchemaAsJson, JsonSchema.class);
+        final JsonSchema jsonSchema = objectMapper.readValue(JSON_SCHEMA_AS_JSON, JsonSchema.class);
         assert jsonSchema != null;
         assertEquals("Product", jsonSchema.getTitle());
         assertEquals("A product from Acme's catalog", jsonSchema.getDescription());
