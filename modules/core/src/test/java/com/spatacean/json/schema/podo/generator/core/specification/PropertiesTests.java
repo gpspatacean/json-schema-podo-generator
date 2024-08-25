@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class PropertiesTests {
-    private static final String propertiesJson = "{\n" +
+    private static final String PROPERTIES_JSON = "{\n" +
             "\t\t\"prop1\":{\n" +
             "\t\t\t\"description\":\"Description of 1st property\",\n" +
             "\t\t\t\"type\":\"object\"\n" +
@@ -44,7 +44,7 @@ public class PropertiesTests {
     @Test
     public void testFullSerialization() throws JsonProcessingException {
         final String actual = objectMapper.writeValueAsString(properties);
-        final String liniarExpected = propertiesJson.replaceAll("[\\r\\n\\t]", "");
+        final String liniarExpected = PROPERTIES_JSON.replaceAll("[\\r\\n\\t]", "");
         assertEquals(liniarExpected, actual);
     }
 

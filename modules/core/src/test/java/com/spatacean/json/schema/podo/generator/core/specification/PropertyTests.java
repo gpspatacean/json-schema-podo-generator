@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class PropertyTests {
-    private static final String propertyJson = "{\n" +
+    private static final String PROPERTY_JSON = "{\n" +
             "\t\"productId\":{\n" +
             "\t\t\"description\":\"The unique identifier for a product\",\n" +
             "\t\t\"type\":\"integer\"\n" +
@@ -20,7 +20,7 @@ public class PropertyTests {
 
     @Test
     public void nonNullObjectIsReturned() throws JsonProcessingException {
-        final Property property = objectMapper.readValue(propertyJson, Property.class);
+        final Property property = objectMapper.readValue(PROPERTY_JSON, Property.class);
         assertNotNull(property);
     }
 
@@ -32,7 +32,7 @@ public class PropertyTests {
                 .type(JsonDataTypes.INTEGER)
                 .build();
         final String result = objectMapper.writeValueAsString(property);
-        final String linearizedExpectedJson = propertyJson.replaceAll("[\\n\\t]", "");
+        final String linearizedExpectedJson = PROPERTY_JSON.replaceAll("[\\n\\t]", "");
         assertEquals(linearizedExpectedJson, result);
     }
 

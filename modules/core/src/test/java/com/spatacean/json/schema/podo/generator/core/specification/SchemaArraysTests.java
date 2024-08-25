@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class SchemaArraysTests {
-    private final ObjectMapper objectMapper = ObjectMapperFactory.createDefaultObjectMapper();
+    private final ObjectMapper defaultObjectMapper = ObjectMapperFactory.createDefaultObjectMapper();
 
     @Test
     public void DeserializeArrayWithSimpleTypes() throws JsonProcessingException {
@@ -34,7 +34,7 @@ public class SchemaArraysTests {
             assertFalse("Test Failure: failed to read input file", false);
         }
         final String schema = jsonSchema.get();
-        final JsonSchema workingSchema = objectMapper.readValue(schema, JsonSchema.class);
+        final JsonSchema workingSchema = defaultObjectMapper.readValue(schema, JsonSchema.class);
         final Properties properties = workingSchema.getProperties();
         final Optional<Property> tagsProperty = properties.getPropertyByName("tags");
         if (!tagsProperty.isPresent()) {
@@ -51,7 +51,7 @@ public class SchemaArraysTests {
             assertFalse("Test Failure: failed to read input file", false);
         }
         final String schema = jsonSchema.get();
-        final JsonSchema workingSchema = objectMapper.readValue(schema, JsonSchema.class);
+        final JsonSchema workingSchema = defaultObjectMapper.readValue(schema, JsonSchema.class);
         final Properties properties = workingSchema.getProperties();
         final Optional<Property> reviews = properties.getPropertyByName("reviews");
         if (!reviews.isPresent()) {
