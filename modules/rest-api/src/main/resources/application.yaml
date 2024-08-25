@@ -1,6 +1,6 @@
 logging:
   level:
-    net.gspatace.json.schema.podo.generator: trace
+    com.spatacean.json.schema.podo.generator: trace
 
 project:
   properties:
