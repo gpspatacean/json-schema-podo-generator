@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author George Spătăcean
  */
-public class UtilitiesTests {
+class UtilitiesTests {
 
     @Test
-    public void checkDefaultObjectMapperSettings() {
+    void checkDefaultObjectMapperSettings() {
         final ObjectMapper objectMapper = ObjectMapperFactory.createDefaultObjectMapper();
         assertTrue(objectMapper.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING));
         assertTrue(objectMapper.isEnabled(SerializationFeature.WRITE_ENUMS_USING_TO_STRING));

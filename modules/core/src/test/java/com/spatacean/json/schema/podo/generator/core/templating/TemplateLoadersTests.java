@@ -8,11 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for template loaders.
+ *
+ * @author George Spătăcean
  */
-public class TemplateLoadersTests {
+class TemplateLoadersTests {
 
     @Test
-    public void readEmbeddedResource() {
+    void readEmbeddedResource() {
         final TemplateLoader templateLoader = new EmbeddedTemplateLoader("subdir");
         final String content = templateLoader.loadTemplate("simple.file");
         assertEquals("test", content);

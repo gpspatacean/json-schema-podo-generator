@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author George Spătăcean
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-public class JsonSchemaParserTests {
+class JsonSchemaParserTests {
     private final JsonSchemaGenData generatorData;
 
     public JsonSchemaParserTests() throws JsonProcessingException {
@@ -30,7 +30,7 @@ public class JsonSchemaParserTests {
     }
 
     @Test
-    public void testBasicProperties() {
+    void testBasicProperties() {
         assertEquals("Product", generatorData.getName(), "Name of the main Schema is \"Product\"");
         assertEquals(4, generatorData.getModels().size(), "Main Schema should have 4 models");
         final List<String> models = generatorData.getModels().stream().map(ModelData::getModelName).toList();
@@ -38,13 +38,13 @@ public class JsonSchemaParserTests {
     }
 
     @Test
-    public void testMainObjectProperties() {
+    void testMainObjectProperties() {
         final ModelData productModel = Utils.getModelByName(generatorData, "Product");
         assertEquals(6, productModel.getMembers().size(), "Main product should have 6 properties");
     }
 
     @Test
-    public void testSimpleProperty() {
+    void testSimpleProperty() {
         final MemberVariableData productIdProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "Product"), "productId");
         assertEquals("productId", productIdProperty.getName(), "Property Name");
         assertEquals(JsonDataTypes.INTEGER, productIdProperty.getJsonDataTypes(), "Property Type");
@@ -52,14 +52,14 @@ public class JsonSchemaParserTests {
     }
 
     @Test
-    public void testArrayWithSimpleMembersProperty() {
+    void testArrayWithSimpleMembersProperty() {
         final MemberVariableData tagsProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "Product"), "tags");
         assertTrue(tagsProperty.isArray(), "This should be an array property");
         assertEquals("string", tagsProperty.getDataType(), "The array should contain simple Strings");
     }
 
     @Test
-    public void testArrayWithComplexMembersProperty() {
+    void testArrayWithComplexMembersProperty() {
         final MemberVariableData reviewsProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "Product"), "reviews");
         assertTrue(reviewsProperty.isArray() && JsonDataTypes.ARRAY == reviewsProperty.getJsonDataTypes(), "This should be an array property");
         final ModelData innerModelData = reviewsProperty.getInnerModel().get();
@@ -68,7 +68,7 @@ public class JsonSchemaParserTests {
     }
 
     @Test
-    public void testSubObjectOfSubObject() {
+    void testSubObjectOfSubObject() {
         final MemberVariableData subDimProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "dimensions"), "subDim");
         assertSame(JsonDataTypes.OBJECT, subDimProperty.getJsonDataTypes(), "This should be an object property");
         final ModelData subDimModel = subDimProperty.getInnerModel().get();
@@ -77,7 +77,7 @@ public class JsonSchemaParserTests {
     }
 
     @Test
-    public void testComplexObjectProperty() {
+    void testComplexObjectProperty() {
         final MemberVariableData dimensionsProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "Product"), "dimensions");
         assertSame(JsonDataTypes.OBJECT, dimensionsProperty.getJsonDataTypes(), "This should be an Object Property");
         assertEquals(4, dimensionsProperty.getInnerModel().get().getMembers().size(), "This property should have itself 4 properties");
