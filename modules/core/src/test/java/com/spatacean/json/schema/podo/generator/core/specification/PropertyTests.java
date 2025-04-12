@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spatacean.json.schema.podo.generator.core.utils.ObjectMapperFactory;
 import com.spatacean.json.schema.podo.generator.core.specification.models.Property;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PropertyTests {
     private static final String PROPERTY_JSON = "{\n" +

@@ -10,7 +10,7 @@ import com.spatacean.json.schema.podo.generator.core.specification.models.JsonSc
 import com.spatacean.json.schema.podo.generator.core.specification.models.Properties;
 import com.spatacean.json.schema.podo.generator.core.specification.models.Property;
 import org.json.JSONException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author George Spătăcean
@@ -30,16 +30,12 @@ public class SchemaArraysTests {
     @Test
     public void DeserializeArrayWithSimpleTypes() throws JsonProcessingException {
         final Optional<String> jsonSchema = Utils.getSchemaFromResource(this.getClass().getClassLoader(), "schemas/SchemaArrays.json");
-        if (!jsonSchema.isPresent()) {
-            assertFalse("Test Failure: failed to read input file", false);
-        }
+        assertTrue(jsonSchema.isPresent(), "Test Failure: failed to read input file");
         final String schema = jsonSchema.get();
         final JsonSchema workingSchema = defaultObjectMapper.readValue(schema, JsonSchema.class);
         final Properties properties = workingSchema.getProperties();
         final Optional<Property> tagsProperty = properties.getPropertyByName("tags");
-        if (!tagsProperty.isPresent()) {
-            assertFalse("Test Failure: failed to read \"tags\" property", false);
-        }
+        assertTrue(tagsProperty.isPresent(), "Test Failure: failed to read \"tags\" property");
         assertSame(JsonDataTypes.ARRAY, tagsProperty.get().getType());
         assertSame(JsonDataTypes.STRING, tagsProperty.get().getItems().get().getType());
     }
@@ -47,16 +43,12 @@ public class SchemaArraysTests {
     @Test
     public void DeserializeArrayWithComplexTypes() throws JsonProcessingException {
         final Optional<String> jsonSchema = Utils.getSchemaFromResource(this.getClass().getClassLoader(), "schemas/SchemaArrays.json");
-        if (!jsonSchema.isPresent()) {
-            assertFalse("Test Failure: failed to read input file", false);
-        }
+        assertTrue(jsonSchema.isPresent(), "Test Failure: failed to read input file");
         final String schema = jsonSchema.get();
         final JsonSchema workingSchema = defaultObjectMapper.readValue(schema, JsonSchema.class);
         final Properties properties = workingSchema.getProperties();
         final Optional<Property> reviews = properties.getPropertyByName("reviews");
-        if (!reviews.isPresent()) {
-            assertFalse("Test Failure: failed to read \"reviews\" property", false);
-        }
+        assertTrue(reviews.isPresent(), "Test Failure: failed to read \"reviews\" property");
         assertEquals(JsonDataTypes.ARRAY, reviews.get().getType());
         final ArrayItems items = reviews.get().getItems().get();
         assertEquals(JsonDataTypes.OBJECT, items.getType());
@@ -95,12 +87,12 @@ public class SchemaArraysTests {
         final ArrayItems.ArrayItemsBuilder arrayItemsBuilder = ArrayItems.builder();
         arrayItemsBuilder
                 .type(JsonDataTypes.OBJECT)
-                        .properties(Optional.of(arrayProperties));
+                .properties(Optional.of(arrayProperties));
         final ArrayItems arrayItems = arrayItemsBuilder.build();
         final ObjectMapper objectMapper = ObjectMapperFactory.createDefaultObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
         final String actualRepresentation = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayItems);
         final Optional<String> expectedRepresentation = Utils.getSchemaFromResource(this.getClass().getClassLoader(), "schemas/ComplexArrayProperty.json");
-        JSONAssert.assertEquals(expectedRepresentation.get(),actualRepresentation,JSONCompareMode.STRICT);
+        JSONAssert.assertEquals(expectedRepresentation.get(), actualRepresentation, JSONCompareMode.STRICT);
     }
 }

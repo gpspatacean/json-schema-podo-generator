@@ -3,9 +3,9 @@ package com.spatacean.json.schema.podo.generator.cli;
 
 import com.spatacean.json.schema.podo.generator.cli.commands.subcommands.CustomConfigHelper;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Simple run of the {@link CustomConfigHelper} command

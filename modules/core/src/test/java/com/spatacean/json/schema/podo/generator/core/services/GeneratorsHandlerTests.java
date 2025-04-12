@@ -2,13 +2,13 @@ package com.spatacean.json.schema.podo.generator.core.services;
 
 import com.spatacean.json.schema.podo.generator.core.base.AbstractGenerator;
 import com.spatacean.json.schema.podo.generator.core.base.GeneratorInput;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Basic tests of the generator services, things like
@@ -28,10 +28,10 @@ public class GeneratorsHandlerTests {
     @Test
     public void testBasicGeneratorData() {
         final List<GeneratorDescription> availableGenerators = generatorService.getAvailableGenerators();
-        assertTrue("At least one registered generator", availableGenerators.size() > 0);
+        assertTrue(availableGenerators.size() > 0, "At least one registered generator");
         final GeneratorDescription generatorDescription = generatorService.getGeneratorDescription(testGeneratorName);
-        assertEquals("Name of the registered generator", testGeneratorName, generatorDescription.name());
-        assertEquals("Description of the generator", "Generator use just for unit testing", generatorDescription.description());
+        assertEquals(testGeneratorName, generatorDescription.name(), "Name of the registered generator");
+        assertEquals("Generator use just for unit testing", generatorDescription.description(), "Description of the generator");
     }
 
     @Test
@@ -42,15 +42,15 @@ public class GeneratorsHandlerTests {
                 .generatorSpecificProperties(testCustomProps)
                 .build();
         final AbstractGenerator testGenerator = generatorService.getGeneratorInstance(generatorInput);
-        assertNotNull("Generator is not null", testGenerator);
-        assertEquals("Generator name", "TestGenerator", testGenerator.getClass().getSimpleName());
+        assertNotNull(testGenerator, "Generator is not null");
+        assertEquals("TestGenerator", testGenerator.getClass().getSimpleName(), "Generator name");
     }
 
     @Test
     public void testGeneratorCustomOptions() {
         final Object testGeneratorCustomOptions = generatorService.getCustomOptionsCommand(testGeneratorName).get();
-        assertNotNull("Generator Custom options is not null", testGeneratorCustomOptions);
-        assertEquals("Generator Custom Options class", "TestGeneratorCustomProperties", testGeneratorCustomOptions.getClass().getSimpleName());
+        assertNotNull(testGeneratorCustomOptions, "Generator Custom options is not null");
+        assertEquals("TestGeneratorCustomProperties", testGeneratorCustomOptions.getClass().getSimpleName(), "Generator Custom Options class");
     }
 
     @Test
@@ -64,6 +64,6 @@ public class GeneratorsHandlerTests {
         expectedOptions.add(OptionDescription.builder().name("-customOptionOne").description("Custom Option One").build());
         expectedOptions.add(OptionDescription.builder().name("-customOptionTwo").description("Custom Option Two").build());
         final Set<OptionDescription> actualOptions = generatorService.getSpecificGeneratorOptions(testGeneratorName);
-        assertEquals("Generator Custom Options match:", expectedOptions, actualOptions);
+        assertEquals(expectedOptions, actualOptions, "Generator Custom Options match:");
     }
 }

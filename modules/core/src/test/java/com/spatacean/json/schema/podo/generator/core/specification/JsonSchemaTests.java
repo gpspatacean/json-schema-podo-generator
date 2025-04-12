@@ -6,14 +6,14 @@ import com.spatacean.json.schema.podo.generator.core.utils.ObjectMapperFactory;
 import com.spatacean.json.schema.podo.generator.core.specification.models.JsonSchema;
 import com.spatacean.json.schema.podo.generator.core.specification.models.Properties;
 import com.spatacean.json.schema.podo.generator.core.specification.models.Property;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JsonSchemaTests {
     private static final String JSON_SCHEMA_AS_JSON = """
@@ -38,7 +38,7 @@ public class JsonSchemaTests {
     private final ObjectMapper objectMapper = ObjectMapperFactory.createDefaultObjectMapper();
     private JsonSchema jsonSchemaTest;
 
-    @Before
+    @BeforeEach
     public void Setup() {
         final Properties properties = new Properties();
         final List<Property> propertyList = new ArrayList<>();

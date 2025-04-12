@@ -2,12 +2,12 @@ package com.spatacean.json.schema.podo.generator.cli;
 
 import com.spatacean.json.schema.podo.generator.cli.commands.subcommands.GenerateCommand;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Basic test over the Generate command. It runs the Test Generator,

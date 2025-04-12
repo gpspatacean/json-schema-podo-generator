@@ -13,8 +13,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
     <sonar.organization>gspatace</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
@@ -22,40 +22,42 @@
     <maven.assembly.plugin.version>3.3.0</maven.assembly.plugin.version>
     <maven.clean.plugin.version>3.2.0</maven.clean.plugin.version>
     <maven.dependecy.plugin.version>3.6.0</maven.dependecy.plugin.version>
+    <maven.jacoco.plugin.version>0.8.13</maven.jacoco.plugin.version>
     <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
     <maven.javadoc.plugin.version>3.2.0</maven.javadoc.plugin.version>
     <maven.resources.plugin.version>3.3.0</maven.resources.plugin.version>
-    <maven.surefire.plugin.version>3.0.0-M4</maven.surefire.plugin.version>
-    <maven.surefire.report.plugin.version>3.0.0-M5</maven.surefire.report.plugin.version>
+    <maven.surefire.plugin.version>3.5.3</maven.surefire.plugin.version>
+    <maven.surefire.report.plugin.version>3.5.3</maven.surefire.report.plugin.version>
     <!-- end of maven plugins versions -->
 
     <!-- 3rd party plugins version -->
     <frontend.maven.plugin.version>1.12.1</frontend.maven.plugin.version>
-    <spring.boot.maven.plugin.version>3.0.2</spring.boot.maven.plugin.version>
+    <spring.boot.maven.plugin.version>3.4.4</spring.boot.maven.plugin.version>
     <!-- end of 3rd party plugins version -->
 
     <!-- 3rd party dependencies versions -->
     <classpath.version>4.8.146</classpath.version>
     <commons.compress.version>1.21</commons.compress.version>
     <commons.lang3.version>3.11</commons.lang3.version>
-    <jackson.core.version>2.12.7</jackson.core.version>
-    <jackson.databind.version>2.12.7.1</jackson.databind.version>
-    <jackson.datatype.jdk8.version>2.11.3</jackson.datatype.jdk8.version>
+    <jackson.core.version>2.18.3</jackson.core.version>
+    <jackson.databind.version>2.18.3</jackson.databind.version>
+    <jackson.datatype.jdk8.version>2.18.3</jackson.datatype.jdk8.version>
+    <javax.servlet.api.version>4.0.1</javax.servlet.api.version>
     <jibx.tools.version>1.3.3</jibx.tools.version>
     <jmustache.version>1.15</jmustache.version>
     <jsonassert.version>1.5.0</jsonassert.version>
-    <junit.version>4.13.1</junit.version>
+    <junit.jupiter.api.version>5.12.1</junit.jupiter.api.version>
     <log4j.all.version>2.17.1</log4j.all.version>
-    <lombok.version>1.18.24</lombok.version>
+    <lombok.version>1.18.30</lombok.version>
     <node.version>v16.17.0</node.version>
     <npm.version>9.8.1</npm.version>
     <picocli.version>4.6.1</picocli.version>
-    <spring.boot.autoconfigure.version>2.7.12</spring.boot.autoconfigure.version>
-    <spring.boot.starter.test.version>2.7.6</spring.boot.starter.test.version>
-    <spring.boot.starter.web.version>2.7.6</spring.boot.starter.web.version>
-    <spring.framework.spring.test>5.3.24</spring.framework.spring.test>
+    <spring.boot.autoconfigure.version>3.4.4</spring.boot.autoconfigure.version>
+    <spring.boot.starter.test.version>3.4.4</spring.boot.starter.test.version>
+    <spring.boot.starter.web.version>3.4.4</spring.boot.starter.web.version>
+    <spring.framework.spring.test>6.2.5</spring.framework.spring.test>
     <springdoc.openapi.ui.version>1.6.14</springdoc.openapi.ui.version>
-    <mockito.junit.jupiter.version>4.8.1</mockito.junit.jupiter.version>
+    <mockito.junit.jupiter.version>5.17.0</mockito.junit.jupiter.version>
 
     <!-- end of 3rd party dependencies version -->
   </properties>
@@ -114,10 +116,10 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>${javax.servlet.api.version}</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
@@ -144,6 +146,12 @@
         <scope>compile</scope>
       </dependency>
       <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit.jupiter.api.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-junit-jupiter</artifactId>
         <version>${mockito.junit.jupiter.version}</version>
@@ -166,6 +174,12 @@
         <artifactId>spring-boot-starter-test</artifactId>
         <version>${spring.boot.starter.test.version}</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -273,7 +287,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.7</version>
+        <version>${maven.jacoco.plugin.version}</version>
         <executions>
           <execution>
             <goals>
