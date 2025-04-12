@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spatacean.json.schema.podo.generator.core.specification.JsonDataTypes;
 import com.spatacean.json.schema.podo.generator.core.specification.models.JsonSchema;
 import com.spatacean.json.schema.podo.generator.core.utils.ObjectMapperFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Basic tests for {@link JsonSchemaParser}. The tests suite parses a JSON Schema
@@ -32,55 +31,55 @@ public class JsonSchemaParserTests {
 
     @Test
     public void testBasicProperties() {
-        assertEquals("Name of the main Schema is \"Product\"", "Product", generatorData.getName());
-        assertEquals("Main Schema should have 4 models", 4, generatorData.getModels().size());
+        assertEquals("Product", generatorData.getName(), "Name of the main Schema is \"Product\"");
+        assertEquals(4, generatorData.getModels().size(), "Main Schema should have 4 models");
         final List<String> models = generatorData.getModels().stream().map(ModelData::getModelName).toList();
-        assertTrue("Main Schema should have \"Product\", \"dimensions\", \"review\" models", models.containsAll(Arrays.asList("Product", "dimensions", "review")));
+        assertTrue(models.containsAll(Arrays.asList("Product", "dimensions", "review")), "Main Schema should have \"Product\", \"dimensions\", \"review\" models");
     }
 
     @Test
     public void testMainObjectProperties() {
         final ModelData productModel = Utils.getModelByName(generatorData, "Product");
-        assertEquals("Main product should have 6 properties", 6, productModel.getMembers().size());
+        assertEquals(6, productModel.getMembers().size(), "Main product should have 6 properties");
     }
 
     @Test
     public void testSimpleProperty() {
         final MemberVariableData productIdProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "Product"), "productId");
-        assertEquals("Property Name", "productId", productIdProperty.getName());
-        Assert.assertEquals("Property Type", JsonDataTypes.INTEGER, productIdProperty.getJsonDataTypes());
-        assertEquals("Property description", "The unique identifier for a product", productIdProperty.getDescription());
+        assertEquals("productId", productIdProperty.getName(), "Property Name");
+        assertEquals(JsonDataTypes.INTEGER, productIdProperty.getJsonDataTypes(), "Property Type");
+        assertEquals("The unique identifier for a product", productIdProperty.getDescription(), "Property description");
     }
 
     @Test
     public void testArrayWithSimpleMembersProperty() {
         final MemberVariableData tagsProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "Product"), "tags");
-        assertTrue("This should be an array property", tagsProperty.isArray());
-        assertEquals("The array should contain simple Strings", "string", tagsProperty.getDataType());
+        assertTrue(tagsProperty.isArray(), "This should be an array property");
+        assertEquals("string", tagsProperty.getDataType(), "The array should contain simple Strings");
     }
 
     @Test
     public void testArrayWithComplexMembersProperty() {
         final MemberVariableData reviewsProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "Product"), "reviews");
-        assertTrue("This should be an array property", reviewsProperty.isArray() && JsonDataTypes.ARRAY == reviewsProperty.getJsonDataTypes());
+        assertTrue(reviewsProperty.isArray() && JsonDataTypes.ARRAY == reviewsProperty.getJsonDataTypes(), "This should be an array property");
         final ModelData innerModelData = reviewsProperty.getInnerModel().get();
-        assertEquals("Name of the inner model ", "review", innerModelData.getModelName());
-        assertEquals("Inner model should have 2 properties ", 2, innerModelData.getMembers().size());
+        assertEquals("review", innerModelData.getModelName(), "Name of the inner model ");
+        assertEquals(2, innerModelData.getMembers().size(), "Inner model should have 2 properties ");
     }
 
     @Test
     public void testSubObjectOfSubObject() {
         final MemberVariableData subDimProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "dimensions"), "subDim");
-        assertSame("This should be an object property", JsonDataTypes.OBJECT, subDimProperty.getJsonDataTypes());
+        assertSame(JsonDataTypes.OBJECT, subDimProperty.getJsonDataTypes(), "This should be an object property");
         final ModelData subDimModel = subDimProperty.getInnerModel().get();
-        assertEquals("Name of the inner model ", "subDim", subDimModel.getModelName());
-        assertEquals("SubDim inner model should have 2 properties", 2, subDimModel.getMembers().size());
+        assertEquals("subDim", subDimModel.getModelName(), "Name of the inner model ");
+        assertEquals(2, subDimModel.getMembers().size(), "SubDim inner model should have 2 properties");
     }
 
     @Test
     public void testComplexObjectProperty() {
         final MemberVariableData dimensionsProperty = Utils.getMemberDataByName(Utils.getModelByName(generatorData, "Product"), "dimensions");
-        assertSame("This should be an Object Property", JsonDataTypes.OBJECT, dimensionsProperty.getJsonDataTypes());
-        assertEquals("This property should have itself 4 properties", 4, dimensionsProperty.getInnerModel().get().getMembers().size());
+        assertSame(JsonDataTypes.OBJECT, dimensionsProperty.getJsonDataTypes(), "This should be an Object Property");
+        assertEquals(4, dimensionsProperty.getInnerModel().get().getMembers().size(), "This property should have itself 4 properties");
     }
 }

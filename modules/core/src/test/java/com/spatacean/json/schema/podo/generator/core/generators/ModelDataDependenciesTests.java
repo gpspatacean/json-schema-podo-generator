@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spatacean.json.schema.podo.generator.core.Utils;
 import com.spatacean.json.schema.podo.generator.core.specification.models.JsonSchema;
 import com.spatacean.json.schema.podo.generator.core.utils.ObjectMapperFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.spatacean.json.schema.podo.generator.core.generators.Utils.getModelByName;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for dependencies of a {@link ModelData}
@@ -35,10 +35,10 @@ public class ModelDataDependenciesTests {
     }
 
     @Test
-    public void testObjectDependency(){
-        final ModelData productModel = getModelByName(generatorData,"Product");
+    public void testObjectDependency() {
+        final ModelData productModel = getModelByName(generatorData, "Product");
         final List<Map<String, String>> dependencies = productModel.getDependencies();
-        assertEquals("Product must have 2 dependency, \"dimensions\"", 2, dependencies.size());
+        assertEquals(2, dependencies.size(), "Product must have 2 dependency, \"dimensions\"");
         final boolean hasCorrectDependencies = dependencies
                 .stream()
                 .map(Map::values)
@@ -48,6 +48,6 @@ public class ModelDataDependenciesTests {
                     return acc;
                 })
                 .containsAll(Arrays.asList("Dimensions", "Review"));
-        assertTrue("Product must have correct dependencies", hasCorrectDependencies);
+        assertTrue(hasCorrectDependencies, "Product must have correct dependencies");
     }
 }

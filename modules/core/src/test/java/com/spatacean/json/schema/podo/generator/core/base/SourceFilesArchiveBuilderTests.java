@@ -3,14 +3,14 @@ package com.spatacean.json.schema.podo.generator.core.base;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author George Spătăcean
@@ -44,7 +44,7 @@ public class SourceFilesArchiveBuilderTests {
                 bytesRead += theFile.getInputStream(entry).read(entryContents, bytesRead, entryContents.length - bytesRead);
             }
             final ProcessedSourceFile rebuiltProcessedFile = new ProcessedSourceFile(entry.getName(), new String(entryContents));
-            assertTrue("Rebuilt Processed File matches an initial one", files.contains(rebuiltProcessedFile));
+            assertTrue(files.contains(rebuiltProcessedFile), "Rebuilt Processed File matches an initial one");
         }
     }
 }

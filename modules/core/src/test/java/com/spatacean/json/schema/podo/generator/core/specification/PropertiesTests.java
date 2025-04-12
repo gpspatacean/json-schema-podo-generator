@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spatacean.json.schema.podo.generator.core.utils.ObjectMapperFactory;
 import com.spatacean.json.schema.podo.generator.core.specification.models.Properties;
 import com.spatacean.json.schema.podo.generator.core.specification.models.Property;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PropertiesTests {
     private static final String PROPERTIES_JSON = "{\n" +
@@ -31,7 +31,7 @@ public class PropertiesTests {
     private final ObjectMapper objectMapper = ObjectMapperFactory.createDefaultObjectMapper();
     private Properties properties;
 
-    @Before
+    @BeforeEach
     public void Setup() {
         properties = new Properties();
         final List<Property> propertyList = new ArrayList<>();
