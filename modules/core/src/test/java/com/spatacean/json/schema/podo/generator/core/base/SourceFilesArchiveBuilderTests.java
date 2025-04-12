@@ -15,16 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author George Spătăcean
  */
-public class SourceFilesArchiveBuilderTests {
+class SourceFilesArchiveBuilderTests {
 
     /**
      * Archive list of {@link ProcessedSourceFile} and
      * check if the output matches the input
-     * 
+     *
      * @throws IOException
      */
     @Test
-    public void checkArchiveBuilder() throws IOException {
+    void checkArchiveBuilder() throws IOException {
         final List<ProcessedSourceFile> files = new ArrayList<>();
         files.add(new ProcessedSourceFile("foo.txt", "foo_txt_contents.txt"));
         files.add(new ProcessedSourceFile("foo/bar.txt", "foo_bar_txt_contents.txt"));

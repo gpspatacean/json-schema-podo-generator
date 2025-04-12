@@ -2,10 +2,10 @@ package com.spatacean.json.schema.podo.generator.core.specification;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spatacean.json.schema.podo.generator.core.utils.ObjectMapperFactory;
 import com.spatacean.json.schema.podo.generator.core.specification.models.JsonSchema;
 import com.spatacean.json.schema.podo.generator.core.specification.models.Properties;
 import com.spatacean.json.schema.podo.generator.core.specification.models.Property;
+import com.spatacean.json.schema.podo.generator.core.utils.ObjectMapperFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JsonSchemaTests {
+class JsonSchemaTests {
     private static final String JSON_SCHEMA_AS_JSON = """
             {
               "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -39,7 +39,7 @@ public class JsonSchemaTests {
     private JsonSchema jsonSchemaTest;
 
     @BeforeEach
-    public void Setup() {
+    void Setup() {
         final Properties properties = new Properties();
         final List<Property> propertyList = new ArrayList<>();
         propertyList.add(Property.builder().propertyName("prop1").description("Description of 1st property").type(JsonDataTypes.OBJECT).build());
@@ -61,7 +61,7 @@ public class JsonSchemaTests {
     }
 
     @Test
-    public void simpleDeserialization() throws JsonProcessingException {
+    void simpleDeserialization() throws JsonProcessingException {
         final JsonSchema jsonSchema = objectMapper.readValue(JSON_SCHEMA_AS_JSON, JsonSchema.class);
         assert jsonSchema != null;
         assertEquals("Product", jsonSchema.getTitle());
@@ -74,7 +74,7 @@ public class JsonSchemaTests {
     }
 
     @Test
-    public void bidirectionalConversion_startFromPojo() throws JsonProcessingException {
+    void bidirectionalConversion_startFromPojo() throws JsonProcessingException {
         final String pojoRepresentation = objectMapper.writeValueAsString(jsonSchemaTest);
         final JsonSchema reconstructedSchema = objectMapper.readValue(pojoRepresentation, JsonSchema.class);
         assertEquals(jsonSchemaTest, reconstructedSchema);

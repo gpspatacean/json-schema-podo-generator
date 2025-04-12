@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author George Spătăcean
  */
-public class ModelDataDependenciesTests {
+class ModelDataDependenciesTests {
     private final JsonSchemaGenData generatorData;
 
     public ModelDataDependenciesTests() throws JsonProcessingException {
@@ -35,7 +35,7 @@ public class ModelDataDependenciesTests {
     }
 
     @Test
-    public void testObjectDependency() {
+    void testObjectDependency() {
         final ModelData productModel = getModelByName(generatorData, "Product");
         final List<Map<String, String>> dependencies = productModel.getDependencies();
         assertEquals(2, dependencies.size(), "Product must have 2 dependency, \"dimensions\"");

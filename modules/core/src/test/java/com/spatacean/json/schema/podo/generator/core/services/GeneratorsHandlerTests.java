@@ -21,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author George Spătăcean
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-public class GeneratorsHandlerTests {
+class GeneratorsHandlerTests {
     private static final String testGeneratorName = "test-generator";
     private static final GeneratorsHandler generatorService = GeneratorsHandler.getInstance();
 
     @Test
-    public void testBasicGeneratorData() {
+    void testBasicGeneratorData() {
         final List<GeneratorDescription> availableGenerators = generatorService.getAvailableGenerators();
         assertTrue(availableGenerators.size() > 0, "At least one registered generator");
         final GeneratorDescription generatorDescription = generatorService.getGeneratorDescription(testGeneratorName);
@@ -35,7 +35,7 @@ public class GeneratorsHandlerTests {
     }
 
     @Test
-    public void testGeneratorInstantiation() {
+    void testGeneratorInstantiation() {
         final String[] testCustomProps = {"-customOptionOne", "custOptOneValue", "-customOptionTwo", "custOptTwoValue"};
         final GeneratorInput generatorInput = GeneratorInput.builder()
                 .generatorName(testGeneratorName)
@@ -47,19 +47,19 @@ public class GeneratorsHandlerTests {
     }
 
     @Test
-    public void testGeneratorCustomOptions() {
+    void testGeneratorCustomOptions() {
         final Object testGeneratorCustomOptions = generatorService.getCustomOptionsCommand(testGeneratorName).get();
         assertNotNull(testGeneratorCustomOptions, "Generator Custom options is not null");
         assertEquals("TestGeneratorCustomProperties", testGeneratorCustomOptions.getClass().getSimpleName(), "Generator Custom Options class");
     }
 
     @Test
-    public void testGeneratorDescriptionRetrieval() {
+    void testGeneratorDescriptionRetrieval() {
         assertThrows(GeneratorNotFoundException.class, () -> generatorService.getGeneratorDescription("non-existent"));
     }
 
     @Test
-    public void testCustomOptionsSerialization() throws GeneratorNotFoundException {
+    void testCustomOptionsSerialization() throws GeneratorNotFoundException {
         final Set<OptionDescription> expectedOptions = new HashSet<>();
         expectedOptions.add(OptionDescription.builder().name("-customOptionOne").description("Custom Option One").build());
         expectedOptions.add(OptionDescription.builder().name("-customOptionTwo").description("Custom Option Two").build());

@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author George Spătăcean
  */
-public class GenerateCommandTests {
+class GenerateCommandTests {
 
     @Test
-    public void runGenerateCommandWithTestGenerator() throws IllegalAccessException {
+    void runGenerateCommandWithTestGenerator() throws IllegalAccessException {
         final GenerateCommand generateCommand = new GenerateCommand();
 
         //"magically" set the private fields.

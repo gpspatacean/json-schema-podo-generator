@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PropertiesTests {
+class PropertiesTests {
     private static final String PROPERTIES_JSON = "{\n" +
             "\t\t\"prop1\":{\n" +
             "\t\t\t\"description\":\"Description of 1st property\",\n" +
@@ -32,7 +32,7 @@ public class PropertiesTests {
     private Properties properties;
 
     @BeforeEach
-    public void Setup() {
+    void Setup() {
         properties = new Properties();
         final List<Property> propertyList = new ArrayList<>();
         propertyList.add(Property.builder().propertyName("prop1").description("Description of 1st property").type(JsonDataTypes.OBJECT).build());
@@ -42,14 +42,14 @@ public class PropertiesTests {
     }
 
     @Test
-    public void testFullSerialization() throws JsonProcessingException {
+    void testFullSerialization() throws JsonProcessingException {
         final String actual = objectMapper.writeValueAsString(properties);
-        final String liniarExpected = PROPERTIES_JSON.replaceAll("[\\r\\n\\t]", "");
-        assertEquals(liniarExpected, actual);
+        final String linearExpected = PROPERTIES_JSON.replaceAll("[\\r\\n\\t]", "");
+        assertEquals(linearExpected, actual);
     }
 
     @Test
-    public void bidirectionalTransformation() throws JsonProcessingException {
+    void bidirectionalTransformation() throws JsonProcessingException {
         final String propertiesAsString = objectMapper.writeValueAsString(properties);
         final Properties reconvertedProperties = objectMapper.readValue(propertiesAsString, Properties.class);
         assertEquals(properties, reconvertedProperties);

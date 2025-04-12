@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author George Spătăcean
  */
-public class ListCommandTests {
+class ListCommandTests {
 
     @Test
-    public void runListCommand(){
+    void runListCommand() {
         new ListCommand().run();
         assertTrue(true);
     }

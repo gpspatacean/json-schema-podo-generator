@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author George Spătăcean
  */
-public class CustomConfigHelperTests {
+class CustomConfigHelperTests {
 
     @Test
-    public void runCustomConfigHelperCommand() throws IllegalAccessException {
+    void runCustomConfigHelperCommand() throws IllegalAccessException {
         final CustomConfigHelper customConfig = new CustomConfigHelper();
 
         //"magically" set the private generator name

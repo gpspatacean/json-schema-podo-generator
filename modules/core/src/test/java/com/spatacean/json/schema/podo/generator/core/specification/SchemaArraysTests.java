@@ -24,11 +24,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author George Spătăcean
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-public class SchemaArraysTests {
+class SchemaArraysTests {
     private final ObjectMapper defaultObjectMapper = ObjectMapperFactory.createDefaultObjectMapper();
 
     @Test
-    public void DeserializeArrayWithSimpleTypes() throws JsonProcessingException {
+    void DeserializeArrayWithSimpleTypes() throws JsonProcessingException {
         final Optional<String> jsonSchema = Utils.getSchemaFromResource(this.getClass().getClassLoader(), "schemas/SchemaArrays.json");
         assertTrue(jsonSchema.isPresent(), "Test Failure: failed to read input file");
         final String schema = jsonSchema.get();
@@ -41,7 +41,7 @@ public class SchemaArraysTests {
     }
 
     @Test
-    public void DeserializeArrayWithComplexTypes() throws JsonProcessingException {
+    void DeserializeArrayWithComplexTypes() throws JsonProcessingException {
         final Optional<String> jsonSchema = Utils.getSchemaFromResource(this.getClass().getClassLoader(), "schemas/SchemaArrays.json");
         assertTrue(jsonSchema.isPresent(), "Test Failure: failed to read input file");
         final String schema = jsonSchema.get();
@@ -59,7 +59,7 @@ public class SchemaArraysTests {
     }
 
     @Test
-    public void SerializeSimpleArrayItems() throws JsonProcessingException, JSONException {
+    void SerializeSimpleArrayItems() throws JsonProcessingException, JSONException {
         final ArrayItems arrayItems = ArrayItems.builder().type(JsonDataTypes.STRING).build();
         final ObjectMapper objectMapper = ObjectMapperFactory.createDefaultObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
@@ -69,7 +69,7 @@ public class SchemaArraysTests {
     }
 
     @Test
-    public void SerializeComplexArrayItems() throws JsonProcessingException, JSONException {
+    void SerializeComplexArrayItems() throws JsonProcessingException, JSONException {
         final Properties arrayProperties = new Properties();
         final List<Property> propertyList = new ArrayList<>();
         propertyList.add(Property.builder()
