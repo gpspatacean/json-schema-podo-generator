@@ -37,7 +37,7 @@
 
     <!-- 3rd party dependencies versions -->
     <classpath.version>4.8.146</classpath.version>
-    <commons.compress.version>1.21</commons.compress.version>
+    <commons.compress.version>1.27.1</commons.compress.version>
     <commons.lang3.version>3.11</commons.lang3.version>
     <jackson.core.version>2.18.3</jackson.core.version>
     <jackson.databind.version>2.18.3</jackson.databind.version>
@@ -47,7 +47,7 @@
     <jmustache.version>1.15</jmustache.version>
     <jsonassert.version>1.5.0</jsonassert.version>
     <junit.jupiter.api.version>5.12.1</junit.jupiter.api.version>
-    <log4j.all.version>2.17.1</log4j.all.version>
+    <log4j.all.version>2.24.3</log4j.all.version>
     <lombok.version>1.18.30</lombok.version>
     <node.version>v22.14.0</node.version>
     <npm.version>11.3.0</npm.version>
