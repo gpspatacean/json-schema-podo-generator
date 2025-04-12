@@ -49,8 +49,8 @@
     <junit.jupiter.api.version>5.12.1</junit.jupiter.api.version>
     <log4j.all.version>2.17.1</log4j.all.version>
     <lombok.version>1.18.30</lombok.version>
-    <node.version>v16.17.0</node.version>
-    <npm.version>9.8.1</npm.version>
+    <node.version>v22.14.0</node.version>
+    <npm.version>11.3.0</npm.version>
     <picocli.version>4.6.1</picocli.version>
     <spring.boot.autoconfigure.version>3.4.4</spring.boot.autoconfigure.version>
     <spring.boot.starter.test.version>3.4.4</spring.boot.starter.test.version>
