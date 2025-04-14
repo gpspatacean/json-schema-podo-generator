@@ -2,12 +2,12 @@ import {Component} from '@angular/core';
 import {GeneratorsService} from "../../services/generators.service";
 
 @Component({
-    selector: 'app-schema-textarea',
-    template: `<textarea class="form-control"
+  selector: 'app-schema-textarea',
+  template: `<textarea class="form-control"
                        rows="20"
                        [(ngModel)]="schemaInput"
                        (ngModelChange)="updatePayload()"></textarea>`,
-    standalone: false
+  standalone: false
 })
 export class SchemaTextareaComponent {
   constructor(private generatorsService: GeneratorsService) {

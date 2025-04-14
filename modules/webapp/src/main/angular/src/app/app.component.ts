@@ -2,9 +2,9 @@ import {Component} from '@angular/core';
 import {GeneratorsService} from "./services/generators.service";
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  standalone: false
 })
 export class AppComponent {
   title = 'Plain Old Data Objects from JSON Schemas Generator';
