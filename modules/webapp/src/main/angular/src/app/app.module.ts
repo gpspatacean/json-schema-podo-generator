@@ -1,4 +1,4 @@
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
@@ -25,12 +25,10 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     bootstrap: [AppComponent], imports: [BrowserModule,
         FormsModule], providers: [
         AppConfigService,
-        {
-            provide: APP_INITIALIZER,
-            useFactory: appInitializerFn,
-            multi: true,
-            deps: [AppConfigService]
-        },
+        provideAppInitializer(() => {
+        const initializerFn = (appInitializerFn)(inject(AppConfigService));
+        return initializerFn();
+      }),
         {
             provide: APP_BASE_HREF,
             useValue: '/' + (window.location.pathname.split('/')[1] || '')

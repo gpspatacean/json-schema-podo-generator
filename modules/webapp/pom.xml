@@ -117,7 +117,7 @@
               <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${basedir}/src/main/angular/dist/webapp</directory>
+                  <directory>${basedir}/src/main/angular/dist/webapp/browser</directory>
                 </resource>
               </resources>
             </configuration>

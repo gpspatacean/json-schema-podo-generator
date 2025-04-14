@@ -5,8 +5,9 @@ import {Subscription} from "rxjs";
 import {GeneratorProperty} from "../../models/generator-property";
 
 @Component({
-  selector: 'app-generators-dropdown',
-  templateUrl: './generators-dropdown.component.html'
+    selector: 'app-generators-dropdown',
+    templateUrl: './generators-dropdown.component.html',
+    standalone: false
 })
 export class GeneratorsDropdownComponent implements OnInit, OnDestroy {
 
