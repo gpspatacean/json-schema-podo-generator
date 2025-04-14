@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Generator} from "../models/generator";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
 import {GeneratorProperty} from "../models/generator-property";
 import {GeneratorInput} from "../models/generator-input";
