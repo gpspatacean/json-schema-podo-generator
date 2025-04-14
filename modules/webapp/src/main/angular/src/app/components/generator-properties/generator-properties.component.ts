@@ -3,9 +3,9 @@ import {GeneratorProperty} from "../../models/generator-property";
 import {GeneratorsService} from "../../services/generators.service";
 
 @Component({
-    selector: 'app-generator-properties',
-    templateUrl: './generator-properties.component.html',
-    standalone: false
+  selector: 'app-generator-properties',
+  templateUrl: './generator-properties.component.html',
+  standalone: false
 })
 export class GeneratorPropertiesComponent {
   properties: GeneratorProperty[] = [];

@@ -1,27 +1,27 @@
 import {TestBed} from '@angular/core/testing';
 
 import {GeneratorsService} from './generators.service';
-import { provideHttpClientTesting } from "@angular/common/http/testing";
+import {provideHttpClientTesting} from "@angular/common/http/testing";
 import {AppConfigService} from "./app-config.service";
 import {APP_BASE_HREF} from "@angular/common";
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 
 describe('GeneratorsService', () => {
   let service: GeneratorsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [
+      imports: [],
+      providers: [
         AppConfigService,
         {
-            provide: APP_BASE_HREF,
-            useValue: "/"
+          provide: APP_BASE_HREF,
+          useValue: "/"
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
-    ]
-});
+      ]
+    });
     service = TestBed.inject(GeneratorsService);
   });
 
