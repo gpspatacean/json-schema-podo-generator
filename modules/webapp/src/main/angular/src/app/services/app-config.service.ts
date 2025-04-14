@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {AppConfig} from "../models/app-config";
 import {tap} from "rxjs";
 import {APP_BASE_HREF} from "@angular/common";
