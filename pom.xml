@@ -56,7 +56,7 @@
     <spring.boot.starter.test.version>3.4.4</spring.boot.starter.test.version>
     <spring.boot.starter.web.version>3.4.4</spring.boot.starter.web.version>
     <spring.framework.spring.test>6.2.5</spring.framework.spring.test>
-    <springdoc.openapi.ui.version>1.6.14</springdoc.openapi.ui.version>
+    <springdoc.openapi.starter.webmvc.ui.version>2.8.6</springdoc.openapi.starter.webmvc.ui.version>
     <mockito.junit.jupiter.version>5.17.0</mockito.junit.jupiter.version>
 
     <!-- end of 3rd party dependencies version -->
@@ -195,8 +195,8 @@
       </dependency>
       <dependency>
         <groupId>org.springdoc</groupId>
-        <artifactId>springdoc-openapi-ui</artifactId>
-        <version>${springdoc.openapi.ui.version}</version>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>${springdoc.openapi.starter.webmvc.ui.version}</version>
         <scope>compile</scope>
       </dependency>
     </dependencies>
