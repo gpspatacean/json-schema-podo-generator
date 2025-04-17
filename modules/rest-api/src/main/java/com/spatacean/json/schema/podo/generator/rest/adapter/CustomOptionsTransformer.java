@@ -61,7 +61,7 @@ public class CustomOptionsTransformer {
      * <li> check if there are long name values registered </li>
      * <ul>
      * <li> if yes, return the first one of those, stripping leading dashes ("package")</li>
-     * <li> if no, return the first value, stripping leading dashes ("p)</li>
+     * <li> if no, return the first value, stripping leading dashes ("p")</li>
      * </ul>
      */
     private String getOptionParameterName(@NotNull final String compoundOptionName) {
