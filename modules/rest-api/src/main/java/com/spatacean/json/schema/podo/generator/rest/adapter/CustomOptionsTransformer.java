@@ -3,10 +3,10 @@ package com.spatacean.json.schema.podo.generator.rest.adapter;
 import com.spatacean.json.schema.podo.generator.core.base.AbstractGenerator;
 import com.spatacean.json.schema.podo.generator.core.services.GeneratorsHandler;
 import com.spatacean.json.schema.podo.generator.core.services.OptionDescription;
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
 import java.security.InvalidParameterException;
 import java.util.*;
 

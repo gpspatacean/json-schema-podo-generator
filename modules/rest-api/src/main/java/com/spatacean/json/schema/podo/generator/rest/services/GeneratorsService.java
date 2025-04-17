@@ -1,6 +1,5 @@
 package com.spatacean.json.schema.podo.generator.rest.services;
 
-import lombok.extern.slf4j.Slf4j;
 import com.spatacean.json.schema.podo.generator.core.base.AbstractGenerator;
 import com.spatacean.json.schema.podo.generator.core.base.GeneratorInput;
 import com.spatacean.json.schema.podo.generator.core.base.ProcessedSourceFile;
@@ -8,10 +7,11 @@ import com.spatacean.json.schema.podo.generator.core.base.SourceFilesArchiveBuil
 import com.spatacean.json.schema.podo.generator.core.services.GeneratorDescription;
 import com.spatacean.json.schema.podo.generator.core.services.GeneratorsHandler;
 import com.spatacean.json.schema.podo.generator.core.services.OptionDescription;
+import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
