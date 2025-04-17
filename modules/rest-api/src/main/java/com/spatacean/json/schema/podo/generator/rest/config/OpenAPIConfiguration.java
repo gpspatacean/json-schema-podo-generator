@@ -22,7 +22,7 @@ public class OpenAPIConfiguration {
                         .version(version))
                 .externalDocs(new ExternalDocumentation()
                         .description("More info on GitHub!")
-                        .url("https://github.com/gspatace/json-schema-podo-generator")
+                        .url("https://github.com/gpspatacean/json-schema-podo-generator")
                 );
     }
 }
