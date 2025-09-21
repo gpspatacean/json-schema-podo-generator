@@ -28,6 +28,4 @@ COPY --from=builder /app/modules/rest-api/target/*.jar /app/app.jar
 
 EXPOSE 8080
 
-EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
