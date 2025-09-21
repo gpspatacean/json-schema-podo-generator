@@ -21,5 +21,9 @@ RUN mvn clean package -pl modules/cli-wrapper -am -B -e -DskipTests
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
+RUN useradd -m -s /usr/sbin/nologin appuser
+USER appuser
+
 COPY --from=builder /app/modules/cli-wrapper/target/*.jar /app/app.jar
+
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

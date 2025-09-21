@@ -21,7 +21,11 @@ RUN mvn clean package -pl modules/rest-api -am -B -e -DskipTests
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
+RUN useradd -m -s /usr/sbin/nologin appuser
+USER appuser
+
 COPY --from=builder /app/modules/rest-api/target/*.jar /app/app.jar
+
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
