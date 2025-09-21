@@ -1,0 +1,13 @@
+services:
+  restapi:
+    build:
+      context: .
+      dockerfile: modules/rest-api/Dockerfile
+    ports:
+      - "8080:8080"
+  webapp:
+    build:
+      context: .
+      dockerfile: modules/webapp/Dockerfile
+    ports:
+      - "8081:8081"
