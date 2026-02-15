@@ -33,18 +33,19 @@ class SourceFilesArchiveBuilderTests {
 
         final byte[] zippedBytes = new SourceFilesArchiveBuilder(files).buildArchive();
         final SeekableInMemoryByteChannel bytesChannel = new SeekableInMemoryByteChannel(zippedBytes);
-        final ZipFile theFile = new ZipFile(bytesChannel);
-        final Enumeration<ZipArchiveEntry> entries = theFile.getEntries();
+        try (final ZipFile theFile = ZipFile.builder().setSeekableByteChannel(bytesChannel).get()) {
+            final Enumeration<ZipArchiveEntry> entries = theFile.getEntries();
 
-        while (entries.hasMoreElements()) {
-            final ZipArchiveEntry entry = entries.nextElement();
-            final byte[] entryContents = new byte[(int) entry.getSize()];
-            int bytesRead = 0;
-            while (bytesRead < entryContents.length) {
-                bytesRead += theFile.getInputStream(entry).read(entryContents, bytesRead, entryContents.length - bytesRead);
+            while (entries.hasMoreElements()) {
+                final ZipArchiveEntry entry = entries.nextElement();
+                final byte[] entryContents = new byte[(int) entry.getSize()];
+                int bytesRead = 0;
+                while (bytesRead < entryContents.length) {
+                    bytesRead += theFile.getInputStream(entry).read(entryContents, bytesRead, entryContents.length - bytesRead);
+                }
+                final ProcessedSourceFile rebuiltProcessedFile = new ProcessedSourceFile(entry.getName(), new String(entryContents));
+                assertTrue(files.contains(rebuiltProcessedFile), "Rebuilt Processed File matches an initial one");
             }
-            final ProcessedSourceFile rebuiltProcessedFile = new ProcessedSourceFile(entry.getName(), new String(entryContents));
-            assertTrue(files.contains(rebuiltProcessedFile), "Rebuilt Processed File matches an initial one");
         }
     }
 }
