@@ -61,7 +61,7 @@ public class MemberVariableData {
     @SuppressWarnings("unused") //May be used directly in templates
     public boolean isSimpleArray() {
         return JsonDataTypes.ARRAY == jsonDataTypes &&
-                !innerModel.isPresent();
+                innerModel.isEmpty();
     }
 
     @SuppressWarnings("unused") //May be used directly in templates
