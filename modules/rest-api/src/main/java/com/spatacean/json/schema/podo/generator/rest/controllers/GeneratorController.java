@@ -1,7 +1,9 @@
 package com.spatacean.json.schema.podo.generator.rest.controllers;
 
+import com.spatacean.json.schema.podo.generator.core.services.GeneratorDescription;
+import com.spatacean.json.schema.podo.generator.core.services.GeneratorNotFoundException;
+import com.spatacean.json.schema.podo.generator.core.services.OptionDescription;
 import com.spatacean.json.schema.podo.generator.rest.adapter.CustomOptionsTransformer;
-import com.spatacean.json.schema.podo.generator.rest.models.ProblemDetails;
 import com.spatacean.json.schema.podo.generator.rest.services.GeneratorsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,13 +18,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.spatacean.json.schema.podo.generator.core.services.GeneratorDescription;
-import com.spatacean.json.schema.podo.generator.core.services.GeneratorNotFoundException;
-import com.spatacean.json.schema.podo.generator.core.services.OptionDescription;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -123,10 +123,10 @@ public class GeneratorController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                                            schema = @Schema(implementation = ProblemDetails.class),
+                                            schema = @Schema(implementation = ProblemDetail.class),
                                             examples = {
                                                     @ExampleObject(
-                                                            value = "{\"title\":\"Generator not found.\",\"status\":404,\"details\":\"Generator 'javas' not found\",\"instance\":\"/generators/javas\"}"
+                                                            value = "{\"title\":\"Generator not found.\",\"status\":404,\"detail\":\"Generator 'javas' not found\",\"instance\":\"/generators/javas\"}"
                                                     )}
                                     )}
                     )}
@@ -174,10 +174,10 @@ public class GeneratorController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                                            schema = @Schema(implementation = ProblemDetails.class),
+                                            schema = @Schema(implementation = ProblemDetail.class),
                                             examples = {
                                                     @ExampleObject(
-                                                            value = "{\"title\":\"Generator not found.\",\"status\":404,\"details\":\"Generator 'javas' not found\",\"instance\":\"/generators/javas\"}"
+                                                            value = "{\"title\":\"Generator not found.\",\"status\":404,\"detail\":\"Generator 'javas' not found\",\"instance\":\"/generators/javas\"}"
                                                     )}
                                     )}
                     ),
@@ -187,10 +187,10 @@ public class GeneratorController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                                            schema = @Schema(implementation = ProblemDetails.class),
+                                            schema = @Schema(implementation = ProblemDetail.class),
                                             examples = {
                                                     @ExampleObject(
-                                                            value = "{\"title\":\"Custom Properties Object Instantiation error.\",\"status\":500,\"details\":\"Failed to instantiate Custom Properties object of class 'CppSpecificProperties' for generator `cpp`\",\"instance\":\"/generators/cpp/options\"}"
+                                                            value = "{\"title\":\"Custom Properties Object Instantiation error.\",\"status\":500,\"detail\":\"Failed to instantiate Custom Properties object of class 'CppSpecificProperties' for generator `cpp`\",\"instance\":\"/generators/cpp/options\"}"
                                                     )}
                                     )}
                     )
@@ -274,10 +274,10 @@ public class GeneratorController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                                            schema = @Schema(implementation = ProblemDetails.class),
+                                            schema = @Schema(implementation = ProblemDetail.class),
                                             examples = {
                                                     @ExampleObject(
-                                                            value = "{\"title\":\"Generator not found.\",\"status\":404,\"details\":\"Generator 'javas' not found\",\"instance\":\"/generators/javas\"}"
+                                                            value = "{\"title\":\"Generator not found.\",\"status\":404,\"detail\":\"Generator 'javas' not found\",\"instance\":\"/generators/javas\"}"
                                                     )}
                                     )}
                     ),
@@ -287,10 +287,10 @@ public class GeneratorController {
                             content = {
                                     @Content(
                                             mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                                            schema = @Schema(implementation = ProblemDetails.class),
+                                            schema = @Schema(implementation = ProblemDetail.class),
                                             examples = {
                                                     @ExampleObject(
-                                                            value = "{\"title\":\"Custom Properties Object Instantiation error.\",\"status\":500,\"details\":\"Failed to instantiate Custom Properties object of class 'CppSpecificProperties' for generator `cpp`\",\"instance\":\"/generators/cpp/options\"}"
+                                                            value = "{\"title\":\"Custom Properties Object Instantiation error.\",\"status\":500,\"detail\":\"Failed to instantiate Custom Properties object of class 'CppSpecificProperties' for generator `cpp`\",\"instance\":\"/generators/cpp/options\"}"
                                                     )}
                                     )}
                     )
