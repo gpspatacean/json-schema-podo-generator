@@ -39,7 +39,7 @@ public class CustomOptionsTransformer {
     public String[] getCommandOptions(final String generatorName, final Map<String, String> allQueryParams) {
         List<String> commandString = new ArrayList<>();
         final Set<OptionDescription> optionDescriptions = genHandler.getSpecificGeneratorOptions(generatorName);
-        optionDescriptions.parallelStream().forEach(optionDescription -> {
+        optionDescriptions.forEach(optionDescription -> {
             final String optionName = getOptionParameterName(optionDescription.getName());
             if (allQueryParams.containsKey(optionName)) {
                 commandString.add(buildConcreteOptionName(optionDescription.getName(), optionName));
