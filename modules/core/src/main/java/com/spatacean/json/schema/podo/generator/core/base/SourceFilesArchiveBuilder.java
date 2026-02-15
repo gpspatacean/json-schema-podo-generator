@@ -30,25 +30,25 @@ public class SourceFilesArchiveBuilder {
      * @throws IOException in case of byte stream errors
      */
     public byte[] buildArchive() throws IOException {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(byteArrayOutputStream);
+        try (final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             final ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(byteArrayOutputStream)) {
 
-        for (final ProcessedSourceFile processedSourceFile : fileList) {
-            try {
-                final ZipArchiveEntry zipEntry = new ZipArchiveEntry(processedSourceFile.filePath());
-                final byte[] bytesToWrite = processedSourceFile.fileContent().getBytes(StandardCharsets.UTF_8);
-                zipEntry.setSize(bytesToWrite.length);
-                zipOutputStream.putArchiveEntry(zipEntry);
-                zipOutputStream.write(bytesToWrite);
-                zipOutputStream.closeArchiveEntry();
-            } catch (IOException exception) {
-                log.error("Failed to archive file {}", processedSourceFile.filePath(), exception);
+            for (final ProcessedSourceFile processedSourceFile : fileList) {
+                try {
+                    final ZipArchiveEntry zipEntry = new ZipArchiveEntry(processedSourceFile.filePath());
+                    final byte[] bytesToWrite = processedSourceFile.fileContent().getBytes(StandardCharsets.UTF_8);
+                    zipEntry.setSize(bytesToWrite.length);
+                    zipOutputStream.putArchiveEntry(zipEntry);
+                    zipOutputStream.write(bytesToWrite);
+                    zipOutputStream.closeArchiveEntry();
+                } catch (final IOException ex) {
+                    log.error("Failed to add file {} to archive", processedSourceFile.filePath(), ex);
+                    throw ex;
+                }
             }
+
+            zipOutputStream.finish();
+            return byteArrayOutputStream.toByteArray();
         }
-
-        zipOutputStream.close();
-        byteArrayOutputStream.close();
-
-        return byteArrayOutputStream.toByteArray();
     }
 }
