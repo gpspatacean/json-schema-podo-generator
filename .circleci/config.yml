@@ -40,7 +40,8 @@ jobs:
     docker:
       - image: cimg/openjdk:21.0.6-browsers
     steps:
-      - checkout
+      - checkout:
+          method: full
       - run:
           name: SonarCloud Analysis
           command: mvn verify sonar:sonar -Dsonar.projectKey=gspatace_json-schema-podo-generator
