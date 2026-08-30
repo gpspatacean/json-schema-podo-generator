@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: json-schema-podo-generator
+  name: json-schema-podo-generator-restapi
   labels:
-    app: json-schema-podo-generator
+    app: json-schema-podo-generator-restapi
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: json-schema-podo-generator
+      app: json-schema-podo-generator-restapi
   template:
     metadata:
       labels:
-        app: json-schema-podo-generator
+        app: json-schema-podo-generator-restapi
     spec:
       containers:
         - name: jspg-restapi
@@ -20,23 +20,59 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: json-schema-podo-generator-restapi
+  labels:
+    app: json-schema-podo-generator-restapi
+spec:
+  selector:
+    app: json-schema-podo-generator-restapi
+  ports:
+    - name: api
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: json-schema-podo-generator-webapp
+  labels:
+    app: json-schema-podo-generator-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: json-schema-podo-generator-webapp
+  template:
+    metadata:
+      labels:
+        app: json-schema-podo-generator-webapp
+    spec:
+      containers:
         - name: jspg-webapp
           image: spatacean.com/jspg/webapp:k8s-test
           imagePullPolicy: IfNotPresent
+          env:
+            - name: WEBAPP_BACKENDLOCATION
+              value: "http://localhost:8080"
           ports:
             - containerPort: 8081
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: json-schema-podo-generator
+  name: json-schema-podo-generator-webapp
   labels:
-    app: json-schema-podo-generator
+    app: json-schema-podo-generator-webapp
 spec:
   selector:
-    app: json-schema-podo-generator
+    app: json-schema-podo-generator-webapp
   ports:
-    - port: 8081
+    - name: web
+      port: 8081
       targetPort: 8081
-      nodePort: 30081
-  type: NodePort
+  type: LoadBalancer
